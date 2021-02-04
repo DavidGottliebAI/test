@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
  *         For example: <br>
  *
  */
-public class geneListener implements ActionListener {
+public class editableGeneListener implements ActionListener {
 
-	private Gene gene;
+	private EditableGene gene;
 	private EditableViewer editableViewer;
 
-	public geneListener(Gene gene, EditableViewer editableViewer) {
+	public editableGeneListener(EditableGene gene, EditableViewer editableViewer) {
 		this.gene = gene;
 		this.editableViewer = editableViewer;
 	}

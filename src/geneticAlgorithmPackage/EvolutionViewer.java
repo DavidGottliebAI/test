@@ -1,4 +1,8 @@
 package geneticAlgorithmPackage;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 /**
  * 
  * @author oblaznjc and gottlijd
@@ -9,5 +13,12 @@ package geneticAlgorithmPackage;
  *
  */
 public class EvolutionViewer {
-
+	
+	public JFrame frame;
+	private JPanel buttonGrid;
+	public final String title = "Evolution Viewer";
+	
+	public EvolutionViewer() {
+		
+	}
 }

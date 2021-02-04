@@ -12,20 +12,28 @@ import javax.swing.JFileChooser;
  * 
  * @author oblaznjc and gottlijd
  * 
- *         Purpose: <br>
- *         Restriction: <br>
- *         For example: <br>
+ *         Purpose: <br> Load in txt file of specific saved chromosome
+ *         Restriction: <br> Only loads in chromosomes that have already been saved
+ *         For example: <br> button.addActionListener(loadListener(editableViewer))
  *
  */
 public class loadListener implements ActionListener {
 
 	private EditableViewer editableViewer;
 	private File selectedFile;
-
+	
+	/**
+	 * ensures: initializes editableViewer
+	 * @param editableViewer
+	 */
 	public loadListener(EditableViewer editableViewer) {
 		this.editableViewer = editableViewer;
 	}
-
+	
+	/**
+	 * ensures: shows all previously saved files and lets you choose and load that chromosome in. Throws exceptions if file cannot be found
+	 * or if no file is selected
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		JFileChooser fileChooser = new JFileChooser();
@@ -44,7 +52,6 @@ public class loadListener implements ActionListener {
 			String geneString = "";
 			while (scanner.hasNext()) {
 				String line = scanner.nextLine();
-				// System.out.println(line);
 				geneString += line;
 			}
 			Chromosome chromosome = new Chromosome(this.editableViewer, geneString);
@@ -53,7 +60,9 @@ public class loadListener implements ActionListener {
 
 		} catch (FileNotFoundException e1) {
 			System.out.println("File not found");
-			e1.printStackTrace();
+			return;
+		} catch (NullPointerException e2) { // Edit for canceling loaded file
+			System.out.println("No File Loaded");
 			return;
 		}
 		scanner.close();

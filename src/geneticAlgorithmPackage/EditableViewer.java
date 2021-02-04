@@ -1,9 +1,11 @@
 package geneticAlgorithmPackage;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -24,6 +26,7 @@ public class EditableViewer {
 	public final String title = "Editable Chomosome Viewer";
 	private Chromosome chromosome;
 	private JTextField mutationRate;
+	private JPanel adminGrid;
 
 	/**
 	 * ensures: creates a specific JPanel and instantiates chromosome
@@ -33,36 +36,36 @@ public class EditableViewer {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
-		this.frame.add(createAdminPanel(), BorderLayout.SOUTH);
+		this.adminGrid = new JPanel();
+		createAdminPanel();
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
 		this.frame.setVisible(true);
-
 	}
 
 	/**
 	 * ensures: creates an admin panel and associated buttons with listeners
-	 * 
-	 * @return the admin panel to be added to frame
 	 */
-	private JPanel createAdminPanel() {
-		JPanel adminPanel = new JPanel();
+	private void createAdminPanel() {
+		this.adminGrid.setLayout(new GridLayout(2, 3));
 		JButton newChromosomeButton = new JButton("New Chromosome");
 		JButton loadButton = new JButton("Load");
 		JButton saveButton = new JButton("Save");
-		JButton mutateButton = new JButton("Mutate");
-		this.mutationRate = new JTextField("(input / num genes)");
-		adminPanel.add(newChromosomeButton);
-		adminPanel.add(loadButton);
-		adminPanel.add(saveButton);
-		adminPanel.add(mutateButton);
-		adminPanel.add(mutationRate);
+		JButton mutateButton = new JButton("Mutate: ___/N");
+		this.mutationRate = new JTextField("Enter Positive Integer");
+		
+		this.adminGrid.add(newChromosomeButton);
+		this.adminGrid.add(loadButton);
+		this.adminGrid.add(saveButton);
+		this.adminGrid.add(mutateButton);
+		this.adminGrid.add(mutationRate);
 
 		loadButton.addActionListener(new loadListener(this));
 		saveButton.addActionListener(new saveListener(this));
 		newChromosomeButton.addActionListener(new newChromosomeListener(this));
 		mutateButton.addActionListener(new mutateListener(this));
-		return adminPanel;
+		
+		this.frame.add(this.adminGrid, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -73,7 +76,7 @@ public class EditableViewer {
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
 		this.chromosome = new Chromosome(this);
-		for (Gene gene : getChromosome().geneList) {
+		for (EditableGene gene : getChromosome().geneList) {
 			gene.setSize(30, 30);
 			this.buttonGrid.add(gene);
 		}
@@ -84,7 +87,7 @@ public class EditableViewer {
 	}
 
 	/**
-	 * ensures: accepts a loaded chromosome and and adds it to a button grid
+	 * ensures: accepts a loaded chromosome and adds it to a button grid
 	 * 
 	 * @param chromosome <br>
 	 *                   requires: chromosome
@@ -93,7 +96,7 @@ public class EditableViewer {
 		this.chromosome = chromosome;
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
-		for (Gene gene : this.getChromosome().geneList) {
+		for (EditableGene gene : this.getChromosome().geneList) {
 			gene.setSize(30, 30);
 			this.buttonGrid.add(gene);
 		}
