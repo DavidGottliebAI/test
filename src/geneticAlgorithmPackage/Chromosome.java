@@ -114,4 +114,16 @@ public class Chromosome implements Comparable<Chromosome> {
 				gene.changeBit();
 		}
 	}
+
+	public Chromosome deepCopy() {
+		Chromosome copiedChromosome = new Chromosome();
+		copiedChromosome.geneList.clear();
+		for (Gene gene : this.geneList) {
+			Gene newGene = new Gene();
+			newGene.setBit(gene.getBit());
+			copiedChromosome.geneList.add(newGene);
+		}
+		copiedChromosome.calculateLameFitness();
+		return copiedChromosome;
+	}
 }

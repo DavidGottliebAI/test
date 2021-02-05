@@ -57,7 +57,7 @@ public class Population {
 			if (index > this.chromosomeList.size() - 1) {
 				index = 0;
 			}
-			repopulatedChromosomeList.add(this.chromosomeList.get(index));
+			repopulatedChromosomeList.add(this.chromosomeList.get(index).deepCopy());
 			index++;
 		}
 		return repopulatedChromosomeList;
@@ -68,6 +68,7 @@ public class Population {
 		ArrayList<Chromosome> mutatedChromosomeList = new ArrayList<Chromosome>();
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate();
+			chromosome.calculateLameFitness();
 			mutatedChromosomeList.add(chromosome);
 		}
 		return mutatedChromosomeList;
@@ -75,7 +76,7 @@ public class Population {
 	}
 
 	public void evolutionLoop() {
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 200; i++) {
 			System.out.println();
 			for (Chromosome chromosome : this.chromosomeList) {
 				chromosome.calculateLameFitness();
@@ -105,20 +106,23 @@ public class Population {
 
 			System.out.println();
 			System.out.println("After repop:");
+			
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
 
 			this.chromosomeList = mutate();
-			for (Chromosome chromosome : this.chromosomeList) {
-				System.out.print(chromosome.getFitness() + ", ");
-			}
 
 			System.out.println();
 			System.out.println("After mutate:");
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
+			
+			if(chromosomeList.get(0).getFitness() > 88) {
+				break;
+			}
+			
 		}
 	}
 }

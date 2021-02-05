@@ -31,6 +31,10 @@ public class Gene {
 		return bit;
 	}
 
+	public void setBit(int bit) {
+		this.bit = bit;
+	}
+
 //	private void draw(Graphics2D g2) {
 //		g2.setColor(this.color);
 //		g2.fillRect(0, 0, 5, 5);
