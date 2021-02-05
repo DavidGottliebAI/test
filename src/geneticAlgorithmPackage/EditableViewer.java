@@ -76,7 +76,7 @@ public class EditableViewer {
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
 		this.chromosome = new Chromosome(this);
-		for (EditableGene gene : getChromosome().geneList) {
+		for (EditableGene gene : getChromosome().editableGeneList) {
 			gene.setSize(30, 30);
 			this.buttonGrid.add(gene);
 		}
@@ -96,7 +96,7 @@ public class EditableViewer {
 		this.chromosome = chromosome;
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
-		for (EditableGene gene : this.getChromosome().geneList) {
+		for (EditableGene gene : this.getChromosome().editableGeneList) {
 			gene.setSize(30, 30);
 			this.buttonGrid.add(gene);
 		}

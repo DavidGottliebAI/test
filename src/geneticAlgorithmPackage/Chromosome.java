@@ -14,9 +14,21 @@ import javax.swing.JPanel;
  *
  */
 public class Chromosome {
-	ArrayList<EditableGene> geneList = new ArrayList<EditableGene>();
+	ArrayList<EditableGene> editableGeneList = new ArrayList<EditableGene>();
+	ArrayList<Gene> geneList = new ArrayList<Gene>();
 	private String geneString = "";
 	private EditableViewer editableViewer;
+	
+	/**
+	 * ensures: 
+	 */
+	
+	public Chromosome() { // maybe create new chromosome class
+		for (int i = 0; i < 100; i++) {
+			Gene gene = new Gene();
+			this.geneList.add(gene);
+		}
+	}
 	
 	/**
 	 * ensures: adds genes to a geneList and adds their actionListeners, thereby creating a chromosome.
@@ -28,7 +40,7 @@ public class Chromosome {
 		for (int i = 0; i < 100; i++) {
 			EditableGene gene = new EditableGene(i);
 			gene.addActionListener(new editableGeneListener(gene, this.editableViewer));
-			this.geneList.add(gene);
+			this.editableGeneList.add(gene);
 			this.geneString = this.geneString + gene.getBit();
 		}
 	}
@@ -44,21 +56,11 @@ public class Chromosome {
 			int bit = Character.getNumericValue(geneString.charAt(index));
 			EditableGene gene = new EditableGene(index, bit);
 			gene.addActionListener(new editableGeneListener(gene, this.editableViewer));
-			this.geneList.add(gene);
+			this.editableGeneList.add(gene);
 		}
 	}
 	
-//	public JPanel populationChromosome(PopulationViewer populationViewer) {
-//		this.populationViewer = populationViewer;
-//		JPanel chromosomeGrid = new JPanel();
-//		chromosomeGrid.setLayout(new GridLayout(100, 100));
-//		chromosomeGrid.setSize(50, 50);
-//		for (int i = 0; i < 100; i++) {
-//			Gene gene = new Gene();
-//			chromosomeGrid.add(gene);
-//		}
-//		return chromosomeGrid;
-//	}
+
 	
 	/**
 	 * ensures: creates a new geneString based on geneList
@@ -66,7 +68,7 @@ public class Chromosome {
 	 */
 	public String getUpdatedGeneString() {
 		this.geneString = "";
-		for (EditableGene gene : geneList) {
+		for (EditableGene gene : editableGeneList) {
 			this.geneString = this.geneString + gene.getBit();
 		}
 		return this.geneString;
@@ -77,6 +79,6 @@ public class Chromosome {
 	 * @return geneList
 	 */
 	public ArrayList<EditableGene> getGeneList() {
-		return geneList;
+		return editableGeneList;
 	}
 }
