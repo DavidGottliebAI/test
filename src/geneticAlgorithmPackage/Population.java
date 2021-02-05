@@ -21,7 +21,7 @@ public class Population {
 	private int originalSize;
 
 	public Population() {
-		this.originalSize = 100;
+		this.originalSize = 20;
 		for (int i = 0; i < this.originalSize; i++) {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
@@ -42,12 +42,11 @@ public class Population {
 		return this.chromosomeList;
 	}
 
-	public ArrayList<Chromosome> truncate() {
-		ArrayList<Chromosome> truncatedChromosomeList = new ArrayList<Chromosome>();
-		for (int index = 0; index < Math.floorDiv(this.chromosomeList.size(), 2); index++) {
-			truncatedChromosomeList.add(this.chromosomeList.get(index));
+	public void truncate(int percent) {
+		double numberSurvive = Math.round((double) percent / 100 * this.chromosomeList.size());
+		while (this.chromosomeList.size() > numberSurvive) {
+			this.chromosomeList.remove(this.chromosomeList.size() - 1);
 		}
-		return truncatedChromosomeList;
 	}
 
 	private ArrayList<Chromosome> repopulate() {
@@ -64,24 +63,27 @@ public class Population {
 
 	}
 
-	private ArrayList<Chromosome> mutate() {
-		ArrayList<Chromosome> mutatedChromosomeList = new ArrayList<Chromosome>();
+	private void mutate() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate();
 			chromosome.calculateLameFitness();
-			mutatedChromosomeList.add(chromosome);
 		}
-		return mutatedChromosomeList;
 
 	}
 
 	public void evolutionLoop() {
-		for (int i = 0; i < 200; i++) {
+		int bestLoop = 0;
+		int bestFitness = 0;
+		for (int i = 0; i < 100; i++) {
 			System.out.println();
+			System.out.println();
+
+			System.out.println("Loop:" + i);
+
 			for (Chromosome chromosome : this.chromosomeList) {
 				chromosome.calculateLameFitness();
 			}
-			System.out.println();
+
 			System.out.println("Before sort:");
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
@@ -94,7 +96,11 @@ public class Population {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
 
-			this.chromosomeList = truncate();
+			if (chromosomeList.get(0).getFitness() > 95) {
+				break;
+			}
+
+			truncate(20);
 
 			System.out.println();
 			System.out.println("After truncate:");
@@ -105,24 +111,20 @@ public class Population {
 			this.chromosomeList = repopulate();
 
 			System.out.println();
-			System.out.println("After repop:");
-			
+			System.out.println("After repopulted:");
+
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
 
-			this.chromosomeList = mutate();
+			mutate();
 
 			System.out.println();
 			System.out.println("After mutate:");
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
-			
-			if(chromosomeList.get(0).getFitness() > 88) {
-				break;
-			}
-			
+
 		}
 	}
 }
