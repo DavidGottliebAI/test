@@ -19,40 +19,45 @@ public class Population {
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 
 	public Population() {
-		this.chromosomeList = chromosomeList;
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 100; i++) {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
 		evolutionLoop();
 	}
-
-	public Chromosome getChromosomeList() {
+	
+	/**
+	 * ensures: gets chromosome from list
+	 * @return chromosome
+	 */
+	public Chromosome getChromosome() {
 		return this.chromosomeList.get(0);
 	}
-
+	
+	/**
+	 * ensures: sorts fitness of all chromosomes in the population, from highest to lowest
+	 * @return sortedChromosomes
+	 */
 	public ArrayList<Chromosome> sortByFitness() {
 		ArrayList<Chromosome> sortedChromosomes = new ArrayList<Chromosome>();
-		for(Chromosome chromosome : this.chromosomeList) {
-			if(sortedChromosomes.isEmpty()) {
-				sortedChromosomes.add(chromosome);
-				System.out.println("Once");
-			} else{
-				for(int i = 0; i < this.chromosomeList.size(); i++) {
-					if(chromosome.getFitness() >= sortedChromosomes.get(i).getFitness()) {
-						System.out.println("Bigger");
-						sortedChromosomes.add(i, chromosome);
-					} else {
-						System.out.println("Smaller");
-						sortedChromosomes.add(chromosome);
-					}
+		sortedChromosomes.add(this.chromosomeList.get(0));
+		for(int i = 0; i < this.chromosomeList.size() - 1; i++) {
+			Chromosome current = this.chromosomeList.get(i);
+			for(int j = 0; j < sortedChromosomes.size() - 1; j++) {
+				if(current.getFitness() >= sortedChromosomes.get(j).getFitness()) {
+					sortedChromosomes.add(j, current);
+					break;
 				}
-				
 			}
+			sortedChromosomes.add(current);
 		}
 		return sortedChromosomes;
 	}
-
+	
+	/**
+	 * ensures: truncates chromosomes by removing bottom 50%
+	 * @param truncatedChromosomes
+	 */
 	public ArrayList<Chromosome> truncate(ArrayList<Chromosome> chromosomes) {
 		ArrayList<Chromosome> truncatedChromosomes = new ArrayList<Chromosome>();
 		for(int i = 0; i < Math.floorDiv(chromosomes.size(), 2); i++) {
@@ -63,15 +68,13 @@ public class Population {
 	
 	public void evolutionLoop() {
 		int end = 0;
-		for(int i = 0; i < 2; i++) {
+		while(end < 20) {
 			ArrayList<Chromosome> sortedChromosomes = new ArrayList<Chromosome>();
 			for(Chromosome chromosome : this.chromosomeList) {
 				chromosome.calculateLameFitness();
 			}
 			sortedChromosomes = sortByFitness();
-			System.out.println("!!!");
 			sortedChromosomes = truncate(sortedChromosomes);
-			System.out.println(sortedChromosomes.size());
 			end++;
 		}
 	}

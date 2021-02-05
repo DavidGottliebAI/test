@@ -18,14 +18,13 @@ public class Chromosome {
 	ArrayList<Gene> geneList = new ArrayList<Gene>();
 	private String geneString = "";
 	private EditableViewer editableViewer;
-	public int fitness;
+	public int fitness = 0;
 	
 	/**
 	 * ensures: 
 	 */
 	
 	public Chromosome() { // maybe create new chromosome class
-		this.fitness = 0;
 		for (int i = 0; i < 100; i++) {
 			Gene gene = new Gene();
 			this.geneList.add(gene);
@@ -35,7 +34,7 @@ public class Chromosome {
 	public void calculateLameFitness() {
 		this.fitness = 0;
 		for (Gene gene : this.geneList) {
-				fitness += gene.getBit();
+				this.fitness += gene.getBit();
 		}
 	}
 	

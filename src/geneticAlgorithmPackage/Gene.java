@@ -38,7 +38,7 @@ public class Gene {
 	}
 
 	public int getBit() {
-		return bit;
+		return this.bit;
 	}
 	
 //	private void draw(Graphics2D g2) {

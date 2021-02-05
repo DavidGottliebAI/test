@@ -129,6 +129,10 @@ public class EditableViewer {
 			}
 			return mutationNumber;
 		} catch (NumberFormatException e) {
+			if(Integer.parseInt(text) > 9000) {
+				this.frame.setTitle("Your Power Levels Are Too High!");
+				return 0;
+			}
 			this.frame.setTitle("Enter Mutation Rate between 0 and " + this.getChromosome().getGeneList().size());
 			return 0;
 		}
