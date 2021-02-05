@@ -20,6 +20,13 @@ public class Gene { // may need refactoring
 		updateColor();
 	}
 	
+	public Gene(long seed) {
+		Random random = new Random();
+		random.setSeed(seed);
+		this.bit = random.nextInt(2);
+		updateColor();
+	}
+	
 	public void updateColor() {
 		if (this.getBit() == 0) {
 			this.color = oneBit;

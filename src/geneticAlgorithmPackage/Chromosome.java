@@ -26,7 +26,7 @@ public class Chromosome {
 	
 	public Chromosome() { // maybe create new chromosome class
 		for (int i = 0; i < 100; i++) {
-			Gene gene = new Gene();
+			Gene gene = new Gene(i); // allow to be seeded or not
 			this.geneList.add(gene);
 		}
 	}

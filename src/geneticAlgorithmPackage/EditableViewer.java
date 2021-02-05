@@ -134,7 +134,7 @@ public class EditableViewer {
 			}
 			return mutationNumber;
 		} catch (NumberFormatException e) {
-			if(text.matches("[0-9]+") && Integer.parseInt(text) > 9000) {
+			if(text.matches("[0-9]+") && Integer.parseInt(text) > 9000) { // EASTER EGG!
 				this.frame.setTitle("Your Power Levels Are Too High!");
 				return 0;
 			}
