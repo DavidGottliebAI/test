@@ -6,7 +6,7 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
-public class Gene {
+public class Gene { // may need refactoring
 	
 	private static final Color oneBit = Color.GREEN;
 	private static final Color zeroBit = Color.BLACK;

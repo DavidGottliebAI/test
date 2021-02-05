@@ -30,9 +30,9 @@ public class Population {
 	 * ensures: gets chromosome from list
 	 * @return chromosome
 	 */
-	public Chromosome getChromosome() {
-		return this.chromosomeList.get(0);
-	}
+//	public Chromosome getChromosome() {
+//		return this.chromosomeList.get(0);
+//	}
 	
 	/**
 	 * ensures: sorts fitness of all chromosomes in the population, from highest to lowest
