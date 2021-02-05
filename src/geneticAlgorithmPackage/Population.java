@@ -75,7 +75,6 @@ public class Population {
 	}
 
 	public void evolutionLoop() {
-		int end = 0;
 		for (int i = 0; i < 10; i++) {
 			System.out.println();
 			for (Chromosome chromosome : this.chromosomeList) {
@@ -120,8 +119,6 @@ public class Population {
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
-
-			end++;
 		}
 	}
 }

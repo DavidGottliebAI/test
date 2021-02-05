@@ -1,30 +1,20 @@
 package geneticAlgorithmPackage;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.Random;
 
-import javax.swing.JPanel;
-
 public class Gene {
-	
-	private static final Color oneBit = Color.GREEN;
-	private static final Color zeroBit = Color.BLACK;
-	
+
 	private int bit;
-	private Color color;
-	
+
 	public Gene() {
 		Random random = new Random();
 		this.bit = random.nextInt(2);
 		updateColor();
 	}
-	
+
 	public void updateColor() {
 		if (this.getBit() == 0) {
-			this.color = oneBit;
 		} else {
-			this.color = zeroBit;
 		}
 	}
 
@@ -40,7 +30,7 @@ public class Gene {
 	public int getBit() {
 		return bit;
 	}
-	
+
 //	private void draw(Graphics2D g2) {
 //		g2.setColor(this.color);
 //		g2.fillRect(0, 0, 5, 5);
