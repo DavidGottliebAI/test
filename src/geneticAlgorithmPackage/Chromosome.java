@@ -2,28 +2,31 @@ package geneticAlgorithmPackage;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
+
 /**
  * 
  * @author oblaznjc and gottlijd
  * 
- *         Purpose: <br> Creates chromosome full of genes for EditableViewer to interpret
- *         Restriction: <br> Only creates array of genes, must pass to EditableViewer to create the chromosome
- *         For example: <br> Chromosome chromosome = new Chromosome()
+ *         Purpose: <br>
+ *         Creates chromosome full of genes for EditableViewer to interpret
+ *         Restriction: <br>
+ *         Only creates array of genes, must pass to EditableViewer to create
+ *         the chromosome For example: <br>
+ *         Chromosome chromosome = new Chromosome()
  *
  */
-public class Chromosome {
+public class Chromosome implements Comparable<Chromosome> {
 	ArrayList<EditableGene> editableGeneList = new ArrayList<EditableGene>();
 	ArrayList<Gene> geneList = new ArrayList<Gene>();
 	private String geneString = "";
 	private EditableViewer editableViewer;
-	public int fitness;
-	
+	private int fitness;
+
 	/**
-	 * ensures: 
+	 * ensures:
 	 */
-	
+
 	public Chromosome() { // maybe create new chromosome class
 		this.fitness = 0;
 		for (int i = 0; i < 100; i++) {
@@ -31,21 +34,23 @@ public class Chromosome {
 			this.geneList.add(gene);
 		}
 	}
-	
+
 	public void calculateLameFitness() {
 		this.fitness = 0;
 		for (Gene gene : this.geneList) {
-				fitness += gene.getBit();
+			this.fitness += gene.getBit();
 		}
 	}
-	
+
 	public int getFitness() {
 		return this.fitness;
 	}
-	
+
 	/**
-	 * ensures: adds genes to a geneList and adds their actionListeners, thereby creating a chromosome.
-	 * Also creates a geneString so it can be reproduced later
+	 * ensures: adds genes to a geneList and adds their actionListeners, thereby
+	 * creating a chromosome. Also creates a geneString so it can be reproduced
+	 * later
+	 * 
 	 * @param editableViewer
 	 */
 	public Chromosome(EditableViewer editableViewer) {
@@ -57,9 +62,11 @@ public class Chromosome {
 			this.geneString = this.geneString + gene.getBit();
 		}
 	}
-	
+
 	/**
-	 * ensures: adds genes to geneList based on specified geneString as well as actionListeners, thereby creating a chromosome.
+	 * ensures: adds genes to geneList based on specified geneString as well as
+	 * actionListeners, thereby creating a chromosome.
+	 * 
 	 * @param editableViewer, geneString
 	 */
 	public Chromosome(EditableViewer editableViewer, String geneString) {
@@ -72,11 +79,10 @@ public class Chromosome {
 			this.editableGeneList.add(gene);
 		}
 	}
-	
 
-	
 	/**
 	 * ensures: creates a new geneString based on geneList
+	 * 
 	 * @return geneString
 	 */
 	public String getUpdatedGeneString() {
@@ -86,12 +92,18 @@ public class Chromosome {
 		}
 		return this.geneString;
 	}
-	
+
 	/**
 	 * ensures: gets geneList
+	 * 
 	 * @return geneList
 	 */
 	public ArrayList<EditableGene> getGeneList() {
 		return editableGeneList;
+	}
+
+	@Override
+	public int compareTo(Chromosome other) {
+		return other.fitness - this.fitness;
 	}
 }

@@ -1,6 +1,7 @@
 package geneticAlgorithmPackage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * 
@@ -19,59 +20,42 @@ public class Population {
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 
 	public Population() {
-		this.chromosomeList = chromosomeList;
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 100; i++) {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
 		evolutionLoop();
 	}
 
-	public Chromosome getChromosomeList() {
-		return this.chromosomeList.get(0);
+	public ArrayList<Chromosome> getChromosomeList() {
+		return this.chromosomeList;
 	}
 
-	public ArrayList<Chromosome> sortByFitness() {
-		ArrayList<Chromosome> sortedChromosomes = new ArrayList<Chromosome>();
-		for(Chromosome chromosome : this.chromosomeList) {
-			if(sortedChromosomes.isEmpty()) {
-				sortedChromosomes.add(chromosome);
-				System.out.println("Once");
-			} else{
-				for(int i = 0; i < this.chromosomeList.size(); i++) {
-					if(chromosome.getFitness() >= sortedChromosomes.get(i).getFitness()) {
-						System.out.println("Bigger");
-						sortedChromosomes.add(i, chromosome);
-					} else {
-						System.out.println("Smaller");
-						sortedChromosomes.add(chromosome);
-					}
-				}
-				
-			}
-		}
-		return sortedChromosomes;
-	}
+//	public ArrayList<Chromosome> truncate() {
+//		ArrayList<Chromosome> truncatedChromosomes = new ArrayList<Chromosome>();
+//		for (int i = 0; i < Math.floorDiv(chromosomes.size(), 2); i++) {
+//			truncatedChromosomes.add(chromosomes.get(i));
+//		}
+//		return truncatedChromosomes;
+//	}
 
-	public ArrayList<Chromosome> truncate(ArrayList<Chromosome> chromosomes) {
-		ArrayList<Chromosome> truncatedChromosomes = new ArrayList<Chromosome>();
-		for(int i = 0; i < Math.floorDiv(chromosomes.size(), 2); i++) {
-			truncatedChromosomes.add(chromosomes.get(i));
-		}
-		return truncatedChromosomes;
-	}
-	
 	public void evolutionLoop() {
 		int end = 0;
-		for(int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
+			System.out.println("Loop:");
 			ArrayList<Chromosome> sortedChromosomes = new ArrayList<Chromosome>();
-			for(Chromosome chromosome : this.chromosomeList) {
+			for (Chromosome chromosome : this.chromosomeList) {
 				chromosome.calculateLameFitness();
 			}
-			sortedChromosomes = sortByFitness();
-			System.out.println("!!!");
-			sortedChromosomes = truncate(sortedChromosomes);
-			System.out.println(sortedChromosomes.size());
+			System.out.println("	Before: ");
+			for (Chromosome chromosome : this.chromosomeList) {
+				System.out.println(chromosome.getFitness());
+			}
+			System.out.println("	After:");
+			Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+			for (Chromosome chromosome : this.chromosomeList) {
+				System.out.println(chromosome.getFitness());
+			}
 			end++;
 		}
 	}
