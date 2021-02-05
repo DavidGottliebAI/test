@@ -2,6 +2,8 @@ package geneticAlgorithmPackage;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.JPanel;
 
 /**
@@ -105,5 +107,14 @@ public class Chromosome implements Comparable<Chromosome> {
 	@Override
 	public int compareTo(Chromosome other) {
 		return other.fitness - this.fitness;
+	}
+
+	public void mutate() {
+		Random random = new Random();
+		int averageNumMutations = 2;
+		for (Gene gene : this.geneList) {
+			if (random.nextInt(this.geneList.size()) <= averageNumMutations)
+				gene.changeBit();
+		}
 	}
 }
