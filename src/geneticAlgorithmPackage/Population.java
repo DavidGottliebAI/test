@@ -20,17 +20,20 @@ public class Population {
 
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 	private int populationSize;
+	private LineGraph lineGraph;
 
-	public Population() {
+	public Population(LineGraph lineGraph) {
+		this.lineGraph = lineGraph;
 		this.populationSize = 100;
 		for (int i = 0; i < this.populationSize; i++) {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
-		//evolutionLoop();
+		evolutionLoop();
 	}
 
-	public Population(int originalSize, long seed) {
+	public Population(LineGraph lineGraph, int originalSize, long seed) {
+		this.lineGraph = lineGraph;
 		this.populationSize = originalSize;
 		for (int i = 0; i < originalSize; i++) {
 			Random random = new Random();
@@ -42,15 +45,18 @@ public class Population {
 	}
 
 	/**
-	 * ensures: sorts fitness of all chromosomes in the population, from highest to lowest
+	 * ensures: sorts fitness of all chromosomes in the population, from highest to
+	 * lowest
+	 * 
 	 * @return sortedChromosomes
 	 */
 	public ArrayList<Chromosome> getChromosomeList() {
 		return this.chromosomeList;
 	}
-  
-  /**
+
+	/**
 	 * ensures: truncates chromosomes by leaving the top n%
+	 * 
 	 * @param percent
 	 */
 	public void truncate(int percent) {
@@ -72,10 +78,16 @@ public class Population {
 		}
 		return repopulatedChromosomeList;
 	}
-  
+
 	private void mutate() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate();
+			chromosome.calculateLameFitness();
+		}
+	}
+
+	private void updateFitessScores() {
+		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.calculateLameFitness();
 		}
 	}
@@ -87,16 +99,14 @@ public class Population {
 
 			System.out.println("Loop:" + i);
 
-			for (Chromosome chromosome : this.chromosomeList) {
-				chromosome.calculateLameFitness();
-			}
-
 			System.out.println("Before sort:");
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
 
 			Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+			
+			lineGraph.addEntry(this.chromosomeList.get(0).getFitness());
 			System.out.println();
 			System.out.println("After sort:");
 			for (Chromosome chromosome : this.chromosomeList) {
@@ -125,6 +135,7 @@ public class Population {
 			}
 
 			mutate();
+			updateFitessScores();
 
 			System.out.println();
 			System.out.println("After mutate:");

@@ -14,37 +14,44 @@ import javax.swing.JTextField;
  * 
  * @author oblaznjc and gottlijd
  * 
- *         Purpose: <br> Visualizes the fitness of the best, worst and average chromosomes as well as their Hamming Distance
- *         Restriction: <br> Only visualizes fitness over time
- *         For example: <br> EvolutionViewer evolutionViewer = new EvolutionViewer
+ *         Purpose: <br>
+ *         Visualizes the fitness of the best, worst and average chromosomes as
+ *         well as their Hamming Distance Restriction: <br>
+ *         Only visualizes fitness over time For example: <br>
+ *         EvolutionViewer evolutionViewer = new EvolutionViewer
  *
  */
 public class EvolutionViewer {
-	
+
 	public JFrame frame;
 	private JPanel buttonGrid;
 	public final String title = "Evolution Viewer";
+
 //	
 	public EvolutionViewer() {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
-		
+
 		LineGraph lineGraph = new LineGraph();
+		Population population = new Population(lineGraph);
 		frame.add(lineGraph, BorderLayout.CENTER);
 		
+		lineGraph.repaint();
+
 		createAdminPanel();
-		
+
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(1300, 500);
 		this.frame.setLocation(500, 20); // might want to play with later
 		this.frame.setVisible(true);
 	}
+
 //
 	private void createAdminPanel() {
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
 		JTextField mutateField = new JTextField("0");
-		
+
 		JLabel fitnessLabel = new JLabel("Fitness");
 		JComboBox fitnessField = new JComboBox();
 		fitnessField.addItem("All 1's");
@@ -87,7 +94,7 @@ public class EvolutionViewer {
 		this.buttonGrid.add(evolutionButton);
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
 	}
-	
+
 //	public int getTextFieldNumber(JTextField textField) { // may need refactoring
 //		String text = textField.getText();
 //		try {

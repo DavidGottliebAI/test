@@ -3,6 +3,7 @@ package geneticAlgorithmPackage;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
@@ -13,10 +14,15 @@ public class LineGraph extends JComponent {
 	private static final int LINE_WIDTH = 5;
 	private static final int LINE_HEIGHT = 5;
 	private static final int PLOT_HEIGHT = 300;
-	private int maxGenerations = 500;
+
+	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 
 	public LineGraph() {
 		this.setPreferredSize(new Dimension(200, 200));
+	}
+
+	public void addEntry(int fitness) {
+		this.bestFitnessLog.add(fitness);
 	}
 
 	@Override
@@ -27,11 +33,9 @@ public class LineGraph extends JComponent {
 		g2.drawRect(0, -PLOT_HEIGHT, 1200, PLOT_HEIGHT);
 		int plotRatio = PLOT_HEIGHT / 100;
 
-		int fitness = 40;
-
-		for (int x = 0; x < maxGenerations; x++) {
+		for (int x = 1; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.BLUE);
-			g2.fillRect(x, -fitness * plotRatio, LINE_WIDTH, LINE_HEIGHT);
+			g2.fillRect(x * 5, -this.bestFitnessLog.get(x) * plotRatio, LINE_WIDTH, LINE_HEIGHT);
 
 		}
 	}
