@@ -52,7 +52,7 @@ public class EditableViewer {
 		JButton saveButton = new JButton("Save");
 		JButton mutateButton = new JButton("Mutate: ___/N");
 		this.mutationRate = new JTextField("Enter Positive Integer");
-		
+
 		this.adminGrid.add(newChromosomeButton);
 		this.adminGrid.add(loadButton);
 		this.adminGrid.add(saveButton);
@@ -63,7 +63,7 @@ public class EditableViewer {
 		saveButton.addActionListener(new saveListener(this));
 		newChromosomeButton.addActionListener(new newChromosomeListener(this));
 		mutateButton.addActionListener(new mutateListener(this));
-		
+
 		this.frame.add(this.adminGrid, BorderLayout.SOUTH);
 	}
 
@@ -112,7 +112,7 @@ public class EditableViewer {
 	public Chromosome getChromosome() {
 		return chromosome;
 	}
-	
+
 	public JTextField getMutationRate() {
 		return this.mutationRate;
 	}
@@ -132,7 +132,7 @@ public class EditableViewer {
 			}
 			return mutationNumber;
 		} catch (NumberFormatException e) {
-			if(text.matches("[0-9]+") && Integer.parseInt(text) > 9000) { // EASTER EGG!
+			if (text.matches("[0-9]+") && Integer.parseInt(text) > 9000) { // EASTER EGG!
 				this.frame.setTitle("Your Power Levels Are Too High!");
 				return 0;
 			}

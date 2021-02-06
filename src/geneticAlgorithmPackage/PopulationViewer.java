@@ -24,7 +24,7 @@ public class PopulationViewer {
 	private JPanel populationGrid;
 	
 	public PopulationViewer() {
-		Population population = new Population();
+		
 //		this.frame = new JFrame();
 //		this.populationGrid = new JPanel();
 //		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
