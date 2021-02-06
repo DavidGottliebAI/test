@@ -18,11 +18,11 @@ import java.util.Collections;
 public class Population {
 
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
-	private int originalSize;
+	private int populationSize;
 
 	public Population() {
-		this.originalSize = 20;
-		for (int i = 0; i < this.originalSize; i++) {
+		this.populationSize = 100;
+		for (int i = 0; i < this.populationSize; i++) {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
@@ -30,7 +30,7 @@ public class Population {
 	}
 
 	public Population(int originalSize) {
-		this.originalSize = originalSize;
+		this.populationSize = originalSize;
 		for (int i = 0; i < originalSize; i++) {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
@@ -52,7 +52,7 @@ public class Population {
 	private ArrayList<Chromosome> repopulate() {
 		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
 		int index = 0;
-		while (repopulatedChromosomeList.size() < this.originalSize) {
+		while (repopulatedChromosomeList.size() < this.populationSize) {
 			if (index > this.chromosomeList.size() - 1) {
 				index = 0;
 			}
@@ -72,8 +72,6 @@ public class Population {
 	}
 
 	public void evolutionLoop() {
-		int bestLoop = 0;
-		int bestFitness = 0;
 		for (int i = 0; i < 100; i++) {
 			System.out.println();
 			System.out.println();
@@ -96,11 +94,11 @@ public class Population {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
 
-			if (chromosomeList.get(0).getFitness() > 95) {
+			if (chromosomeList.get(0).getFitness() >= 100) { // Stop evolutionary loop when you reach 100
 				break;
 			}
 
-			truncate(20);
+			truncate(5);
 
 			System.out.println();
 			System.out.println("After truncate:");
