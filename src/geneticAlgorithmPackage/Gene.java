@@ -12,6 +12,11 @@ public class Gene {
 		updateColor();
 	}
 
+	public Gene(int bit) {
+		this.bit = bit;
+		updateColor();
+	}
+
 	public void updateColor() {
 		if (this.getBit() == 0) {
 		} else {

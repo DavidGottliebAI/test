@@ -2,6 +2,7 @@ package geneticAlgorithmPackage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * 
@@ -26,15 +27,19 @@ public class Population {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
+
 		evolutionLoop();
 	}
 
-	public Population(int originalSize) {
+	public Population(int originalSize, long seed) {
 		this.populationSize = originalSize;
 		for (int i = 0; i < originalSize; i++) {
-			Chromosome chromosome = new Chromosome();
+			Random random = new Random();
+			random.setSeed(seed);
+			Chromosome chromosome = new Chromosome(random.nextLong());
 			this.chromosomeList.add(chromosome);
 		}
+
 		evolutionLoop();
 	}
 

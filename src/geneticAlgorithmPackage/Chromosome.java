@@ -34,6 +34,16 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
+	public Chromosome(long seed) { // maybe create new chromosome class
+		this.fitness = 0;
+		for (int i = 0; i < 100; i++) {
+			Random random = new Random();
+			random.setSeed(seed);
+			Gene gene = new Gene(random.nextInt(2));
+			this.geneList.add(gene);
+		}
+	}
+
 	public void calculateLameFitness() {
 		this.fitness = 0;
 		for (Gene gene : this.geneList) {
