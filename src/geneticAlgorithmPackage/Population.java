@@ -29,7 +29,6 @@ public class Population {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
-		evolutionLoop();
 	}
 
 	public Population(LineGraph lineGraph, int originalSize, long seed) {
@@ -41,7 +40,6 @@ public class Population {
 			Chromosome chromosome = new Chromosome(random.nextLong());
 			this.chromosomeList.add(chromosome);
 		}
-		evolutionLoop();
 	}
 
 	/**

@@ -31,6 +31,8 @@ public class EvolutionViewer {
 	public final String title = "Evolution Viewer";
 	private Population population;
 	private int DELAY = 50;
+	private boolean evolutionRunning = true;
+	private int generation;
 
 //	
 	public EvolutionViewer() {
@@ -47,11 +49,19 @@ public class EvolutionViewer {
 
 		createAdminPanel();
 
-		Timer t = new Timer(DELAY , new ActionListener() {
+		Timer t = new Timer(DELAY, new ActionListener() {
+			int loop = 0;
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				population.evolutionLoop();
-				frame.repaint();
+				if (evolutionRunning) {
+					if (loop > 300) {
+						return;
+					}
+					population.evolutionLoop();
+					frame.repaint();
+					loop++;
+				}
 			}
 		});
 
@@ -89,8 +99,8 @@ public class EvolutionViewer {
 		JLabel elitismLabel = new JLabel("Elitism %");
 		JTextField elitismField = new JTextField("0.1");
 		elitismField.addActionListener(new elitismListener());
-		JButton evolutionButton = new JButton("Start Evolution");
-		evolutionButton.addActionListener(new evolutionListener());
+		JButton startButton = new JButton("Start Evolution");
+		startButton.addActionListener(new startListener(this));
 		this.buttonGrid.add(mutateLabel);
 		this.buttonGrid.add(mutateField);
 		this.buttonGrid.add(fitnessLabel);
@@ -107,9 +117,17 @@ public class EvolutionViewer {
 		this.buttonGrid.add(genomeLengthField);
 		this.buttonGrid.add(elitismLabel);
 		this.buttonGrid.add(elitismField);
-		this.buttonGrid.add(evolutionButton);
+		this.buttonGrid.add(startButton);
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
 
+	}
+
+	public void flipEvolutionRunning() {
+		if (evolutionRunning) {
+			evolutionRunning = false;
+		} else {
+			evolutionRunning = true;
+		}
 	}
 
 	// Starts the simulator
