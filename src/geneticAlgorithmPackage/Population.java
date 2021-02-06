@@ -93,13 +93,16 @@ public class Population {
 	}
 
 	public void evolutionLoop() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 3; i++) {
 			System.out.println();
 			System.out.println();
 
 			System.out.println("Loop:" + i);
 
 			System.out.println("Before sort:");
+			
+			updateFitessScores();
+			
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");
 			}
@@ -107,7 +110,8 @@ public class Population {
 			Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 			
 			lineGraph.addEntry(this.chromosomeList.get(0).getFitness());
-			System.out.println();
+			System.out.println(this.chromosomeList.get(0).getFitness());
+
 			System.out.println("After sort:");
 			for (Chromosome chromosome : this.chromosomeList) {
 				System.out.print(chromosome.getFitness() + ", ");

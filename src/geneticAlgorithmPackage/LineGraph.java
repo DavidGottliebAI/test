@@ -33,7 +33,7 @@ public class LineGraph extends JComponent {
 		g2.drawRect(0, -PLOT_HEIGHT, 1200, PLOT_HEIGHT);
 		int plotRatio = PLOT_HEIGHT / 100;
 
-		for (int x = 1; x < this.bestFitnessLog.size(); x++) {
+		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.BLUE);
 			g2.fillRect(x * 5, -this.bestFitnessLog.get(x) * plotRatio, LINE_WIDTH, LINE_HEIGHT);
 
