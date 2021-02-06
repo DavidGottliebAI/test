@@ -16,5 +16,4 @@ public class startListener implements ActionListener {
 		
 		this.evolutionViewer.flipEvolutionRunning();
 	}
-
 }
