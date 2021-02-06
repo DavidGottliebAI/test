@@ -27,7 +27,7 @@ public class LineGraph extends JComponent {
 		g2.drawRect(0, -PLOT_HEIGHT, 1200, PLOT_HEIGHT);
 		int plotRatio = PLOT_HEIGHT / 100;
 
-		int fitness = 30;
+		int fitness = 40;
 
 		for (int x = 0; x < maxGenerations; x++) {
 			g2.setColor(Color.BLUE);
