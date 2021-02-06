@@ -1,5 +1,6 @@
 package geneticAlgorithmPackage;
 
+import java.awt.Color;
 import java.util.Random;
 
 

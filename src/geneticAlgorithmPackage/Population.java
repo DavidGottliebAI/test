@@ -27,8 +27,7 @@ public class Population {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
-
-		evolutionLoop();
+		//evolutionLoop();
 	}
 
 	public Population(int originalSize, long seed) {
@@ -39,11 +38,9 @@ public class Population {
 			Chromosome chromosome = new Chromosome(random.nextLong());
 			this.chromosomeList.add(chromosome);
 		}
-
 		evolutionLoop();
 	}
 
-	
 	/**
 	 * ensures: sorts fitness of all chromosomes in the population, from highest to lowest
 	 * @return sortedChromosomes
@@ -73,7 +70,7 @@ public class Population {
 			repopulatedChromosomeList.add(this.chromosomeList.get(index).deepCopy());
 			index++;
 		}
-		return repopulatedChromosomeList
+		return repopulatedChromosomeList;
 	}
   
 	private void mutate() {
@@ -81,7 +78,6 @@ public class Population {
 			chromosome.mutate();
 			chromosome.calculateLameFitness();
 		}
-
 	}
 
 	public void evolutionLoop() {
