@@ -43,17 +43,19 @@ public class Population {
 		evolutionLoop();
 	}
 
-	
 	/**
-	 * ensures: sorts fitness of all chromosomes in the population, from highest to lowest
+	 * ensures: sorts fitness of all chromosomes in the population, from highest to
+	 * lowest
+	 * 
 	 * @return sortedChromosomes
 	 */
 	public ArrayList<Chromosome> getChromosomeList() {
 		return this.chromosomeList;
 	}
-  
-  /**
+
+	/**
 	 * ensures: truncates chromosomes by leaving the top n%
+	 * 
 	 * @param percent
 	 */
 	public void truncate(int percent) {
@@ -73,9 +75,9 @@ public class Population {
 			repopulatedChromosomeList.add(this.chromosomeList.get(index).deepCopy());
 			index++;
 		}
-		return repopulatedChromosomeList
+		return repopulatedChromosomeList;
 	}
-  
+
 	private void mutate() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate();
