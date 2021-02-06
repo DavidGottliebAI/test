@@ -1,6 +1,8 @@
 package geneticAlgorithmPackage;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -9,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 /**
  * 
@@ -26,6 +29,8 @@ public class EvolutionViewer {
 	public JFrame frame;
 	private JPanel buttonGrid;
 	public final String title = "Evolution Viewer";
+	private Population population;
+	private int DELAY = 50;
 
 //	
 	public EvolutionViewer() {
@@ -34,12 +39,23 @@ public class EvolutionViewer {
 		this.buttonGrid = new JPanel();
 
 		LineGraph lineGraph = new LineGraph();
-		Population population = new Population(lineGraph);
+		this.population = new Population(lineGraph);
+
 		frame.add(lineGraph, BorderLayout.CENTER);
-		
+
 		lineGraph.repaint();
 
 		createAdminPanel();
+
+		Timer t = new Timer(DELAY , new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				population.evolutionLoop();
+				frame.repaint();
+			}
+		});
+
+		t.start();
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(1300, 500);
@@ -93,7 +109,10 @@ public class EvolutionViewer {
 		this.buttonGrid.add(elitismField);
 		this.buttonGrid.add(evolutionButton);
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
+
 	}
+
+	// Starts the simulator
 
 //	public int getTextFieldNumber(JTextField textField) { // may need refactoring
 //		String text = textField.getText();

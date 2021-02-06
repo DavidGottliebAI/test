@@ -93,59 +93,58 @@ public class Population {
 	}
 
 	public void evolutionLoop() {
-		for (int i = 0; i < 3; i++) {
-			System.out.println();
-			System.out.println();
 
-			System.out.println("Loop:" + i);
+		System.out.println();
+		System.out.println();
 
-			System.out.println("Before sort:");
-			
-			updateFitessScores();
-			
-			for (Chromosome chromosome : this.chromosomeList) {
-				System.out.print(chromosome.getFitness() + ", ");
-			}
+		System.out.println("Loop:");
 
-			Collections.sort(this.chromosomeList); // Sorts the list based on fitness
-			
-			lineGraph.addEntry(this.chromosomeList.get(0).getFitness());
-			System.out.println(this.chromosomeList.get(0).getFitness());
+		System.out.println("Before sort:");
 
-			System.out.println("After sort:");
-			for (Chromosome chromosome : this.chromosomeList) {
-				System.out.print(chromosome.getFitness() + ", ");
-			}
+		updateFitessScores();
 
-			if (chromosomeList.get(0).getFitness() >= 100) { // Stop evolutionary loop when you reach 100
-				break;
-			}
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
+		}
 
-			truncate(5);
+		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
-			System.out.println();
-			System.out.println("After truncate:");
-			for (Chromosome chromosome : this.chromosomeList) {
-				System.out.print(chromosome.getFitness() + ", ");
-			}
+		lineGraph.addEntry(this.chromosomeList.get(0).getFitness());
+		System.out.println(this.chromosomeList.get(0).getFitness());
 
-			this.chromosomeList = repopulate();
+		System.out.println("After sort:");
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
+		}
 
-			System.out.println();
-			System.out.println("After repopulted:");
+		if (chromosomeList.get(0).getFitness() >= 100) { // Stop evolutionary loop when you reach 100
+			return;
+		}
 
-			for (Chromosome chromosome : this.chromosomeList) {
-				System.out.print(chromosome.getFitness() + ", ");
-			}
+		truncate(10);
 
-			mutate();
-			updateFitessScores();
+		System.out.println();
+		System.out.println("After truncate:");
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
+		}
 
-			System.out.println();
-			System.out.println("After mutate:");
-			for (Chromosome chromosome : this.chromosomeList) {
-				System.out.print(chromosome.getFitness() + ", ");
-			}
+		this.chromosomeList = repopulate();
+
+		System.out.println();
+		System.out.println("After repopulated:");
+
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
+		}
+
+		mutate();
+		updateFitessScores();
+
+		System.out.println();
+		System.out.println("After mutate:");
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
 		}
 	}
 }
