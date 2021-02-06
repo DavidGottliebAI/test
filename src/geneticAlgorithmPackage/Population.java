@@ -27,8 +27,7 @@ public class Population {
 			Chromosome chromosome = new Chromosome();
 			this.chromosomeList.add(chromosome);
 		}
-
-		evolutionLoop();
+		//evolutionLoop();
 	}
 
 	public Population(int originalSize, long seed) {
@@ -39,7 +38,6 @@ public class Population {
 			Chromosome chromosome = new Chromosome(random.nextLong());
 			this.chromosomeList.add(chromosome);
 		}
-
 		evolutionLoop();
 	}
 
@@ -83,7 +81,6 @@ public class Population {
 			chromosome.mutate();
 			chromosome.calculateLameFitness();
 		}
-
 	}
 
 	public void evolutionLoop() {

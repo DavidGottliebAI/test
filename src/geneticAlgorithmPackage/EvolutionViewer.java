@@ -29,6 +29,10 @@ public class EvolutionViewer {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
+		
+		LineGraph lineGraph = new LineGraph();
+		frame.add(lineGraph, BorderLayout.CENTER);
+		
 		createAdminPanel();
 		
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
