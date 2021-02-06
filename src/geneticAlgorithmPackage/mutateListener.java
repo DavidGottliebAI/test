@@ -36,7 +36,7 @@ public class mutateListener implements ActionListener {
 		try {
 			for (EditableGene gene : this.editableViewer.getChromosome().getGeneList()) {
 				if (random.nextInt(this.editableViewer.getChromosome().getGeneList().size()) < this.editableViewer
-						.getMutationNumber()) {
+						.getMutationNumber(this.editableViewer.getMutationRate())) {
 					gene.changeBit();
 				}
 			}

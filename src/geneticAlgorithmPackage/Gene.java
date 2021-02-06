@@ -2,16 +2,22 @@ package geneticAlgorithmPackage;
 
 import java.util.Random;
 
-public class Gene {
 
+import javax.swing.JPanel;
+
+public class Gene { // may need refactoring
+	
+	private static final Color oneBit = Color.GREEN;
+	private static final Color zeroBit = Color.BLACK;
+  private Color color;
 	private int bit;
 
 	public Gene() {
 		Random random = new Random();
 		this.bit = random.nextInt(2);
 		updateColor();
-	}
-
+  }
+  
 	public Gene(int bit) {
 		this.bit = bit;
 		updateColor();
@@ -19,7 +25,9 @@ public class Gene {
 
 	public void updateColor() {
 		if (this.getBit() == 0) {
+      this.color = zeroBit;
 		} else {
+      this.color = oneBit;
 		}
 	}
 
@@ -33,7 +41,7 @@ public class Gene {
 	}
 
 	public int getBit() {
-		return bit;
+		return this.bit;
 	}
 
 	public void setBit(int bit) {

@@ -27,9 +27,8 @@ public class Chromosome implements Comparable<Chromosome> {
 	 */
 
 	public Chromosome() { // maybe create new chromosome class
-		this.fitness = 0;
 		for (int i = 0; i < 100; i++) {
-			Gene gene = new Gene();
+			Gene gene = new Gene(); // allow to be seeded or not
 			this.geneList.add(gene);
 		}
 	}

@@ -76,6 +76,6 @@ public class EditableGene extends JButton {
 	 * @return gene's bit
 	 */
 	public int getBit() {
-		return bit;
+		return this.bit;
 	}
 }

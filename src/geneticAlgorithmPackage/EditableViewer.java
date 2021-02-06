@@ -38,6 +38,7 @@ public class EditableViewer {
 		createAdminPanel();
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
+		this.frame.setLocation(0, 20);
 		this.frame.setVisible(true);
 	}
 
@@ -111,6 +112,10 @@ public class EditableViewer {
 	public Chromosome getChromosome() {
 		return chromosome;
 	}
+	
+	public JTextField getMutationRate() {
+		return this.mutationRate;
+	}
 
 	/**
 	 * ensures: gets the user input from mutation rate text field
@@ -118,8 +123,8 @@ public class EditableViewer {
 	 * @return user input if between 0 and chromosome size <br>
 	 *         else returns 0
 	 */
-	public int getMutationNumber() {
-		String text = this.mutationRate.getText();
+	public int getMutationNumber(JTextField textField) {
+		String text = textField.getText();
 		try {
 			int mutationNumber = Integer.parseInt(text);
 			if (mutationNumber < 0 || mutationNumber > this.getChromosome().getGeneList().size()) {
@@ -127,10 +132,13 @@ public class EditableViewer {
 			}
 			return mutationNumber;
 		} catch (NumberFormatException e) {
+			if(text.matches("[0-9]+") && Integer.parseInt(text) > 9000) { // EASTER EGG!
+				this.frame.setTitle("Your Power Levels Are Too High!");
+				return 0;
+			}
 			this.frame.setTitle("Enter Mutation Rate between 0 and " + this.getChromosome().getGeneList().size());
 			return 0;
 		}
-
 	}
 
 	/**
