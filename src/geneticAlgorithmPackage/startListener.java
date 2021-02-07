@@ -31,6 +31,7 @@ public class startListener implements ActionListener {
 		this.evolutionViewer.setSeed();
 		this.evolutionViewer.setChromsomeLength();
 		this.evolutionViewer.setPopulationSize();
+		this.evolutionViewer.setFitnessFunction();
 
 		this.evolutionViewer.flipEvolutionRunning();
 	}

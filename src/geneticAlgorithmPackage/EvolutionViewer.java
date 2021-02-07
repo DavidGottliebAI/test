@@ -38,6 +38,7 @@ public class EvolutionViewer {
 	private JTextField seedField;
 	private JTextField chromosomeLengthField;
 	private JTextField populationSizeField;
+	private JComboBox<String> fitnessField;
 
 	private static final int DELAY = 50;
 	public static final String title = "Evolution Viewer";
@@ -49,6 +50,7 @@ public class EvolutionViewer {
 	private int seed = 0;
 	private int chromosomeLength = 100;
 	private int populationSize = 100;
+	private String fitnessFunction = "One for All!";
 
 //	
 	public EvolutionViewer() {
@@ -101,11 +103,11 @@ public class EvolutionViewer {
 		this.seedField.setPreferredSize(new Dimension(40, 20));
 
 		JLabel fitnessLabel = new JLabel("Fitness");
-		JComboBox<String> fitnessField = new JComboBox<String>();
+		this.fitnessField = new JComboBox<String>();
+		this.fitnessField.addItem("One for All!");
+		this.fitnessField.addItem("Absolutely!");
 
-		fitnessField.addItem("All 1's");
 		JLabel selectionLabel = new JLabel("Selection");
-
 		JComboBox<String> selectionField = new JComboBox<String>();
 		selectionField.addItem("Truncation");
 
@@ -225,6 +227,11 @@ public class EvolutionViewer {
 		if (this.populationSize != oldPopulationSize) {
 			this.reset();
 		}
+	}
+
+	public void setFitnessFunction() {
+		this.fitnessFunction = this.fitnessField.getSelectedItem().toString();
+		this.population.setFitnessFunction(this.fitnessFunction);
 	}
 
 	public void reset() {

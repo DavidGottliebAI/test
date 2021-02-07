@@ -82,7 +82,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	public void calculateFitness(String fitnessFunction, int populationSize) {
-		if (fitnessFunction.equals("fitnessAbsolute")) {
+		if (fitnessFunction.equals("Absolutely!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();

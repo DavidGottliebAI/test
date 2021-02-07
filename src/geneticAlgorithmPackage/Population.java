@@ -145,8 +145,7 @@ public class Population {
 //		}
 	}
 
-	public void setChromosomeLength(int chromosomeLength) {
-		// TODO Auto-generated method stub
-
+	public void setFitnessFunction(String fitnessFunction) {
+		this.fitnessFunction = fitnessFunction;
 	}
 }
