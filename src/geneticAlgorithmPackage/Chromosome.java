@@ -22,6 +22,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	private EditableViewer editableViewer;
 	private int fitness;
 	private int chromosomeLength;
+	private String fitnessFunction = "Fitness1";
 
 	/**
 	 * ensures:
@@ -80,11 +81,23 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public void calculateLameFitness() {
-		this.fitness = 0;
-		for (Gene gene : this.geneList) {
-			this.fitness += gene.getBit();
+	public void calculateFitness(String fitnessFunction, int populationSize) {
+		if (fitnessFunction.equals("fitnessAbsolute")) {
+			this.fitness = 0;
+			for (Gene gene : this.geneList) {
+				this.fitness += gene.getBit();
+			}
+			this.fitness = Math.abs(this.fitness - populationSize / 2);
+		} else {
+			this.fitness = 0;
+			for (Gene gene : this.geneList) {
+				this.fitness += gene.getBit();
+			}
 		}
+	}
+
+	public void calculateFitnessAbsolute(int populationSize) {
+
 	}
 
 	public int getFitness() {
@@ -135,7 +148,6 @@ public class Chromosome implements Comparable<Chromosome> {
 			newGene.setBit(gene.getBit());
 			copiedChromosome.geneList.add(newGene);
 		}
-		copiedChromosome.calculateLameFitness();
 		return copiedChromosome;
 	}
 }

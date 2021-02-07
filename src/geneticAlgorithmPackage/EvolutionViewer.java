@@ -228,12 +228,12 @@ public class EvolutionViewer {
 	}
 
 	public void reset() {
+		this.startButton.setText("Start");
 		this.evolutionRunning = false;
+		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
 		this.lineGraph.repaint();
-		this.numLoops = 1;
-		this.startButton.setText("Start");
 
 	}
 }
