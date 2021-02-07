@@ -39,4 +39,8 @@ public class LineGraph extends JComponent {
 
 		}
 	}
+
+	public void reset() {
+		this.bestFitnessLog.clear();
+	}
 }

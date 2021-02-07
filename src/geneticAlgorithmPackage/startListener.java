@@ -17,15 +17,21 @@ public class startListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		this.evolutionViewer.flipEvolutionRunning();
-		this.evolutionViewer.setMaxGenerations();
-		
-		if(this.startButton.getText().equals("Start Evolution")) {
+
+		if (this.startButton.getText().equals("Start Evolution")) {
 			this.startButton.setText("Pause");
-		} else if(this.startButton.getText().equals("Pause")) {
+		} else if (this.startButton.getText().equals("Pause")) {
 			this.startButton.setText("Continue");
 		} else {
 			this.startButton.setText("Pause");
 		}
+
+		this.evolutionViewer.setMaxGenerations();
+		this.evolutionViewer.setAverageNumMutations();
+		this.evolutionViewer.setSeed();
+		this.evolutionViewer.setChromsomeLength();
+		this.evolutionViewer.setPopulationSize();
+
+		this.evolutionViewer.flipEvolutionRunning();
 	}
 }
