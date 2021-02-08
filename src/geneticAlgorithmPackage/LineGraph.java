@@ -23,17 +23,17 @@ public class LineGraph extends JComponent {
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Double> averageFitnessLog = new ArrayList<Double>();
-	//private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
+	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 
 	public LineGraph() {
 		this.setPreferredSize(new Dimension(200, 200));
 	}
 
-	public void addEntry(int bestFitness, int worstFitness, double averageFitness) {
+	public void addEntry(int bestFitness, int worstFitness, double averageFitness, double averageHamming) {
 		this.bestFitnessLog.add(bestFitness);
 		this.worstFitnessLog.add(worstFitness);
 		this.averageFitnessLog.add(averageFitness);
-		//this.averageHammingLog.add(averageHamming);
+		this.averageHammingLog.add(averageHamming);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class LineGraph extends JComponent {
 		int previousYBest = 0;
 		int previousYWorst = 0;
 		int previousYAverage = 0;
-		//int previousYAverageHamming = 0;
+		int previousYAverageHamming = 0;
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.GREEN);
@@ -70,9 +70,9 @@ public class LineGraph extends JComponent {
 			g2.drawLine(x*3, previousYAverage, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 			
-//			g2.setColor(Color.YELLOW);
-//			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
-//			previousYAverageHamming = (int) (-this.averageFitnessLog.get(x) * plotRatio);
+			g2.setColor(Color.YELLOW);
+			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
+			previousYAverageHamming = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 		}
 	}
 }

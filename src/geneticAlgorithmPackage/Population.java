@@ -108,7 +108,7 @@ public class Population {
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
 		lineGraph.addEntry(this.chromosomeList.get(0).getFitness(), this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(),
-				this.calculateAverageFitness());
+				this.calculateAverageFitness(), this.calculateAverageHammingDistance());
 		System.out.println(this.chromosomeList.get(0).getFitness());
 
 		System.out.println("After sort:");
@@ -159,41 +159,41 @@ public class Population {
 		return average;
 	}
 	
-//	public int calculate1sBinaryAddition(long binary1, long binary2) {
-//		int[] newBinary = new int[10];
-//		int i = 0;
-//		int carry = 0;
-//		int ones = 0;
-//		
-//		while (binary1 != 0 || binary2 != 0) {
-//			newBinary[i++] = (int)((binary1 % 10 + binary2 % 10 + carry) % 2);
-//			carry = (int)((binary1 % 10 + binary2 % 10 + carry) / 2);
-//			binary1 = 10;
-//			binary2 /= 10;
-//		}
-//		if (carry != 0) {
-//			newBinary[i++] = carry;
-//		}
-//		for(int j = 0; j < newBinary.length; j++) {
-//			if(newBinary[j] == 1) {
-//				ones++;
-//			}
-//		}
-//		return ones;
-//	}
+	public int calculate1sBinaryAddition(long binary1, long binary2) {
+		int[] newBinary = new int[10];
+		int i = 0;
+		int carry = 0;
+		int ones = 0;
+		
+		while (binary1 != 0 || binary2 != 0) {
+			newBinary[i++] = (int)((binary1 % 10 + binary2 % 10 + carry) % 2);
+			carry = (int)((binary1 % 10 + binary2 % 10 + carry) / 2);
+			binary1 = 10;
+			binary2 /= 10;
+		}
+		if (carry != 0) {
+			newBinary[i++] = carry;
+		}
+		for(int j = 0; j < newBinary.length; j++) {
+			if(newBinary[j] == 1) {
+				ones++;
+			}
+		}
+		return ones;
+	}
 	
-//	public double calculateAverageHammingDistance() {
-//		int sum = 0;
-//		int count = 0;
-//		for(int i = 0; i < this.chromosomeList.size(); i++) {
-//			Chromosome current = this.chromosomeList.get(i);
-//			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
-//			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
-//				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
-//				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
-//				count++;
-//			}
-//		}
-//		return sum / count;
-//	}
+	public double calculateAverageHammingDistance() {
+		int sum = 0;
+		int count = 0;
+		for(int i = 0; i < this.chromosomeList.size(); i++) {
+			Chromosome current = this.chromosomeList.get(i);
+			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
+			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
+				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
+				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
+				count++;
+			}
+		}
+		return sum / count;
+	}
 }
