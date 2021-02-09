@@ -19,28 +19,34 @@ import java.util.Random;
 public class Population {
 
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
+	private EvolutionViewer evolutionViewer;
+
+	private int chromosomeLength;
 	private int populationSize;
-	private LineGraph lineGraph;
+	private String fitnessFunction = "";
 
-	public Population(LineGraph lineGraph) {
-		this.lineGraph = lineGraph;
-		this.populationSize = 100;
+	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize) {
+		this.evolutionViewer = evolutionViewer;
+		this.populationSize = populationSize;
+		this.chromosomeLength = chromosomeLength;
+		Random random = new Random();
+		random.setSeed(seed);
 		for (int i = 0; i < this.populationSize; i++) {
-			Chromosome chromosome = new Chromosome();
+			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength);
 			this.chromosomeList.add(chromosome);
 		}
 	}
 
-	public Population(LineGraph lineGraph, int originalSize, long seed) {
-		this.lineGraph = lineGraph;
-		this.populationSize = originalSize;
-		for (int i = 0; i < originalSize; i++) {
-			Random random = new Random();
-			random.setSeed(seed);
-			Chromosome chromosome = new Chromosome(random.nextLong());
-			this.chromosomeList.add(chromosome);
-		}
-	}
+//	public Population(EvolutionViewer evolutionViewer, int populationSize, long seed) {
+//		this.evolutionViewer = evolutionViewer;
+//		this.populationSize = populationSize;
+//		for (int i = 0; i < this.populationSize; i++) {
+//			Random random = new Random();
+//			random.setSeed(seed);
+//			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength);
+//			this.chromosomeList.add(chromosome);
+//		}
+//	}
 
 	/**
 	 * ensures: sorts fitness of all chromosomes in the population, from highest to
@@ -58,7 +64,7 @@ public class Population {
 	 * @param percent
 	 */
 	public void truncate(int percent) {
-		double numberSurvive = Math.round((double) percent / 100 * this.chromosomeList.size());
+		double numberSurvive = Math.ceil((double) percent / 100 * this.chromosomeList.size());
 		while (this.chromosomeList.size() > numberSurvive) {
 			this.chromosomeList.remove(this.chromosomeList.size() - 1);
 		}
@@ -71,80 +77,81 @@ public class Population {
 			if (index > this.chromosomeList.size() - 1) {
 				index = 0;
 			}
-			repopulatedChromosomeList.add(this.chromosomeList.get(index).deepCopy());
+			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
+			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize);
+			repopulatedChromosomeList.add(newChromosome);
+
 			index++;
 		}
 		return repopulatedChromosomeList;
 	}
 
-	private void mutate() {
+	private void mutate(int averageNumMutations) {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.mutate();
-			chromosome.calculateLameFitness();
+			chromosome.mutate(averageNumMutations);
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 		}
 	}
 
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateLameFitness();
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 		}
 	}
 
 	public void evolutionLoop() {
 
-		System.out.println();
-		System.out.println();
-
-		System.out.println("Loop:");
-
-		System.out.println("Before sort:");
-
 		updateFitessScores();
 
+		System.out.println("Before sort:");
 		for (Chromosome chromosome : this.chromosomeList) {
 			System.out.print(chromosome.getFitness() + ", ");
 		}
 
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
-		lineGraph.addEntry(this.chromosomeList.get(0).getFitness(), this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(),
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(), this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(),
 				this.calculateAverageFitness(), this.calculateAverageHammingDistance());
-		System.out.println(this.chromosomeList.get(0).getFitness());
+		
+    System.out.println(this.chromosomeList.get(0).getFitness());
+    
 
-		System.out.println("After sort:");
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
 
-		if (chromosomeList.get(0).getFitness() >= 100) { // Stop evolutionary loop when you reach 100
-			return;
-		}
+//		System.out.println("After sort:");
+//
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
+//		}
 
 		truncate(10);
 
-		System.out.println();
-		System.out.println("After truncate:");
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
+//		System.out.println();
+//		System.out.println("After truncate:");
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
+//		}
 
 		this.chromosomeList = repopulate();
 
-		System.out.println();
-		System.out.println("After repopulated:");
+//		System.out.println();
+//		System.out.println("After repopulated:");
+//
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
+//		}
 
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
-
-		mutate();
+		mutate(this.evolutionViewer.getAverageNumMutations());
 		updateFitessScores();
 
-		System.out.println();
-		System.out.println("After mutate:");
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
+//		System.out.println();
+//		System.out.println("After mutate:");
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
+//		}
+	}
+
+	public void setFitnessFunction(String fitnessFunction) {
+		this.fitnessFunction = fitnessFunction;
 	}
 	
 	public double calculateAverageFitness() {

@@ -75,4 +75,8 @@ public class LineGraph extends JComponent {
 			previousYAverageHamming = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 		}
 	}
+
+	public void reset() {
+		this.bestFitnessLog.clear();
+	}
 }
