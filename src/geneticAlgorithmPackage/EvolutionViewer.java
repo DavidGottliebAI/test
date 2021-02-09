@@ -39,6 +39,7 @@ public class EvolutionViewer {
 	private JTextField chromosomeLengthField;
 	private JTextField populationSizeField;
 	private JComboBox<String> fitnessField;
+	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
 	public static final String title = "Evolution Viewer";
@@ -51,6 +52,7 @@ public class EvolutionViewer {
 	private int chromosomeLength = 100;
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
+	private String selectionMethod = "Truncation";
 
 //	
 	public EvolutionViewer() {
@@ -88,7 +90,7 @@ public class EvolutionViewer {
 		t.start();
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(1300, 500);
+		this.frame.setSize(1450, 500);
 		this.frame.setLocation(500, 20); // might want to play with later
 		this.frame.setVisible(true);
 	}
@@ -97,8 +99,10 @@ public class EvolutionViewer {
 	private void createAdminPanel() {
 		JButton loadButton = new JButton("Load");
 		loadButton.addActionListener(new loadEvolutionListener(this));
+
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new saveEvolutionListener(this, this.buttonGrid));
+
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
 		this.mutateField = new JTextField("1");
 
@@ -112,8 +116,9 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("Absolutely!");
 
 		JLabel selectionLabel = new JLabel("Selection");
-		JComboBox<String> selectionField = new JComboBox<String>();
-		selectionField.addItem("Truncation");
+		this.selectionField = new JComboBox<String>();
+		this.selectionField.addItem("Truncation");
+		this.selectionField.addItem("Roulette Wheel");
 
 		JLabel crossoverLabel = new JLabel("Crossover?");
 		JCheckBox crossoverBox = new JCheckBox();
@@ -144,21 +149,21 @@ public class EvolutionViewer {
 
 		JButton resetButton = new JButton("Reset");
 		resetButton.addActionListener(new resetListener(this));
-   
-    this.buttonGrid.add(saveButton);
+
+		this.buttonGrid.add(saveButton);
 		this.buttonGrid.add(loadButton);
 		this.buttonGrid.add(seedLabel);
 		this.buttonGrid.add(this.seedField);
 		this.buttonGrid.add(mutateLabel);
 		this.buttonGrid.add(this.mutateField);
 		this.buttonGrid.add(fitnessLabel);
-		this.buttonGrid.add(fitnessField);
+		this.buttonGrid.add(this.fitnessField);
 		this.buttonGrid.add(selectionLabel);
-		this.buttonGrid.add(selectionField);
+		this.buttonGrid.add(this.selectionField);
 		this.buttonGrid.add(crossoverLabel);
 		this.buttonGrid.add(crossoverBox);
 		this.buttonGrid.add(populationSizeLabel);
-		this.buttonGrid.add(populationSizeField);
+		this.buttonGrid.add(this.populationSizeField);
 		this.buttonGrid.add(generationsLabel);
 		this.buttonGrid.add(this.generationsField);
 		this.buttonGrid.add(chromosomeLength);
@@ -219,7 +224,7 @@ public class EvolutionViewer {
 		}
 	}
 
-	public void setChromsomeLength() {
+	public void setChromosomeLength() {
 		int oldChromosomeLength = this.chromosomeLength;
 		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
 		if (this.chromosomeLength != oldChromosomeLength) {
@@ -238,6 +243,11 @@ public class EvolutionViewer {
 	public void setFitnessFunction() {
 		this.fitnessFunction = this.fitnessField.getSelectedItem().toString();
 		this.population.setFitnessFunction(this.fitnessFunction);
+	}
+
+	public void setSelectionMethod() {
+		this.selectionMethod = this.selectionField.getSelectedItem().toString();
+		this.population.setSelectionMethod(this.selectionMethod);
 	}
 
 	public void reset() {

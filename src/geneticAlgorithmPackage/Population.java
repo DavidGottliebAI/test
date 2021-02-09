@@ -24,6 +24,7 @@ public class Population {
 	private int chromosomeLength;
 	private int populationSize;
 	private String fitnessFunction = "";
+	private String selectionMethod = "";
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize) {
 		this.evolutionViewer = evolutionViewer;
@@ -63,10 +64,24 @@ public class Population {
 	 * 
 	 * @param percent
 	 */
-	public void truncate(int percent) {
+	public void selection(int percent) {
 		double numberSurvive = Math.ceil((double) percent / 100 * this.chromosomeList.size());
-		while (this.chromosomeList.size() > numberSurvive) {
-			this.chromosomeList.remove(this.chromosomeList.size() - 1);
+		if (this.selectionMethod.equals("Truncation")) {
+			while (this.chromosomeList.size() > numberSurvive) {
+				this.chromosomeList.remove(this.chromosomeList.size() - 1);
+			}
+		} else if (this.selectionMethod.equals("Roulette Wheel")) {
+			ArrayList<Chromosome> rouletteList = new ArrayList<Chromosome>();
+			for (Chromosome chromosome : this.chromosomeList) {
+				for (int i = 0; i < chromosome.getFitness(); i++) {
+					rouletteList.add(chromosome);
+				}
+			}
+			Random random = new Random();
+			this.chromosomeList.clear();
+			for (int i = 0; i < this.populationSize; i++) {
+				this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
+			}
 		}
 	}
 
@@ -105,17 +120,13 @@ public class Population {
 
 		System.out.println("Before sort:");
 		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-			System.out.print(chromosome.getUpdatedGeneString() + ", ");
+			System.out.print(chromosome.getFitness() + ", ");
 		}
 
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
-				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness(),
-				this.calculateAverageHammingDistance());
-
-		System.out.println(this.chromosomeList.get(0).getFitness());
+				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
 
 //		System.out.println("After sort:");
 //
@@ -123,7 +134,7 @@ public class Population {
 //			System.out.print(chromosome.getFitness() + ", ");
 //		}
 
-		truncate(50);
+		selection(50);
 
 //		System.out.println();
 //		System.out.println("After truncate:");
@@ -203,5 +214,9 @@ public class Population {
 //		}
 //		return sum / count;
 		return 0;
+	}
+
+	public void setSelectionMethod(String selectionMethod) {
+		this.selectionMethod = selectionMethod;
 	}
 }

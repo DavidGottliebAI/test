@@ -88,16 +88,14 @@ public class Chromosome implements Comparable<Chromosome> {
 				this.fitness += gene.getBit();
 			}
 			this.fitness = Math.abs(this.fitness - populationSize / 2);
-		} else {
+		} else if(fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
+//		} else if(fitnessFunction.equals("Editable")) {
+//			// TODO
 		}
-	}
-
-	public void calculateFitnessAbsolute(int populationSize) {
-
 	}
 
 	public int getFitness() {

@@ -29,10 +29,11 @@ public class startListener implements ActionListener {
 		this.evolutionViewer.setMaxGenerations();
 		this.evolutionViewer.setAverageNumMutations();
 		this.evolutionViewer.setSeed();
-		this.evolutionViewer.setChromsomeLength();
+		this.evolutionViewer.setChromosomeLength();
 		this.evolutionViewer.setPopulationSize();
 		this.evolutionViewer.setFitnessFunction();
-
+		this.evolutionViewer.setSelectionMethod();
+		
 		this.evolutionViewer.flipEvolutionRunning();
 	}
 }
