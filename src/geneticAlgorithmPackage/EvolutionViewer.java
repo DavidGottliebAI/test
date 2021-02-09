@@ -95,6 +95,10 @@ public class EvolutionViewer {
 
 //
 	private void createAdminPanel() {
+		JButton loadButton = new JButton("Load");
+		loadButton.addActionListener(new loadEvolutionListener(this));
+		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(new saveEvolutionListener(this, this.buttonGrid));
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
 		this.mutateField = new JTextField("1");
 
@@ -140,7 +144,9 @@ public class EvolutionViewer {
 
 		JButton resetButton = new JButton("Reset");
 		resetButton.addActionListener(new resetListener(this));
-
+   
+    this.buttonGrid.add(saveButton);
+		this.buttonGrid.add(loadButton);
 		this.buttonGrid.add(seedLabel);
 		this.buttonGrid.add(this.seedField);
 		this.buttonGrid.add(mutateLabel);
