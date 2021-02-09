@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -33,18 +34,19 @@ public class saveEvolutionListener implements ActionListener {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			this.selectedFile = fileChooser.getSelectedFile();
 		}
-		BufferedImage imagebuf = null;
+		
+		
+		BufferedImage imagebuf = new BufferedImage(this.buttonGrid.getWidth(), this.buttonGrid.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = imagebuf.createGraphics();
+		this.buttonGrid.paintAll(g2);
 		try {
-	        imagebuf = new Robot().createScreenCapture(this.buttonGrid.getBounds());
-	    } catch (AWTException e1) {
+			if (ImageIO.write(imagebuf, "png", new File(this.selectedFile + "output_image.png")))
+            {
+                System.out.println("-- saved");
+            }
+	    } catch (IOException e1) {
 	        e1.printStackTrace();
-	    }
-		Graphics2D graphics2D = imagebuf.createGraphics();
-		this.buttonGrid.paint(graphics2D);
-	    try {
-	        ImageIO.write(imagebuf,"jpeg", new File("\\save1.jpeg"));
-	    } catch (Exception e2) {
-	        System.out.println("error");
 	    }
 	}
 

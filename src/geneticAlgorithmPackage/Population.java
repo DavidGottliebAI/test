@@ -102,13 +102,14 @@ public class Population {
 		updateFitessScores();
 
 		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
+//			System.out.print(chromosome.getFitness() + ", ");
+			System.out.print(chromosome.getUpdatedGeneString() + ", ");
 		}
 
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
 		lineGraph.addEntry(this.chromosomeList.get(0).getFitness(), this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(),
-				this.calculateAverageFitness(), this.calculateAverageHammingDistance());
+				this.calculateAverageFitness()); // add hamming
 		System.out.println(this.chromosomeList.get(0).getFitness());
 
 		System.out.println("After sort:");
@@ -184,7 +185,7 @@ public class Population {
 	
 	public double calculateAverageHammingDistance() {
 		int sum = 0;
-		int count = 0;
+		int count = 1;
 		for(int i = 0; i < this.chromosomeList.size(); i++) {
 			Chromosome current = this.chromosomeList.get(i);
 			long firstBinary = Long.parseLong(current.getUpdatedGeneString());

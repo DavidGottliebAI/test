@@ -29,11 +29,11 @@ public class LineGraph extends JComponent {
 		this.setPreferredSize(new Dimension(200, 200));
 	}
 
-	public void addEntry(int bestFitness, int worstFitness, double averageFitness, double averageHamming) {
+	public void addEntry(int bestFitness, int worstFitness, double averageFitness) { // add hamming
 		this.bestFitnessLog.add(bestFitness);
 		this.worstFitnessLog.add(worstFitness);
 		this.averageFitnessLog.add(averageFitness);
-		this.averageHammingLog.add(averageHamming);
+		//this.averageHammingLog.add(averageHamming);
 	}
 
 	@Override
@@ -70,9 +70,9 @@ public class LineGraph extends JComponent {
 			g2.drawLine(x*3, previousYAverage, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 			
-			g2.setColor(Color.YELLOW);
-			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
-			previousYAverageHamming = (int) (-this.averageFitnessLog.get(x) * plotRatio);
+//			g2.setColor(Color.YELLOW);
+//			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
+//			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
 		}
 	}
 }

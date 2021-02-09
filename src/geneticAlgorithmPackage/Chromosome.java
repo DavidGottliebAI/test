@@ -100,6 +100,15 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 		return this.geneString;
 	}
+	
+	public long getBits() {
+		String bits = "";
+		for (EditableGene gene : editableGeneList) {
+			bits += gene.getBit();
+		}
+		long bitString = Long.parseLong(bits);
+		return bitString;
+	}
 
 	/**
 	 * ensures: gets geneList
