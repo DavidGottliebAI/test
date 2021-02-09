@@ -1,6 +1,7 @@
 package geneticAlgorithmPackage;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,42 +27,60 @@ import javax.swing.Timer;
  */
 public class EvolutionViewer {
 
+	public LineGraph lineGraph;
+	private Population population;
+
 	public JFrame frame;
 	private JPanel buttonGrid;
-	public final String title = "Evolution Viewer";
-	private Population population;
-	private int DELAY = 50;
-	private boolean evolutionRunning = false;
-	private int maxGenerations = 10;
+	private JTextField mutateField;
 	private JTextField generationsField;
+	private JButton startButton;
+	private JTextField seedField;
+	private JTextField chromosomeLengthField;
+	private JTextField populationSizeField;
+	private JComboBox<String> fitnessField;
+
+	private static final int DELAY = 50;
+	public static final String title = "Evolution Viewer";
+
+	public boolean evolutionRunning = false;
+	private int maxGenerations = 100;
+	private int averageNumMutations = 1;
+	private int numLoops = 0;
+	private int seed = 0;
+	private int chromosomeLength = 100;
+	private int populationSize = 100;
+	private String fitnessFunction = "One for All!";
 
 //	
 	public EvolutionViewer() {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
+		this.lineGraph = new LineGraph();
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
 
-		LineGraph lineGraph = new LineGraph();
-		this.population = new Population(lineGraph);
-
-		frame.add(lineGraph, BorderLayout.CENTER);
-
-		lineGraph.repaint();
-
+		frame.add(this.lineGraph, BorderLayout.CENTER);
+		this.lineGraph.repaint();
 		createAdminPanel();
 
+		/**
+		 * purpose: Creates a timer to loop evolutionary process
+		 * 
+		 */
 		Timer t = new Timer(DELAY, new ActionListener() {
-			int loop = 0;
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
-					if (loop > maxGenerations) {
+					if (numLoops > maxGenerations) {
 						return;
 					}
+					System.out.println();
+					System.out.println("Generation: " + numLoops);
 					population.evolutionLoop();
 					frame.repaint();
-					loop++;
+					numLoops++;
 				}
 			}
 		});
@@ -81,35 +100,57 @@ public class EvolutionViewer {
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new saveEvolutionListener(this, this.buttonGrid));
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
-		JTextField mutateField = new JTextField("0");
+		this.mutateField = new JTextField("1");
+
+		JLabel seedLabel = new JLabel("Seed");
+		this.seedField = new JTextField("0");
+		this.seedField.setPreferredSize(new Dimension(40, 20));
 
 		JLabel fitnessLabel = new JLabel("Fitness");
-		JComboBox fitnessField = new JComboBox();
-		fitnessField.addItem("All 1's");
+		this.fitnessField = new JComboBox<String>();
+		this.fitnessField.addItem("One for All!");
+		this.fitnessField.addItem("Absolutely!");
+
 		JLabel selectionLabel = new JLabel("Selection");
-		JComboBox selectionField = new JComboBox();
+		JComboBox<String> selectionField = new JComboBox<String>();
 		selectionField.addItem("Truncation");
+
 		JLabel crossoverLabel = new JLabel("Crossover?");
 		JCheckBox crossoverBox = new JCheckBox();
 		crossoverBox.addActionListener(new crossoverListener());
+
 		JLabel populationSizeLabel = new JLabel("Population Size");
-		JTextField populationSizeField = new JTextField("100");
-		populationSizeField.addActionListener(new populationSizeListener());
+		this.populationSizeField = new JTextField("100");
+		this.populationSizeField.addActionListener(new populationSizeListener());
+		this.populationSizeField.setPreferredSize(new Dimension(40, 20));
+
 		JLabel generationsLabel = new JLabel("Generations");
 		this.generationsField = new JTextField("100");
-		generationsField.addActionListener(new generationsListener());
-		JLabel genomeLengthLabel = new JLabel("Genome Length");
-		JTextField genomeLengthField = new JTextField("100");
-		genomeLengthField.addActionListener(new genomeLengthListener());
+		this.generationsField.addActionListener(new generationsListener());
+		this.generationsField.setPreferredSize(new Dimension(30, 20));
+
+		JLabel chromosomeLength = new JLabel("Chromosome Length");
+		this.chromosomeLengthField = new JTextField("100");
+		this.chromosomeLengthField.addActionListener(new genomeLengthListener());
+		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
+
 		JLabel elitismLabel = new JLabel("Elitism %");
-		JTextField elitismField = new JTextField("0.1");
+		JTextField elitismField = new JTextField("10");
 		elitismField.addActionListener(new elitismListener());
-		JButton startButton = new JButton("Start Evolution");
-		startButton.addActionListener(new startListener(this, startButton));
-		this.buttonGrid.add(saveButton);
+		elitismField.setPreferredSize(new Dimension(30, 20));
+
+		this.startButton = new JButton("Start Evolution");
+		this.startButton.addActionListener(new startListener(this, this.startButton));
+
+		JButton resetButton = new JButton("Reset");
+		resetButton.addActionListener(new resetListener(this));
+   
+    this.buttonGrid.add(saveButton);
 		this.buttonGrid.add(loadButton);
+		this.buttonGrid.add(seedLabel);
+		this.buttonGrid.add(this.seedField);
 		this.buttonGrid.add(mutateLabel);
-		this.buttonGrid.add(mutateField);
+		this.buttonGrid.add(this.mutateField);
 		this.buttonGrid.add(fitnessLabel);
 		this.buttonGrid.add(fitnessField);
 		this.buttonGrid.add(selectionLabel);
@@ -119,12 +160,14 @@ public class EvolutionViewer {
 		this.buttonGrid.add(populationSizeLabel);
 		this.buttonGrid.add(populationSizeField);
 		this.buttonGrid.add(generationsLabel);
-		this.buttonGrid.add(generationsField);
-		this.buttonGrid.add(genomeLengthLabel);
-		this.buttonGrid.add(genomeLengthField);
+		this.buttonGrid.add(this.generationsField);
+		this.buttonGrid.add(chromosomeLength);
+		this.buttonGrid.add(this.chromosomeLengthField);
 		this.buttonGrid.add(elitismLabel);
 		this.buttonGrid.add(elitismField);
-		this.buttonGrid.add(startButton);
+		this.buttonGrid.add(this.startButton);
+		this.buttonGrid.add(resetButton);
+
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
 	}
 
@@ -147,17 +190,63 @@ public class EvolutionViewer {
 			}
 			return textFieldNumber;
 		} catch (NumberFormatException e) {
-			this.frame.setTitle("Enter a number larger than 0!");
+			this.frame.setTitle("Enter a number larger than 0 into the text field!");
 			return 0;
 		}
 	}
 
 	public int getMaxGenerations() {
-		return maxGenerations;
+		return this.maxGenerations;
 	}
 
 	public void setMaxGenerations() {
 		this.maxGenerations = getTextFieldNumber(generationsField);
 	}
 
+	public int getAverageNumMutations() {
+		return this.averageNumMutations;
+	}
+
+	public void setAverageNumMutations() {
+		this.averageNumMutations = getTextFieldNumber(mutateField);
+	}
+
+	public void setSeed() {
+		int oldSeed = this.seed;
+		this.seed = getTextFieldNumber(seedField);
+		if (this.seed != oldSeed) {
+			this.reset();
+		}
+	}
+
+	public void setChromsomeLength() {
+		int oldChromosomeLength = this.chromosomeLength;
+		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
+		if (this.chromosomeLength != oldChromosomeLength) {
+			this.reset();
+		}
+	}
+
+	public void setPopulationSize() {
+		int oldPopulationSize = this.populationSize;
+		this.populationSize = getTextFieldNumber(this.populationSizeField);
+		if (this.populationSize != oldPopulationSize) {
+			this.reset();
+		}
+	}
+
+	public void setFitnessFunction() {
+		this.fitnessFunction = this.fitnessField.getSelectedItem().toString();
+		this.population.setFitnessFunction(this.fitnessFunction);
+	}
+
+	public void reset() {
+		this.startButton.setText("Start");
+		this.evolutionRunning = false;
+		this.numLoops = 1;
+		this.lineGraph.reset();
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
+		this.lineGraph.repaint();
+
+	}
 }
