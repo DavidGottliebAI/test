@@ -22,7 +22,8 @@ public class Chromosome implements Comparable<Chromosome> {
 	private EditableViewer editableViewer;
 	private int fitness;
 	private int chromosomeLength;
-	private String fitnessFunction = "Fitness1";
+	
+	//private String fitnessFunction = "Fitness1";
 
 	/**
 	 * ensures:
@@ -81,20 +82,30 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public void calculateFitness(String fitnessFunction, int populationSize) {
+	public void calculateFitness(String fitnessFunction, int populationSize) throws NullPointerException {
 		if (fitnessFunction.equals("Absolutely!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
 			this.fitness = Math.abs(this.fitness - populationSize / 2);
-		} else if(fitnessFunction.equals("One for All!")) {
+		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
-//		} else if(fitnessFunction.equals("Editable")) {
-//			// TODO
+		} else if (fitnessFunction.equals("Editable")) {
+			try {
+				this.fitness = 0;
+				for (int i = 0; i < this.geneList.size(); i++) {
+					int currentEditableBit = this.editableViewer.getChromosome().getGeneList().get(i).getBit();
+					int currentPopulationBit = this.geneList.get(i).getBit();
+					this.fitness += Math.abs(currentEditableBit - currentPopulationBit);
+				}
+			} catch (NullPointerException e) {
+				// re-title EvolutionViewer
+				System.err.println("No Chromosome");
+			}
 		}
 	}
 
@@ -114,7 +125,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 		return this.geneString;
 	}
-	
+
 	public long getBits() {
 		String bits = "";
 		for (EditableGene gene : editableGeneList) {

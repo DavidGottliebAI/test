@@ -91,7 +91,7 @@ public class EvolutionViewer {
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(1450, 500);
-		this.frame.setLocation(500, 20); // might want to play with later
+		this.frame.setLocation(450, 20); // might want to play with later
 		this.frame.setVisible(true);
 	}
 
@@ -114,6 +114,7 @@ public class EvolutionViewer {
 		this.fitnessField = new JComboBox<String>();
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
+		this.fitnessField.addItem("Editable");
 
 		JLabel selectionLabel = new JLabel("Selection");
 		this.selectionField = new JComboBox<String>();

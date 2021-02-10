@@ -37,7 +37,7 @@ public class EditableViewer {
 		this.adminGrid = new JPanel();
 		createAdminPanel();
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(500, 500);
+		this.frame.setSize(450, 450);
 		this.frame.setLocation(0, 20);
 		this.frame.setVisible(true);
 	}
