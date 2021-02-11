@@ -42,7 +42,7 @@ public class Population {
 		}
 	}
 
-	public void evolutionLoop() {
+	public boolean evolutionLoop() {
 
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
@@ -57,9 +57,13 @@ public class Population {
 //				+ this.calculateAverageFitness());
 
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
+		if (this.chromosomeList.get(0).getFitness() >= 100) {
+			return true;
+		}
 		selection(50);
 		this.chromosomeList = repopulate();
 		mutate(this.evolutionViewer.getAverageNumMutations());
+		return false;
 	}
 
 	/**
