@@ -109,5 +109,7 @@ public class LineGraph extends JComponent {
 
 	public void reset() {
 		this.bestFitnessLog.clear();
+		this.averageFitnessLog.clear();
+		this.worstFitnessLog.clear();
 	}
 }

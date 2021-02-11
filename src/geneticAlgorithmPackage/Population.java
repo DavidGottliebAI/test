@@ -95,7 +95,7 @@ public class Population {
 	}
 
 	private void mutate(int averageNumMutations) {
-		Random randomMutate = new Random();
+		Random randomMutate = new Random(this.random.nextLong());
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate(averageNumMutations, randomMutate.nextLong());
 			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
@@ -112,21 +112,22 @@ public class Population {
 
 		updateFitessScores();
 
-		System.out.println("Before sort:");
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
-
-		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
-
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
-				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
-
-//		System.out.println("After sort:");
-//
+//		System.out.println("Before sort:");
 //		for (Chromosome chromosome : this.chromosomeList) {
 //			System.out.print(chromosome.getFitness() + ", ");
 //		}
+
+		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+
+		System.out.println("After sort:");
+
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
+		}
+		//System.out.println(this.chromosomeList.get(0).getFitness() + " " + this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " " + this.calculateAverageFitness()) ;
+
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
+				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
 
 		selection(50);
 
@@ -161,42 +162,39 @@ public class Population {
 
 	public double calculateAverageFitness() {
 		int sum = 0;
-		int count = 0;
-		for (int i = 0; i < this.chromosomeList.size(); i++) {
-			int current = this.chromosomeList.get(i).getFitness();
-			sum += current;
-			count++;
+		for (Chromosome chromosome : this.chromosomeList) {
+			sum += chromosome.getFitness();
 		}
-		double average = sum / count;
-		return average;
+		return sum / this.chromosomeList.size();
+
 	}
 
-	public int calculate1sBinaryAddition(long binary1, long binary2) {
-		int[] newBinary = new int[10];
-		int i = 0;
-		int carry = 0;
-		int ones = 0;
+//	public int calculate1sBinaryAddition(long binary1, long binary2) {
+//		int[] newBinary = new int[10];
+//		int i = 0;
+//		int carry = 0;
+//		int ones = 0;
+//
+//		while (binary1 != 0 || binary2 != 0) {
+//			newBinary[i++] = (int) ((binary1 % 10 + binary2 % 10 + carry) % 2);
+//			carry = (int) ((binary1 % 10 + binary2 % 10 + carry) / 2);
+//			binary1 = 10;
+//			binary2 /= 10;
+//		}
+//		if (carry != 0) {
+//			newBinary[i++] = carry;
+//		}
+//		for (int j = 0; j < newBinary.length; j++) {
+//			if (newBinary[j] == 1) {
+//				ones++;
+//			}
+//		}
+//		return ones;
+//	}
 
-		while (binary1 != 0 || binary2 != 0) {
-			newBinary[i++] = (int) ((binary1 % 10 + binary2 % 10 + carry) % 2);
-			carry = (int) ((binary1 % 10 + binary2 % 10 + carry) / 2);
-			binary1 = 10;
-			binary2 /= 10;
-		}
-		if (carry != 0) {
-			newBinary[i++] = carry;
-		}
-		for (int j = 0; j < newBinary.length; j++) {
-			if (newBinary[j] == 1) {
-				ones++;
-			}
-		}
-		return ones;
-	}
-
-	public double calculateAverageHammingDistance() {
-		int sum = 0;
-		int count = 0;
+//	public double calculateAverageHammingDistance() {
+//		int sum = 0;
+//		int count = 0;
 //		for(int i = 0; i < this.chromosomeList.size(); i++) {
 //			Chromosome current = this.chromosomeList.get(i);
 //			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
@@ -207,8 +205,8 @@ public class Population {
 //			}
 //		}
 //		return sum / count;
-		return 0;
-	}
+//		return 0;
+//	}
 
 	public void setSelectionMethod(String selectionMethod) {
 		this.selectionMethod = selectionMethod;

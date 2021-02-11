@@ -47,8 +47,6 @@ public class startListener implements ActionListener {
 			}
 			this.evolutionViewer.setEvolutionRunning(true);
 		} else {
-			System.out.println("CONTINUE");
-
 			this.startButton.setText("Continue");
 			this.evolutionViewer.setEvolutionRunning(false);
 		}

@@ -43,8 +43,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		this.seed = seed;
 		this.chromosomeLength = chromosomeLength;
 		this.editableViewer = editableViewer;
-		this.random = new Random();
-		this.random.setSeed(seed);
+		this.random = new Random(seed);
 		this.chromosomeLength = chromosomeLength;
 		for (int i = 0; i < this.chromosomeLength; i++) {
 			Gene gene = new Gene(this.random.nextInt(2));
@@ -111,7 +110,7 @@ public class Chromosome implements Comparable<Chromosome> {
 				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
-				System.err.println("No Chromosome");
+				//System.err.println("No Chromosome");
 			}
 		}
 	}
@@ -156,9 +155,8 @@ public class Chromosome implements Comparable<Chromosome> {
 		return other.fitness - this.fitness;
 	}
 
-	public void mutate(int averageNumMutations, Long seed) {
-		Random newRandom = new Random();
-		newRandom.setSeed(seed);
+	public void mutate(int averageNumMutations, long seed) {
+		Random newRandom = new Random(seed);
 		for (Gene gene : this.geneList) {
 			if (newRandom.nextInt(this.geneList.size()) + 1 <= averageNumMutations) {
 				gene.changeBit();
