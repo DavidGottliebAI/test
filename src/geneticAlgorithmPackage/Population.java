@@ -17,10 +17,10 @@ import java.util.Random;
  */
 
 public class Population {
-
+	
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 	private EvolutionViewer evolutionViewer;
-
+	
 	private int chromosomeLength;
 	private int populationSize;
 	private String fitnessFunction = "";
