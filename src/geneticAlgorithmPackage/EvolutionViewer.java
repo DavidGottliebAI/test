@@ -123,7 +123,7 @@ public class EvolutionViewer {
 		this.fitnessField = new JComboBox<String>();
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
-		this.fitnessField.addItem("Editable");
+		this.fitnessField.addItem("Target");
 
 		JLabel selectionLabel = new JLabel("Selection");
 		this.selectionField = new JComboBox<String>();

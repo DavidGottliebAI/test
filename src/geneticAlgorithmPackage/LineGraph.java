@@ -79,7 +79,7 @@ public class LineGraph extends JComponent {
 		affineTransform.rotate(Math.toRadians(-90), 0, 0);
 		Font rotatedFont = font.deriveFont(affineTransform);
 		g2.setFont(rotatedFont);
-		g2.drawString("Population", -30, -PLOT_HEIGHT / 2 + 35);
+		g2.drawString("Fitness", -30, -PLOT_HEIGHT / 2 + 35);
 
 		g2.setStroke(new BasicStroke(3));
 

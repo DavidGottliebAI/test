@@ -39,7 +39,8 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public Chromosome(long seed, int chromosomeLength, EditableViewer editableViewer) { // maybe create new chromosome class
+	public Chromosome(long seed, int chromosomeLength, EditableViewer editableViewer) { // maybe create new chromosome
+																						// class
 		this.seed = seed;
 		this.chromosomeLength = chromosomeLength;
 		this.editableViewer = editableViewer;
@@ -92,13 +93,13 @@ public class Chromosome implements Comparable<Chromosome> {
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
-			this.fitness = Math.abs(this.fitness - populationSize / 2);
+			this.fitness = Math.abs(this.fitness - populationSize / 2) * 2;
 		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
-		} else if (fitnessFunction.equals("Editable")) {
+		} else if (fitnessFunction.equals("Target")) {
 			try {
 				this.fitness = 0;
 				for (int i = 0; i < this.geneList.size(); i++) {
@@ -110,9 +111,14 @@ public class Chromosome implements Comparable<Chromosome> {
 				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
-				//System.err.println("No Chromosome");
+				// System.err.println("No Chromosome");
 			}
 		}
+		normalizeFitness();
+	}
+
+	public void normalizeFitness() {
+		this.fitness = 100 * this.fitness / this.chromosomeLength;
 	}
 
 	public int getFitness() {

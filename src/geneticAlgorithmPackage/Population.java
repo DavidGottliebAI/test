@@ -42,6 +42,27 @@ public class Population {
 		}
 	}
 
+	public void evolutionLoop() {
+
+		updateFitessScores();
+		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+
+//		System.out.println("After sort:");
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
+//		}
+//
+//		System.out.println(this.chromosomeList.get(0).getFitness() + " "
+//				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
+//				+ this.calculateAverageFitness());
+
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
+				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
+		selection(50);
+		this.chromosomeList = repopulate();
+		mutate(this.evolutionViewer.getAverageNumMutations());
+	}
+
 	/**
 	 * ensures: sorts fitness of all chromosomes in the population, from highest to
 	 * lowest
@@ -108,58 +129,6 @@ public class Population {
 		}
 	}
 
-	public void evolutionLoop() {
-
-		updateFitessScores();
-
-//		System.out.println("Before sort:");
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-
-		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
-
-		System.out.println("After sort:");
-
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
-		//System.out.println(this.chromosomeList.get(0).getFitness() + " " + this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " " + this.calculateAverageFitness()) ;
-
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
-				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
-
-		selection(50);
-
-//		System.out.println();
-//		System.out.println("After truncate:");
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-
-		this.chromosomeList = repopulate();
-
-//		System.out.println();
-//		System.out.println("After repopulated:");
-//
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-
-		mutate(this.evolutionViewer.getAverageNumMutations());
-		updateFitessScores();
-
-//		System.out.println();
-//		System.out.println("After mutate:");
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-	}
-
-	public void setFitnessFunction(String fitnessFunction) {
-		this.fitnessFunction = fitnessFunction;
-	}
-
 	public double calculateAverageFitness() {
 		int sum = 0;
 		for (Chromosome chromosome : this.chromosomeList) {
@@ -167,6 +136,14 @@ public class Population {
 		}
 		return sum / this.chromosomeList.size();
 
+	}
+
+	public void setFitnessFunction(String fitnessFunction) {
+		this.fitnessFunction = fitnessFunction;
+	}
+
+	public void setSelectionMethod(String selectionMethod) {
+		this.selectionMethod = selectionMethod;
 	}
 
 //	public int calculate1sBinaryAddition(long binary1, long binary2) {
@@ -207,8 +184,4 @@ public class Population {
 //		return sum / count;
 //		return 0;
 //	}
-
-	public void setSelectionMethod(String selectionMethod) {
-		this.selectionMethod = selectionMethod;
-	}
 }
