@@ -82,7 +82,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public void calculateFitness(String fitnessFunction, int populationSize) throws NullPointerException {
+	public void calculateFitness(String fitnessFunction, int populationSize, EditableViewer editableViewer) throws NullPointerException {
 		if (fitnessFunction.equals("Absolutely!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
