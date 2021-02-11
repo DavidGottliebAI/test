@@ -22,8 +22,10 @@ public class Chromosome implements Comparable<Chromosome> {
 	private EditableViewer editableViewer;
 	private int fitness;
 	private int chromosomeLength;
-	
-	//private String fitnessFunction = "Fitness1";
+	private long seed;
+	protected Random random;
+
+	// private String fitnessFunction = "Fitness1";
 
 	/**
 	 * ensures:
@@ -37,12 +39,15 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public Chromosome(long seed, int chromosomeLength) { // maybe create new chromosome class
-		Random random = new Random();
-		random.setSeed(seed);
+	public Chromosome(long seed, int chromosomeLength, EditableViewer editableViewer) { // maybe create new chromosome class
+		this.seed = seed;
+		this.chromosomeLength = chromosomeLength;
+		this.editableViewer = editableViewer;
+		this.random = new Random();
+		this.random.setSeed(seed);
 		this.chromosomeLength = chromosomeLength;
 		for (int i = 0; i < this.chromosomeLength; i++) {
-			Gene gene = new Gene(random.nextInt(2));
+			Gene gene = new Gene(this.random.nextInt(2));
 			this.geneList.add(gene);
 		}
 	}
@@ -82,7 +87,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public void calculateFitness(String fitnessFunction, int populationSize, EditableViewer editableViewer) throws NullPointerException {
+	public void calculateFitness(String fitnessFunction, int populationSize) throws NullPointerException {
 		if (fitnessFunction.equals("Absolutely!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
@@ -101,7 +106,9 @@ public class Chromosome implements Comparable<Chromosome> {
 					int currentEditableBit = this.editableViewer.getChromosome().getGeneList().get(i).getBit();
 					int currentPopulationBit = this.geneList.get(i).getBit();
 					this.fitness += Math.abs(currentEditableBit - currentPopulationBit);
+
 				}
+				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
 				System.err.println("No Chromosome");
@@ -149,17 +156,18 @@ public class Chromosome implements Comparable<Chromosome> {
 		return other.fitness - this.fitness;
 	}
 
-	public void mutate(int averageNumMutations) {
-		Random random = new Random();
+	public void mutate(int averageNumMutations, Long seed) {
+		Random newRandom = new Random();
+		newRandom.setSeed(seed);
 		for (Gene gene : this.geneList) {
-			if (random.nextInt(this.geneList.size()) + 1 <= averageNumMutations) {
+			if (newRandom.nextInt(this.geneList.size()) + 1 <= averageNumMutations) {
 				gene.changeBit();
 			}
 		}
 	}
 
 	public Chromosome deepCopy() {
-		Chromosome copiedChromosome = new Chromosome();
+		Chromosome copiedChromosome = new Chromosome(this.seed, this.chromosomeLength, this.editableViewer);
 		copiedChromosome.geneList.clear();
 		for (Gene gene : this.geneList) {
 			Gene newGene = new Gene();

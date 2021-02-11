@@ -1,6 +1,7 @@
 package geneticAlgorithmPackage;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,7 +38,7 @@ public class EditableViewer {
 		this.adminGrid = new JPanel();
 		createAdminPanel();
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(450, 450);
+		this.frame.setSize(500, 500);
 		this.frame.setLocation(0, 20);
 		this.frame.setVisible(true);
 	}
@@ -96,7 +97,7 @@ public class EditableViewer {
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
 		for (EditableGene gene : this.getChromosome().editableGeneList) {
-			gene.setSize(30, 30);
+//			gene.setPreferredSize(new Dimension(50, 50));
 			this.buttonGrid.add(gene);
 		}
 		this.frame.add(this.buttonGrid);

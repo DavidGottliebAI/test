@@ -26,7 +26,7 @@ public class ViewerMain {
 		BestChromosomeViewer bestChromosomeViewer = new BestChromosomeViewer();
 		EditableViewer editableViewer = new EditableViewer();
 		PopulationViewer populationViewer = new PopulationViewer();
-		EvolutionViewer evolutionViewer = new EvolutionViewer();
+		EvolutionViewer evolutionViewer = new EvolutionViewer(editableViewer);
 		LineGraph graph = new LineGraph();
 	}
 

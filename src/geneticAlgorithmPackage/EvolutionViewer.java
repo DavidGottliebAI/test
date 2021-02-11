@@ -42,6 +42,7 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
+	protected static final int GENERATION_LIMIT = 400;
 	public static final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
@@ -53,13 +54,16 @@ public class EvolutionViewer {
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
-	
-	public EvolutionViewer() {
+	private EditableViewer editableViewer;
+
+	public EvolutionViewer(EditableViewer editableViewer) {
+		this.editableViewer = editableViewer;
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
 		this.lineGraph = new LineGraph();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+				this.editableViewer);
 
 		frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
@@ -74,14 +78,20 @@ public class EvolutionViewer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
-					if (numLoops > maxGenerations) {
+					if (getNumLoops() > maxGenerations) {
+						startButton.setText("Continue");
+						flipEvolutionRunning();
+						return;
+					} else if (getNumLoops() >= GENERATION_LIMIT) {
+						startButton.setText("Reset");
+						flipEvolutionRunning();
 						return;
 					}
 					System.out.println();
-					System.out.println("Generation: " + numLoops);
+					System.out.println("Generation: " + getNumLoops());
 					population.evolutionLoop();
 					frame.repaint();
-					numLoops++;
+					numLoops = getNumLoops() + 1;
 				}
 			}
 		});
@@ -144,7 +154,7 @@ public class EvolutionViewer {
 		elitismField.addActionListener(new elitismListener());
 		elitismField.setPreferredSize(new Dimension(30, 20));
 
-		this.startButton = new JButton("Start Evolution");
+		this.startButton = new JButton("Start");
 		this.startButton.addActionListener(new startListener(this, this.startButton));
 
 		JButton resetButton = new JButton("Reset");
@@ -255,8 +265,17 @@ public class EvolutionViewer {
 		this.evolutionRunning = false;
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+				this.editableViewer);
 		this.lineGraph.repaint();
 
+	}
+
+	public int getNumLoops() {
+		return numLoops;
+	}
+
+	public void setEvolutionRunning(boolean b) {
+		this.evolutionRunning = b;
 	}
 }

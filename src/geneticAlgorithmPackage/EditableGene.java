@@ -28,7 +28,7 @@ public class EditableGene extends JButton {
 	 * @param index of gene
 	 */
 	public EditableGene(int index) {
-		this.setFont(new Font("Helvetica", Font.BOLD, 12));
+		this.setFont(new Font("Helvetica", Font.BOLD, 10));
 		Random random = new Random();
 		this.bit = random.nextInt(2);
 		updateColor();
@@ -40,7 +40,7 @@ public class EditableGene extends JButton {
 	 * @param index of gene, and bit number
 	 */
 	public EditableGene(int index, int bit) {
-		this.setFont(new Font("Serif", Font.BOLD, 14));
+		this.setFont(new Font("Helevetica", Font.BOLD, 10));
 		this.bit = bit;
 		updateColor();
 		this.setText("" + index);

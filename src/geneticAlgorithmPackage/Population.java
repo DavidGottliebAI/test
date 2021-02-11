@@ -17,39 +17,30 @@ import java.util.Random;
  */
 
 public class Population {
-	
+
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 	private EvolutionViewer evolutionViewer;
-	
+
 	private int chromosomeLength;
 	private int populationSize;
 	private String fitnessFunction = "";
 	private String selectionMethod = "";
 	private EditableViewer editableViewer;
+	private Random random;
 
-	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize) {
-		//this.editableViewer = editableViewer;
+	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
+			EditableViewer editableViewer) {
+		this.editableViewer = editableViewer;
 		this.evolutionViewer = evolutionViewer;
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
-		Random random = new Random();
-		random.setSeed(seed);
+		this.random = new Random();
+		this.random.setSeed(seed);
 		for (int i = 0; i < this.populationSize; i++) {
-			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength);
+			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength, this.editableViewer);
 			this.chromosomeList.add(chromosome);
 		}
 	}
-
-//	public Population(EvolutionViewer evolutionViewer, int populationSize, long seed) {
-//		this.evolutionViewer = evolutionViewer;
-//		this.populationSize = populationSize;
-//		for (int i = 0; i < this.populationSize; i++) {
-//			Random random = new Random();
-//			random.setSeed(seed);
-//			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength);
-//			this.chromosomeList.add(chromosome);
-//		}
-//	}
 
 	/**
 	 * ensures: sorts fitness of all chromosomes in the population, from highest to
@@ -95,7 +86,7 @@ public class Population {
 				index = 0;
 			}
 			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
-			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
+			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 			repopulatedChromosomeList.add(newChromosome);
 
 			index++;
@@ -104,15 +95,16 @@ public class Population {
 	}
 
 	private void mutate(int averageNumMutations) {
+		Random randomMutate = new Random();
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.mutate(averageNumMutations);
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
+			chromosome.mutate(averageNumMutations, randomMutate.nextLong());
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 		}
 	}
 
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 		}
 	}
 
