@@ -28,7 +28,8 @@ public class Chromosome implements Comparable<Chromosome> {
 	// private String fitnessFunction = "Fitness1";
 
 	/**
-	 * ensures:
+	 * ensures: a chromosome a is constructed completely randomly and basically for
+	 * the editable chromosome viewer
 	 */
 
 	public Chromosome() { // maybe create new chromosome class
@@ -39,6 +40,16 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
+	/**
+	 * ensures: a specific chromosome can be created based on user input of a seed
+	 * and length
+	 * 
+	 * @param seed             the user defined seed to make random chromosome
+	 *                         creation repeatable
+	 * @param chromosomeLength the user defined number of genes in this chromosome
+	 * @param editableViewer   the viewer containing the target chromosome for
+	 *                         target fitness comparison
+	 */
 	public Chromosome(long seed, int chromosomeLength, EditableViewer editableViewer) { // maybe create new chromosome
 																						// class
 		this.seed = seed;
@@ -87,6 +98,18 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
+	/**
+	 * ensures: calculates fitness of the chromosome based on user chosen fitness
+	 * function and normalizes fitness values
+	 * 
+	 * @param fitnessFunction the user chosen (drop down) fitness function
+	 * @param populationSize  the number of chromosomes in this chromsome's
+	 *                        populationF
+	 * @param evolutionViewer the evolution viewer the population's evolutionary
+	 *                        progress is being visualized in
+	 * @throws NullPointerException if the target chromosome has not yet been
+	 *                              created by the user
+	 */
 	public void calculateFitness(String fitnessFunction, int populationSize, EvolutionViewer evolutionViewer)
 			throws NullPointerException {
 		if (fitnessFunction.equals("Absolutely!")) {
@@ -113,13 +136,17 @@ public class Chromosome implements Comparable<Chromosome> {
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
 				// System.err.println("No Chromosome");
-				evolutionViewer.frame
-						.setTitle(evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
+				evolutionViewer.frame.setTitle(
+						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		}
 		normalizeFitness();
 	}
 
+	/**
+	 * ensures: sets the fitness proportional to this chromosome's length on a 0 to
+	 * 100 scale
+	 */
 	public void normalizeFitness() {
 		this.fitness = 100 * this.fitness / this.chromosomeLength;
 	}
@@ -141,6 +168,9 @@ public class Chromosome implements Comparable<Chromosome> {
 		return this.geneString;
 	}
 
+	/**
+	 * ensures: returns a long for use in the hamming distance
+	 */
 	public long getBits() {
 		String bits = "";
 		for (EditableGene gene : editableGeneList) {
@@ -164,6 +194,16 @@ public class Chromosome implements Comparable<Chromosome> {
 		return other.fitness - this.fitness;
 	}
 
+	/**
+	 * ensures: mutations occur to a random selection of genes in the chromosome
+	 * based on user input of mutation rate
+	 * 
+	 * @param averageNumMutations the statistically expected number of mutations to
+	 *                            occur in each chromomosome
+	 * @param seed                the random seed fed from chromosome to ensure
+	 *                            repeated identically random mutations when an
+	 *                            equal seed is selected by a user
+	 */
 	public void mutate(int averageNumMutations, long seed) {
 		Random newRandom = new Random(seed);
 		for (Gene gene : this.geneList) {
@@ -173,6 +213,12 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
+	/**
+	 * ensures: a new chromsome is created based off of the information of this
+	 * chromsome
+	 * 
+	 * @return a cloned chromsome that is new and in a seperate location
+	 */
 	public Chromosome deepCopy() {
 		Chromosome copiedChromosome = new Chromosome(this.seed, this.chromosomeLength, this.editableViewer);
 		copiedChromosome.geneList.clear();

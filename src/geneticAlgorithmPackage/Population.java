@@ -42,6 +42,13 @@ public class Population {
 		}
 	}
 
+	/**
+	 * ensures: runs evolutionary loop to simulate biological evolution of a
+	 * chromosome
+	 * 
+	 * @return true if the evolution produced a chromosome with a fitness >= 100,
+	 *         else false
+	 */
 	public boolean evolutionLoop() {
 
 		updateFitessScores();
@@ -102,6 +109,12 @@ public class Population {
 		}
 	}
 
+	/**
+	 * ensures: all chromosomes that are killed (truncated) or parents are replaced
+	 * my clones of the surviving parents
+	 * 
+	 * @return a repopulated list of cloned chromosomes
+	 */
 	private ArrayList<Chromosome> repopulate() {
 		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
 		int index = 0;
@@ -117,6 +130,12 @@ public class Population {
 		return repopulatedChromosomeList;
 	}
 
+	/**
+	 * ensures: the each chromosome in the population is mutated according to the
+	 * average number of expected mutations
+	 * 
+	 * @param averageNumMutations the statistically expected number of mutations
+	 */
 	private void mutate(int averageNumMutations) {
 		Random randomMutate = new Random(this.random.nextLong());
 		for (Chromosome chromosome : this.chromosomeList) {
@@ -124,16 +143,31 @@ public class Population {
 		}
 	}
 
+	/**
+	 * ensures: iterates through each chromosome at the start of each evolutionary
+	 * loop to have accurate fitness before sorting
+	 */
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.evolutionViewer);
 		}
 	}
 
+	/**
+	 * ensures: the populations fitness function can be set by the evolution viewer
+	 * 
+	 * @param fitnessFunction the selected fitness function from the user drop down
+	 */
 	public void setFitnessFunction(String fitnessFunction) {
 		this.fitnessFunction = fitnessFunction;
 	}
 
+	/**
+	 * ensures: the population's selection method can be set by the evolution viewer
+	 * 
+	 * @param selectionMethod the selected selection method from the user's drop
+	 *                        down
+	 */
 	public void setSelectionMethod(String selectionMethod) {
 		this.selectionMethod = selectionMethod;
 	}

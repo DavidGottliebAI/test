@@ -56,6 +56,14 @@ public class EvolutionViewer {
 	private String selectionMethod = "Truncation";
 	private EditableViewer editableViewer;
 
+	/**
+	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
+	 * eventual use in target fitness function. Also creates the first population
+	 * for the evolutionaryLoop to build off. Also creates the template GUI
+	 * elements.
+	 * 
+	 * @param editableViewer the visualization of the editable target chromosome
+	 */
 	public EvolutionViewer(EditableViewer editableViewer) {
 		this.editableViewer = editableViewer;
 		this.frame = new JFrame();
@@ -70,7 +78,9 @@ public class EvolutionViewer {
 		createAdminPanel();
 
 		/**
-		 * purpose: Creates a timer to loop evolutionary process
+		 * purpose: Creates a timer to loop evolutionary process based on
+		 * evolutionRunnning boolean state and runs continuously while Evolution Viewer
+		 * is open and executing
 		 * 
 		 */
 		Timer t = new Timer(DELAY, new ActionListener() {
@@ -104,7 +114,10 @@ public class EvolutionViewer {
 		this.frame.setVisible(true);
 	}
 
-//
+	/**
+	 * ensures: creates, adds functionality and adds buttons to viewer frame
+	 * 
+	 */
 	private void createAdminPanel() {
 		JButton loadButton = new JButton("Load");
 		loadButton.addActionListener(new loadEvolutionListener(this));
@@ -186,6 +199,9 @@ public class EvolutionViewer {
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * ensures: the state of evolution is flipped to opposite of it's current state
+	 */
 	public void flipEvolutionRunning() {
 		if (evolutionRunning) {
 			evolutionRunning = false;
@@ -194,8 +210,13 @@ public class EvolutionViewer {
 		}
 	}
 
-	// Starts the simulator
-
+	/**
+	 * ensures: a general solution for extracting information from JTextFields in
+	 * GUI and handling exceptions
+	 * 
+	 * @param textField the text field a user entered number into
+	 * @return integer of the user input
+	 */
 	public int getTextFieldNumber(JTextField textField) { // may need refactoring
 		String text = textField.getText();
 		try {
@@ -226,6 +247,10 @@ public class EvolutionViewer {
 		this.averageNumMutations = getTextFieldNumber(mutateField);
 	}
 
+	/**
+	 * ensures: seed can be set based on user input from text field and resets GUI
+	 * if a change is made when start is clicked
+	 */
 	public void setSeed() {
 		int oldSeed = this.seed;
 		this.seed = getTextFieldNumber(seedField);
@@ -234,6 +259,10 @@ public class EvolutionViewer {
 		}
 	}
 
+	/**
+	 * ensures: chromosome length can be set based on user input from text field and
+	 * resets GUI if a change is made when start is clicked
+	 */
 	public void setChromosomeLength() {
 		int oldChromosomeLength = this.chromosomeLength;
 		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
@@ -242,6 +271,10 @@ public class EvolutionViewer {
 		}
 	}
 
+	/**
+	 * ensures: population size can be set based on user input from text field and
+	 * resets GUI if a change is made when start is clicked
+	 */
 	public void setPopulationSize() {
 		int oldPopulationSize = this.populationSize;
 		this.populationSize = getTextFieldNumber(this.populationSizeField);
@@ -260,6 +293,10 @@ public class EvolutionViewer {
 		this.population.setSelectionMethod(this.selectionMethod);
 	}
 
+	/**
+	 * ensures: GUI is reset when reset button is pressed and modifications require
+	 * a change in graphics
+	 */
 	public void reset() {
 		this.startButton.setText("Start");
 		this.evolutionRunning = false;
