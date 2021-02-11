@@ -56,8 +56,7 @@ public class Population {
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
 
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
-				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
 		selection(50);
 		this.chromosomeList = repopulate();
 		mutate(this.evolutionViewer.getAverageNumMutations());
@@ -127,15 +126,6 @@ public class Population {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 		}
-	}
-
-	public double calculateAverageFitness() {
-		int sum = 0;
-		for (Chromosome chromosome : this.chromosomeList) {
-			sum += chromosome.getFitness();
-		}
-		return sum / this.chromosomeList.size();
-
 	}
 
 	public void setFitnessFunction(String fitnessFunction) {

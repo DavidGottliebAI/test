@@ -5,13 +5,15 @@ import java.awt.Font;
 import java.util.Random;
 
 import javax.swing.JButton;
+
 /**
  * 
  * @author oblaznjc and gottlijd
  * 
- *         Purpose: <br> Creates gene button for editable viewer
- *         Restriction: <br> Can only be used for editable viewer
- *         For example: <br> EditableGene gene = new EditableGene()
+ *         Purpose: <br>
+ *         Creates gene button for editable viewer Restriction: <br>
+ *         Can only be used for editable viewer For example: <br>
+ *         EditableGene gene = new EditableGene()
  *
  */
 public class EditableGene extends JButton {
@@ -22,9 +24,10 @@ public class EditableGene extends JButton {
 	private static final Color zeroBitForeground = Color.GREEN;
 
 	private int bit;
-	
+
 	/**
 	 * ensures: creates gene with specific index and random bit number
+	 * 
 	 * @param index of gene
 	 */
 	public EditableGene(int index) {
@@ -34,9 +37,10 @@ public class EditableGene extends JButton {
 		updateColor();
 		this.setText("" + index);
 	}
-	
+
 	/**
 	 * ensures: creates gene with specific index and specified bit number
+	 * 
 	 * @param index of gene, and bit number
 	 */
 	public EditableGene(int index, int bit) {
@@ -45,7 +49,7 @@ public class EditableGene extends JButton {
 		updateColor();
 		this.setText("" + index);
 	}
-	
+
 	/**
 	 * ensures: sets the color of the gene depending on its bit
 	 */
@@ -58,7 +62,7 @@ public class EditableGene extends JButton {
 			this.setForeground(oneBitForeground);
 		}
 	}
-	
+
 	/**
 	 * ensures: changes the bit of the gene
 	 */
@@ -70,9 +74,10 @@ public class EditableGene extends JButton {
 		}
 		updateColor();
 	}
-	
+
 	/**
 	 * ensures: gets the gene's bit
+	 * 
 	 * @return gene's bit
 	 */
 	public int getBit() {

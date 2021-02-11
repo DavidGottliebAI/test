@@ -30,10 +30,14 @@ public class LineGraph extends JComponent {
 		this.setPreferredSize(new Dimension(200, 200));
 	}
 
-	public void addEntry(int bestFitness, int worstFitness, double averageFitness) { // add hamming
-		this.bestFitnessLog.add(bestFitness);
-		this.worstFitnessLog.add(worstFitness);
-		this.averageFitnessLog.add(averageFitness);
+	public void addEntry(ArrayList<Chromosome> chromosomeList) { // add hamming
+		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
+		this.worstFitnessLog.add(chromosomeList.get(chromosomeList.size() - 1).getFitness());
+		int sum = 0;
+		for (Chromosome chromosome : chromosomeList) {
+			sum += chromosome.getFitness();
+		}
+		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
 		// this.averageHammingLog.add(averageHamming);
 	}
 
@@ -43,7 +47,7 @@ public class LineGraph extends JComponent {
 		Graphics2D g2 = (Graphics2D) g;
 		Font smallFont = new Font(null, Font.BOLD, 10);
 		g2.setFont(smallFont);
-		
+
 		g2.setStroke(new BasicStroke(2));
 
 		g2.translate(50, this.getHeight() - 50);
@@ -54,12 +58,11 @@ public class LineGraph extends JComponent {
 			g2.drawLine(-10, -i * 30, 10, -i * 30);
 			g2.drawString("" + i * 10, -20, -i * 30);
 		}
-		
-		
+
 		g2.drawString("Best Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 - 40);
 		g2.drawString("Average Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 10);
 		g2.drawString("Worst Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 60);
-		
+
 		Font font = new Font(null, Font.BOLD, 15);
 		g2.setFont(font);
 
