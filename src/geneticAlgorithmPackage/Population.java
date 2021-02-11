@@ -110,7 +110,6 @@ public class Population {
 				index = 0;
 			}
 			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
-			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 			repopulatedChromosomeList.add(newChromosome);
 
 			index++;
@@ -122,13 +121,12 @@ public class Population {
 		Random randomMutate = new Random(this.random.nextLong());
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate(averageNumMutations, randomMutate.nextLong());
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
 		}
 	}
 
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.evolutionViewer);
 		}
 	}
 

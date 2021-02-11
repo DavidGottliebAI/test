@@ -87,8 +87,6 @@ public class EvolutionViewer {
 						flipEvolutionRunning();
 						return;
 					}
-					System.out.println();
-					System.out.println("Generation: " + getNumLoops());
 					if (population.evolutionLoop()) {
 						flipEvolutionRunning();
 					}

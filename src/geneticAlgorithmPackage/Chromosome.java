@@ -87,7 +87,8 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public void calculateFitness(String fitnessFunction, int populationSize) throws NullPointerException {
+	public void calculateFitness(String fitnessFunction, int populationSize, EvolutionViewer evolutionViewer)
+			throws NullPointerException {
 		if (fitnessFunction.equals("Absolutely!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
@@ -112,6 +113,8 @@ public class Chromosome implements Comparable<Chromosome> {
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
 				// System.err.println("No Chromosome");
+				evolutionViewer.frame
+						.setTitle(evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		}
 		normalizeFitness();
