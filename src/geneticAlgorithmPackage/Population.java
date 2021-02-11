@@ -25,8 +25,10 @@ public class Population {
 	private int populationSize;
 	private String fitnessFunction = "";
 	private String selectionMethod = "";
+	private EditableViewer editableViewer;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize) {
+		//this.editableViewer = editableViewer;
 		this.evolutionViewer = evolutionViewer;
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
@@ -93,7 +95,7 @@ public class Population {
 				index = 0;
 			}
 			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
-			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize);
+			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
 			repopulatedChromosomeList.add(newChromosome);
 
 			index++;
@@ -104,13 +106,13 @@ public class Population {
 	private void mutate(int averageNumMutations) {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.mutate(averageNumMutations);
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
 		}
 	}
 
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize);
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
 		}
 	}
 

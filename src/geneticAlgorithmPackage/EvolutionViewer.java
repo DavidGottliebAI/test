@@ -53,8 +53,7 @@ public class EvolutionViewer {
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
-
-//	
+	
 	public EvolutionViewer() {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
