@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -109,11 +110,16 @@ public class LineGraph extends JComponent {
 
 		// rotates graph
 
-		AffineTransform affineTransform = new AffineTransform();
-		affineTransform.rotate(Math.toRadians(-90), 0, 0);
-		Font rotatedFont = font.deriveFont(affineTransform);
-		g2.setFont(rotatedFont);
+//		AffineTransform affineTransform = new AffineTransform();
+//		affineTransform.rotate(Math.toRadians(-90), 0, 0);
+//		Font rotatedFont = font.deriveFont(affineTransform);
+		//g2.setFont(rotatedFont);
+		g2.translate(85, -PLOT_HEIGHT / 2 + 10);
+		g2.rotate(-Math.PI/2);
 		g2.drawString("Fitness", -30, -PLOT_HEIGHT / 2 + 35);
+		g2.rotate(Math.PI/2);
+		g2.translate(-85, -1*(-PLOT_HEIGHT / 2 + 10));
+		
 
 		g2.setStroke(new BasicStroke(3));
 
@@ -140,6 +146,13 @@ public class LineGraph extends JComponent {
 //			g2.setColor(Color.YELLOW);
 //			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 //			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
+			
+			g2.setColor(Color.GREEN);
+			g2.drawString("" + this.getFitnesses()[0], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 15);
+			g2.setColor(Color.ORANGE);
+			g2.drawString("" + this.getFitnesses()[1], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 35);
+			g2.setColor(Color.RED);
+			g2.drawString("" + this.getFitnesses()[2], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 85);
 		}
 	}
 	
