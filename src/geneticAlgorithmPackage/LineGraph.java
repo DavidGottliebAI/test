@@ -27,7 +27,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 
 	/**
-	 * ensures: Constructs a line graph component and sets the preffered size
+	 * ensures: Constructs a line graph component and sets the preferred size
 	 */
 	public LineGraph() {
 		this.setPreferredSize(new Dimension(200, 200));
@@ -141,6 +141,14 @@ public class LineGraph extends JComponent {
 //			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 //			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
 		}
+	}
+	
+	public double[] getFitnesses() {
+		double[] fitnesses = new double[3];
+		fitnesses[0] = bestFitnessLog.get(bestFitnessLog.size() - 1);
+		fitnesses[1] = averageFitnessLog.get(averageFitnessLog.size() - 1);
+		fitnesses[2] = worstFitnessLog.get(worstFitnessLog.size() - 1);
+		return fitnesses;
 	}
 
 	/**

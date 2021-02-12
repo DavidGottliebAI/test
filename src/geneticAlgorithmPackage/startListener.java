@@ -55,6 +55,9 @@ public class startListener implements ActionListener {
 							this.evolutionViewer.title + ": Reset or choose number of Generations greater than "
 									+ (this.evolutionViewer.getNumLoops() - 1));
 					return;
+				} else if(this.evolutionViewer.lineGraph.getFitnesses()[0] >= this.evolutionViewer.FITNESS_LIMIT) {
+					this.evolutionViewer.frame.setTitle(this.evolutionViewer.title + ": Restart! Best fitness has maxed out!");
+					return;
 				}
 				this.startButton.setText("Pause");
 			}

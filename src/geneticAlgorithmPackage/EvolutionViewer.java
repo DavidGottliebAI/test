@@ -43,6 +43,7 @@ public class EvolutionViewer {
 
 	private static final int DELAY = 50;
 	protected static final int GENERATION_LIMIT = 399;
+	protected static final int FITNESS_LIMIT = 100;
 	
 	public static final String title = "Evolution Viewer";
 
