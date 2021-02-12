@@ -21,7 +21,7 @@ public class EditableGene extends JButton {
 	private static final Color zeroBitBackground = Color.BLACK;
 	private static final Color zeroBitForeground = Color.GREEN;
 
-	private int bit;
+	public int bit;
 	
 	/**
 	 * ensures: creates gene with specific index and random bit number

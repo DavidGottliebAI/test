@@ -34,7 +34,7 @@ public class LineGraph extends JComponent {
 		this.bestFitnessLog.add(bestFitness);
 		this.worstFitnessLog.add(worstFitness);
 		this.averageFitnessLog.add(averageFitness);
-		// this.averageHammingLog.add(averageHamming);
+		//this.averageHammingLog.add(averageHamming);
 	}
 
 	@Override

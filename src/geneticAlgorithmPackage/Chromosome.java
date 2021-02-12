@@ -18,7 +18,7 @@ import java.util.Random;
 public class Chromosome implements Comparable<Chromosome> {
 	ArrayList<EditableGene> editableGeneList = new ArrayList<EditableGene>();
 	ArrayList<Gene> geneList = new ArrayList<Gene>();
-	private String geneString = "";
+	public String geneString = "";
 	private EditableViewer editableViewer;
 	private int fitness;
 	private int chromosomeLength;
@@ -96,15 +96,16 @@ public class Chromosome implements Comparable<Chromosome> {
 			}
 		} else if (fitnessFunction.equals("Editable")) {
 			try {
-				this.fitness = 0;
+				this.fitness = this.chromosomeLength;
 				for (int i = 0; i < this.geneList.size(); i++) {
 					int currentEditableBit = this.editableViewer.getChromosome().getGeneList().get(i).getBit();
 					int currentPopulationBit = this.geneList.get(i).getBit();
-					this.fitness += Math.abs(currentEditableBit - currentPopulationBit);
+					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
 				System.err.println("No Chromosome");
+				
 			}
 		}
 	}
@@ -124,15 +125,6 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.geneString = this.geneString + gene.getBit();
 		}
 		return this.geneString;
-	}
-
-	public long getBits() {
-		String bits = "";
-		for (EditableGene gene : editableGeneList) {
-			bits += gene.getBit();
-		}
-		long bitString = Long.parseLong(bits);
-		return bitString;
 	}
 
 	/**

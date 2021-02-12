@@ -19,6 +19,7 @@ public class startListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (this.startButton.getText().equals("Start Evolution")) {
+			this.evolutionViewer.reset();
 			this.startButton.setText("Pause");
 		} else if (this.startButton.getText().equals("Pause")) {
 			this.startButton.setText("Continue");

@@ -42,6 +42,7 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
+	private static final int GENERATION_LIMIT = 399;
 	public static final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
@@ -53,7 +54,7 @@ public class EvolutionViewer {
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
-	
+
 	public EvolutionViewer() {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
@@ -74,7 +75,8 @@ public class EvolutionViewer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
-					if (numLoops > maxGenerations) {
+					if (numLoops > maxGenerations || numLoops >= GENERATION_LIMIT) {
+						startButton.setText("Start Evolution");
 						return;
 					}
 					System.out.println();
