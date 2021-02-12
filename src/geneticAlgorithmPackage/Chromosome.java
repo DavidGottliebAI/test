@@ -22,11 +22,14 @@ public class Chromosome implements Comparable<Chromosome> {
 	private EditableViewer editableViewer;
 	private int fitness;
 	private int chromosomeLength;
-	
-	//private String fitnessFunction = "Fitness1";
+	private long seed;
+	protected Random random;
+
+	// private String fitnessFunction = "Fitness1";
 
 	/**
-	 * ensures:
+	 * ensures: a chromosome a is constructed completely randomly and basically for
+	 * the editable chromosome viewer
 	 */
 
 	public Chromosome() { // maybe create new chromosome class
@@ -37,12 +40,25 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public Chromosome(long seed, int chromosomeLength) { // maybe create new chromosome class
-		Random random = new Random();
-		random.setSeed(seed);
+	/**
+	 * ensures: a specific chromosome can be created based on user input of a seed
+	 * and length
+	 * 
+	 * @param seed             the user defined seed to make random chromosome
+	 *                         creation repeatable
+	 * @param chromosomeLength the user defined number of genes in this chromosome
+	 * @param editableViewer   the viewer containing the target chromosome for
+	 *                         target fitness comparison
+	 */
+	public Chromosome(long seed, int chromosomeLength, EditableViewer editableViewer) { // maybe create new chromosome
+																						// class
+		this.seed = seed;
+		this.chromosomeLength = chromosomeLength;
+		this.editableViewer = editableViewer;
+		this.random = new Random(seed);
 		this.chromosomeLength = chromosomeLength;
 		for (int i = 0; i < this.chromosomeLength; i++) {
-			Gene gene = new Gene(random.nextInt(2));
+			Gene gene = new Gene(this.random.nextInt(2));
 			this.geneList.add(gene);
 		}
 	}
@@ -82,19 +98,32 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public void calculateFitness(String fitnessFunction, int populationSize, EditableViewer editableViewer) throws NullPointerException {
+	/**
+	 * ensures: calculates fitness of the chromosome based on user chosen fitness
+	 * function and normalizes fitness values
+	 * 
+	 * @param fitnessFunction the user chosen (drop down) fitness function
+	 * @param populationSize  the number of chromosomes in this chromsome's
+	 *                        populationF
+	 * @param evolutionViewer the evolution viewer the population's evolutionary
+	 *                        progress is being visualized in
+	 * @throws NullPointerException if the target chromosome has not yet been
+	 *                              created by the user
+	 */
+	public void calculateFitness(String fitnessFunction, int populationSize, EvolutionViewer evolutionViewer)
+			throws NullPointerException {
 		if (fitnessFunction.equals("Absolutely!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
-			this.fitness = Math.abs(this.fitness - populationSize / 2);
+			this.fitness = Math.abs(this.fitness - populationSize / 2) * 2;
 		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
-		} else if (fitnessFunction.equals("Editable")) {
+		} else if (fitnessFunction.equals("Target")) {
 			try {
 				this.fitness = this.chromosomeLength;
 				for (int i = 0; i < this.geneList.size(); i++) {
@@ -102,12 +131,23 @@ public class Chromosome implements Comparable<Chromosome> {
 					int currentPopulationBit = this.geneList.get(i).getBit();
 					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
+				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
-				System.err.println("No Chromosome");
-				
+				// System.err.println("No Chromosome");
+				evolutionViewer.frame.setTitle(
+						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		}
+		normalizeFitness();
+	}
+
+	/**
+	 * ensures: sets the fitness proportional to this chromosome's length on a 0 to
+	 * 100 scale
+	 */
+	public void normalizeFitness() {
+		this.fitness = 100 * this.fitness / this.chromosomeLength;
 	}
 
 	public int getFitness() {
@@ -128,6 +168,18 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	/**
+	 * ensures: returns a long for use in the hamming distance
+	 */
+	public long getBits() { // don't think we need this
+		String bits = "";
+		for (EditableGene gene : editableGeneList) {
+			bits += gene.getBit();
+		}
+		long bitString = Long.parseLong(bits);
+		return bitString;
+	}
+
+	/**
 	 * ensures: gets geneList
 	 * 
 	 * @return geneList
@@ -141,17 +193,33 @@ public class Chromosome implements Comparable<Chromosome> {
 		return other.fitness - this.fitness;
 	}
 
-	public void mutate(int averageNumMutations) {
-		Random random = new Random();
+	/**
+	 * ensures: mutations occur to a random selection of genes in the chromosome
+	 * based on user input of mutation rate
+	 * 
+	 * @param averageNumMutations the statistically expected number of mutations to
+	 *                            occur in each chromomosome
+	 * @param seed                the random seed fed from chromosome to ensure
+	 *                            repeated identically random mutations when an
+	 *                            equal seed is selected by a user
+	 */
+	public void mutate(int averageNumMutations, long seed) {
+		Random newRandom = new Random(seed);
 		for (Gene gene : this.geneList) {
-			if (random.nextInt(this.geneList.size()) + 1 <= averageNumMutations) {
+			if (newRandom.nextInt(this.geneList.size()) + 1 <= averageNumMutations) {
 				gene.changeBit();
 			}
 		}
 	}
 
+	/**
+	 * ensures: a new chromsome is created based off of the information of this
+	 * chromsome
+	 * 
+	 * @return a cloned chromsome that is new and in a seperate location
+	 */
 	public Chromosome deepCopy() {
-		Chromosome copiedChromosome = new Chromosome();
+		Chromosome copiedChromosome = new Chromosome(this.seed, this.chromosomeLength, this.editableViewer);
 		copiedChromosome.geneList.clear();
 		for (Gene gene : this.geneList) {
 			Gene newGene = new Gene();
