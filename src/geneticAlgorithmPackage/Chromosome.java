@@ -81,6 +81,16 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
+	public Chromosome(BestChromosomeViewer bestChromosomeViewer) {
+		this.chromosomeLength = 100;
+		for (int i = 0; i < this.chromosomeLength; i++) {
+			EditableGene gene = new EditableGene(i);
+			gene.addActionListener(new editableGeneListener(gene, this.editableViewer));
+			this.editableGeneList.add(gene);
+			this.geneString = this.geneString + gene.getBit();
+		}
+	}
+
 	/**
 	 * ensures: adds genes to geneList based on specified geneString as well as
 	 * actionListeners, thereby creating a chromosome.
@@ -166,24 +176,6 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 		return this.geneString;
 	}
-
-
-	/**
-	 * ensures: returns a long for use in the hamming distance 
-   * TODO: Ask David if these can be deleted
-	 */
-	public long getBits() {
-		String bits = "";
-		for (EditableGene gene : editableGeneList) {
-			bits += gene.getBit();
-		}
-		long bitString = Long.parseLong(bits);
-		return bitString;
-	}
-
-	/**
-	 * ensures: returns a long for use in the hamming distance
-	 */
 
 	/**
 	 * ensures: gets geneList

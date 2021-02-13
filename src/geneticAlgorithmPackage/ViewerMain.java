@@ -27,7 +27,6 @@ public class ViewerMain {
 		EditableViewer editableViewer = new EditableViewer();
 		PopulationViewer populationViewer = new PopulationViewer();
 		EvolutionViewer evolutionViewer = new EvolutionViewer(editableViewer);
-		// LineGraph graph = new LineGraph();
 	}
 
 }
