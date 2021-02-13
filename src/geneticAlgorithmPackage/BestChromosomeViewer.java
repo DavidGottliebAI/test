@@ -1,6 +1,9 @@
 package geneticAlgorithmPackage;
 
 import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -38,23 +41,7 @@ public class BestChromosomeViewer {
 	 * @param chromosome <br>
 	 *                   requires: chromosome
 	 */
-	public void createButtonGrid(Chromosome bestChromosome) {
-		this.bestChromosome = bestChromosome;
-		this.geneGrid.removeAll();
-		this.geneGrid.setLayout(new GridLayout(10, 10));
-		for (EditableGene gene : this.bestChromosome.getGeneList()) {
-//			gene.setPreferredSize(new Dimension(50, 50));
-			this.geneGrid.add(gene);
-		}
-		
-		this.frame.add(this.geneGrid);
-		this.frame.setVisible(true);
-		this.frame.repaint();
-	}
-
 	public void createButtonGrid() {
-
-		this.geneGrid.removeAll();
 		this.geneGrid.setLayout(new GridLayout(10, 10));
 		this.frame.add(this.geneGrid);
 		this.frame.setVisible(true);
@@ -72,13 +59,10 @@ public class BestChromosomeViewer {
 
 	public void updateGeneGrid(Chromosome bestChromosome) {
 		this.bestChromosome = bestChromosome;
-		
-		
-		
 		this.geneGrid.removeAll();
-		for (EditableGene gene : bestChromosome.editableGeneList) {
-			gene.setSize(30, 30);
-			this.geneGrid.add(gene);
+		for (Gene gene : this.bestChromosome.getGeneList()) {
+			JComponent geneBox = new JButton("" + gene.getBit());
+			this.geneGrid.add(geneBox);
 		}
 		this.frame.setVisible(true);
 		this.frame.repaint();

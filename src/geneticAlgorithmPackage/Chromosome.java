@@ -127,7 +127,7 @@ public class Chromosome implements Comparable<Chromosome> {
 			try {
 				this.fitness = this.chromosomeLength;
 				for (int i = 0; i < this.geneList.size(); i++) {
-					int currentEditableBit = this.editableViewer.getChromosome().getGeneList().get(i).getBit();
+					int currentEditableBit = this.editableViewer.getChromosome().getEditableGeneList().get(i).getBit();
 					int currentPopulationBit = this.geneList.get(i).getBit();
 					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
@@ -172,8 +172,12 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * 
 	 * @return geneList
 	 */
-	public ArrayList<EditableGene> getGeneList() {
-		return editableGeneList;
+	public ArrayList<EditableGene> getEditableGeneList() {
+		return this.editableGeneList;
+	}
+
+	public ArrayList<Gene> getGeneList() {
+		return this.geneList;
 	}
 
 	@Override
