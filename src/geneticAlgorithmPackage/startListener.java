@@ -38,10 +38,10 @@ public class startListener implements ActionListener {
 				this.startButton.setText("Start");
 				return;
 			} else if (this.startButton.getText().equals("Continue")) {
-				System.out.println("yup");
-				if (this.evolutionViewer.getNumLoops() > this.evolutionViewer.GENERATION_LIMIT) {
+				if (this.evolutionViewer.getNumLoops() >= this.evolutionViewer.GENERATION_LIMIT) {
 					this.evolutionViewer.frame
 							.setTitle(this.evolutionViewer.title + ": Restart! Number of generations exceeded 400!");
+					
 //					this.evolutionViewer.reset();
 //					this.startButton.setText("Start");
 					return;

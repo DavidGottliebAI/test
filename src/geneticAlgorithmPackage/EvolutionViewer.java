@@ -56,6 +56,7 @@ public class EvolutionViewer {
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
 	private EditableViewer editableViewer;
+	private BestChromosomeViewer bestChromosomeViewer;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -66,13 +67,14 @@ public class EvolutionViewer {
 	 * @param editableViewer the visualization of the editable target chromosome
 	 */
 	public EvolutionViewer(EditableViewer editableViewer) {
+		this.bestChromosomeViewer = new BestChromosomeViewer();
 		this.editableViewer = editableViewer;
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
 		this.lineGraph = new LineGraph();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer);
+				this.editableViewer, this.bestChromosomeViewer);
 
 		frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
@@ -97,8 +99,6 @@ public class EvolutionViewer {
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 						return;
-					} else if(getNumLoops() > 0 && lineGraph.getFitnesses()[0] >= FITNESS_LIMIT) {
-						
 					}
 					if (population.evolutionLoop()) {
 						flipEvolutionRunning();
@@ -306,7 +306,7 @@ public class EvolutionViewer {
 		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer);
+				this.editableViewer, this.bestChromosomeViewer);
 		this.lineGraph.repaint();
 
 	}

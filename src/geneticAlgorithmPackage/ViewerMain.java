@@ -23,7 +23,6 @@ public class ViewerMain {
 	 * ensures: opens all viewers
 	 */
 	public static void handleOpenAll() {
-		BestChromosomeViewer bestChromosomeViewer = new BestChromosomeViewer();
 		EditableViewer editableViewer = new EditableViewer();
 		PopulationViewer populationViewer = new PopulationViewer();
 		EvolutionViewer evolutionViewer = new EvolutionViewer(editableViewer);
