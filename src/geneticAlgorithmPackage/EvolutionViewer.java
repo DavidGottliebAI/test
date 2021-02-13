@@ -46,6 +46,7 @@ public class EvolutionViewer {
 	protected static final int GENERATION_LIMIT = 399;
 	public static final String title = "Evolution Viewer";
 
+
 	public boolean evolutionRunning = false;
 	private int maxGenerations = 100;
 	private int averageNumMutations = 1;
@@ -126,10 +127,10 @@ public class EvolutionViewer {
 	 */
 	private void createAdminPanel() {
 		JButton loadButton = new JButton("Load");
-		loadButton.addActionListener(new loadEvolutionListener(this));
+		loadButton.addActionListener(new loadEvolutionListener());
 
 		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(new saveEvolutionListener(this, this.buttonGrid));
+		saveButton.addActionListener(new saveEvolutionListener(this.buttonGrid));
 
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
 		this.mutateField = new JTextField("1");

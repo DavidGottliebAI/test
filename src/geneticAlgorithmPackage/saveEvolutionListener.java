@@ -1,8 +1,6 @@
 package geneticAlgorithmPackage;
 
-import java.awt.AWTException;
 import java.awt.Graphics2D;
-import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -14,13 +12,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 public class saveEvolutionListener implements ActionListener {
-	
-	private EvolutionViewer evolutionViewer;
+
 	private JPanel buttonGrid;
 	private File selectedFile;
 
-	public saveEvolutionListener(EvolutionViewer evolutionViewer, JPanel buttonGrid) {
-		this.evolutionViewer = evolutionViewer;
+	public saveEvolutionListener(JPanel buttonGrid) {
 		this.buttonGrid = buttonGrid;
 	}
 
@@ -34,20 +30,18 @@ public class saveEvolutionListener implements ActionListener {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			this.selectedFile = fileChooser.getSelectedFile();
 		}
-		
-		
+
 		BufferedImage imagebuf = new BufferedImage(this.buttonGrid.getWidth(), this.buttonGrid.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = imagebuf.createGraphics();
 		this.buttonGrid.paintAll(g2);
 		try {
-			if (ImageIO.write(imagebuf, "png", new File(this.selectedFile + "output_image.png")))
-            {
-                System.out.println("-- saved");
-            }
-	    } catch (IOException e1) {
-	        e1.printStackTrace();
-	    }
+			if (ImageIO.write(imagebuf, "png", new File(this.selectedFile + "output_image.png"))) {
+				System.out.println("-- saved");
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }

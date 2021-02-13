@@ -53,6 +53,7 @@ public class BestChromosomeViewer {
 	}
 
 	public void createButtonGrid() {
+
 		this.geneGrid.removeAll();
 		this.geneGrid.setLayout(new GridLayout(10, 10));
 		this.frame.add(this.geneGrid);

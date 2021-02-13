@@ -18,7 +18,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Double> averageFitnessLog = new ArrayList<Double>();
-	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
+	// private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 
 	/**
 	 * ensures: Constructs a line graph component and sets the preffered size
@@ -115,7 +115,7 @@ public class LineGraph extends JComponent {
 		int previousYBest = 0; // consider setting to -150 or -180
 		int previousYWorst = 0;
 		int previousYAverage = 0;
-		int previousYAverageHamming = 0;
+		// int previousYAverageHamming = 0;
 
 		// graphs each line
 
