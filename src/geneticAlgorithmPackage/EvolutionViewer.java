@@ -43,8 +43,9 @@ public class EvolutionViewer {
 
 	private static final int DELAY = 50;
 	protected static final int FITNESS_LIMIT = 100;
-	protected static final int GENERATION_LIMIT = 400;
-	public final String title = "Evolution Viewer";
+	protected static final int GENERATION_LIMIT = 399;
+	public static final String title = "Evolution Viewer";
+
 
 	public boolean evolutionRunning = false;
 	private int maxGenerations = 100;
@@ -56,6 +57,7 @@ public class EvolutionViewer {
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
 	private EditableViewer editableViewer;
+	private BestChromosomeViewer bestChromosomeViewer;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -66,13 +68,14 @@ public class EvolutionViewer {
 	 * @param editableViewer the visualization of the editable target chromosome
 	 */
 	public EvolutionViewer(EditableViewer editableViewer) {
+		this.bestChromosomeViewer = new BestChromosomeViewer();
 		this.editableViewer = editableViewer;
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
 		this.lineGraph = new LineGraph();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer);
+				this.editableViewer, this.bestChromosomeViewer);
 
 		frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
@@ -307,7 +310,7 @@ public class EvolutionViewer {
 		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer);
+				this.editableViewer, this.bestChromosomeViewer);
 		this.lineGraph.repaint();
 
 	}

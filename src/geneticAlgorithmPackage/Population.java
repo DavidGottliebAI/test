@@ -27,9 +27,11 @@ public class Population {
 	private String selectionMethod = "";
 	private EditableViewer editableViewer;
 	private Random random;
+	private BestChromosomeViewer bestChromosomeViewer;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
-			EditableViewer editableViewer) {
+			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer) {
+		this.bestChromosomeViewer = bestChromosomeViewer;
 		this.editableViewer = editableViewer;
 		this.evolutionViewer = evolutionViewer;
 		this.populationSize = populationSize;
@@ -62,11 +64,14 @@ public class Population {
 //		System.out.println(this.chromosomeList.get(0).getFitness() + " "
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
+		
+		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
 
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
 		if (this.chromosomeList.get(0).getFitness() >= 100) {
 			return true;
 		}
+		
 		selection(50);
 		this.chromosomeList = repopulate();
 		mutate(this.evolutionViewer.getAverageNumMutations());

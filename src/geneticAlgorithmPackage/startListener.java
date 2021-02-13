@@ -39,7 +39,7 @@ public class startListener implements ActionListener {
 				this.startButton.setText("Start");
 				return;
 			} else if (this.startButton.getText().equals("Continue")) {
-				if (this.evolutionViewer.getNumLoops() > this.evolutionViewer.getMaxGenerations()) {
+				if (this.evolutionViewer.getNumLoops() > this.evolutionViewer.getMaxGenerations()) { 
 					this.evolutionViewer.frame.setTitle(
 							this.evolutionViewer.title + ": Reset or choose number of Generations greater than "
 									+ (this.evolutionViewer.getNumLoops() - 1));
