@@ -96,11 +96,14 @@ public class EvolutionViewer {
 						flipEvolutionRunning();
 						return;
 					} else if (getNumLoops() >= GENERATION_LIMIT) {
+						frame.setTitle(title + ": Restart! Number of generations exceeded 400!");
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 						return;
 					}
 					if (population.evolutionLoop()) {
+						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
+						startButton.setText("Reset");
 						flipEvolutionRunning();
 					}
 					frame.repaint();
@@ -166,7 +169,7 @@ public class EvolutionViewer {
 		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel elitismLabel = new JLabel("Elitism %");
-		JTextField elitismField = new JTextField("10");
+		JTextField elitismField = new JTextField("0");
 		elitismField.addActionListener(new elitismListener());
 		elitismField.setPreferredSize(new Dimension(30, 20));
 
