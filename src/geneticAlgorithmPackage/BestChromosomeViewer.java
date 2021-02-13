@@ -46,7 +46,7 @@ public class BestChromosomeViewer {
 //			gene.setPreferredSize(new Dimension(50, 50));
 			this.geneGrid.add(gene);
 		}
-
+		
 		this.frame.add(this.geneGrid);
 		this.frame.setVisible(true);
 		this.frame.repaint();
