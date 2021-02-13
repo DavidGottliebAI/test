@@ -18,7 +18,7 @@ import java.util.Random;
 public class Chromosome implements Comparable<Chromosome> {
 	ArrayList<EditableGene> editableGeneList = new ArrayList<EditableGene>();
 	ArrayList<Gene> geneList = new ArrayList<Gene>();
-	private String geneString = "";
+	public String geneString = "";
 	private EditableViewer editableViewer;
 	private int fitness;
 	private int chromosomeLength;
@@ -125,17 +125,14 @@ public class Chromosome implements Comparable<Chromosome> {
 			}
 		} else if (fitnessFunction.equals("Target")) {
 			try {
-				this.fitness = 0;
+				this.fitness = this.chromosomeLength;
 				for (int i = 0; i < this.geneList.size(); i++) {
 					int currentEditableBit = this.editableViewer.getChromosome().getGeneList().get(i).getBit();
 					int currentPopulationBit = this.geneList.get(i).getBit();
-					this.fitness += Math.abs(currentEditableBit - currentPopulationBit);
-
+					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
-				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
-				// System.err.println("No Chromosome");
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
@@ -168,8 +165,10 @@ public class Chromosome implements Comparable<Chromosome> {
 		return this.geneString;
 	}
 
+
 	/**
-	 * ensures: returns a long for use in the hamming distance
+	 * ensures: returns a long for use in the hamming distance 
+   * TODO: Ask David if these can be deleted
 	 */
 	public long getBits() {
 		String bits = "";

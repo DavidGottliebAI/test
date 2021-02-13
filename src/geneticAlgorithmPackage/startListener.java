@@ -18,6 +18,7 @@ public class startListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+
 		// takes all user inputs at runtime, right before starting the loop and passes
 		// them into necesary classes
 		this.evolutionViewer.setMaxGenerations();

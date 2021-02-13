@@ -33,6 +33,7 @@ public class LineGraph extends JComponent {
 		this.setPreferredSize(new Dimension(200, 200));
 	}
 
+
 	/**
 	 * ensures: the line graph can accept information from the population and store
 	 * each generations best, worst, and average fitness scores. along with the
