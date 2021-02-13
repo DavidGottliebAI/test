@@ -210,8 +210,4 @@ public class Population {
 // 		return sum / count;
 // 		//return 0;
 // 	}
-
-	public void setSelectionMethod(String selectionMethod) {
-		this.selectionMethod = selectionMethod;
-	}
 }
