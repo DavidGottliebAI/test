@@ -104,10 +104,6 @@ public class LineGraph extends JComponent {
 
 		// rotates graph
 
-//		AffineTransform affineTransform = new AffineTransform();
-//		affineTransform.rotate(Math.toRadians(-90), 0, 0);
-//		Font rotatedFont = font.deriveFont(affineTransform);
-		// g2.setFont(rotatedFont);
 		g2.translate(85, -PLOT_HEIGHT / 2 + 10);
 		g2.rotate(-Math.PI / 2);
 		g2.drawString("Fitness", -30, -PLOT_HEIGHT / 2 + 35);
