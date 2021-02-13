@@ -167,32 +167,6 @@ public class Chromosome implements Comparable<Chromosome> {
 		return this.geneString;
 	}
 
-
-	/**
-	 * ensures: returns a long for use in the hamming distance 
-   * TODO: Ask David if these can be deleted
-	 */
-	public long getBits() {
-		String bits = "";
-		for (EditableGene gene : editableGeneList) {
-			bits += gene.getBit();
-		}
-		long bitString = Long.parseLong(bits);
-		return bitString;
-	}
-
-	/**
-	 * ensures: returns a long for use in the hamming distance
-	 */
-	public long getBits() { // don't think we need this
-		String bits = "";
-		for (EditableGene gene : editableGeneList) {
-			bits += gene.getBit();
-		}
-		long bitString = Long.parseLong(bits);
-		return bitString;
-	}
-
 	/**
 	 * ensures: gets geneList
 	 * 
