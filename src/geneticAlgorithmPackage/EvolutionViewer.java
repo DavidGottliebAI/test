@@ -43,7 +43,7 @@ public class EvolutionViewer {
 
 	private static final int DELAY = 50;
 	protected static final int GENERATION_LIMIT = 399;
-	protected static final int FITNESS_LIMIT = 100;
+	protected static final int FITNESS_LIMIT = 10;
 	
 	public static final String title = "Evolution Viewer";
 
@@ -98,6 +98,8 @@ public class EvolutionViewer {
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 						return;
+					} else if(getNumLoops() > 0 && lineGraph.getFitnesses()[0] >= FITNESS_LIMIT) {
+						
 					}
 					if (population.evolutionLoop()) {
 						flipEvolutionRunning();
