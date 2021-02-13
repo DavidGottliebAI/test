@@ -49,6 +49,13 @@ public class EditableGene extends JButton {
 		this.setText("" + index);
 	}
 
+	public EditableGene(Gene gene, int index) {
+		this.setFont(new Font("Helvetica", Font.BOLD, 10));
+		this.bit = gene.getBit();
+		updateColor();
+		this.setText("" + index);
+	}
+
 	/**
 	 * ensures: sets the color of the gene depending on its bit
 	 */

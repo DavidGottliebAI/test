@@ -131,12 +131,11 @@ public class Chromosome implements Comparable<Chromosome> {
 					int currentPopulationBit = this.geneList.get(i).getBit();
 					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
-				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
 
 				evolutionViewer.frame.setTitle(
-						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
+						EvolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		}
 		normalizeFitness();

@@ -2,8 +2,6 @@ package geneticAlgorithmPackage;
 
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -60,9 +58,9 @@ public class BestChromosomeViewer {
 	public void updateGeneGrid(Chromosome bestChromosome) {
 		this.bestChromosome = bestChromosome;
 		this.geneGrid.removeAll();
+		int index = 0;
 		for (Gene gene : this.bestChromosome.getGeneList()) {
-			JComponent geneBox = new JButton("" + gene.getBit());
-			this.geneGrid.add(geneBox);
+			this.geneGrid.add(new EditableGene(gene, index++));
 		}
 		this.frame.setVisible(true);
 		this.frame.repaint();

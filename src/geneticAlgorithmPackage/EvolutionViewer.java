@@ -46,7 +46,6 @@ public class EvolutionViewer {
 	protected static final int GENERATION_LIMIT = 399;
 	public static final String title = "Evolution Viewer";
 
-
 	public boolean evolutionRunning = false;
 	private int maxGenerations = 100;
 	private int averageNumMutations = 1;
@@ -58,6 +57,7 @@ public class EvolutionViewer {
 	private String selectionMethod = "Truncation";
 	private EditableViewer editableViewer;
 	private BestChromosomeViewer bestChromosomeViewer;
+	private JTextField truncationField;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -150,28 +150,28 @@ public class EvolutionViewer {
 		this.selectionField.addItem("Truncation");
 		this.selectionField.addItem("Roulette Wheel");
 
+		JLabel truncationLabel = new JLabel("Truncate %");
+		this.truncationField = new JTextField("50");
+		this.truncationField.setPreferredSize(new Dimension(30, 20));
+
 		JLabel crossoverLabel = new JLabel("Crossover?");
 		JCheckBox crossoverBox = new JCheckBox();
 		crossoverBox.addActionListener(new crossoverListener());
 
 		JLabel populationSizeLabel = new JLabel("Population Size");
 		this.populationSizeField = new JTextField("100");
-		this.populationSizeField.addActionListener(new populationSizeListener());
 		this.populationSizeField.setPreferredSize(new Dimension(40, 20));
 
 		JLabel generationsLabel = new JLabel("Generations");
 		this.generationsField = new JTextField("100");
-		this.generationsField.addActionListener(new generationsListener());
 		this.generationsField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel chromosomeLength = new JLabel("Chromosome Length");
 		this.chromosomeLengthField = new JTextField("100");
-		this.chromosomeLengthField.addActionListener(new genomeLengthListener());
 		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel elitismLabel = new JLabel("Elitism %");
 		JTextField elitismField = new JTextField("0");
-		elitismField.addActionListener(new elitismListener());
 		elitismField.setPreferredSize(new Dimension(30, 20));
 
 		this.startButton = new JButton("Start");
