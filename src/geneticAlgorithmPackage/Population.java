@@ -17,39 +17,61 @@ import java.util.Random;
  */
 
 public class Population {
-	
+
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 	private EvolutionViewer evolutionViewer;
-	
+
 	private int chromosomeLength;
 	private int populationSize;
 	private String fitnessFunction = "";
 	private String selectionMethod = "";
 	private EditableViewer editableViewer;
+	private Random random;
 
-	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize) {
-		//this.editableViewer = editableViewer;
+	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
+			EditableViewer editableViewer) {
+		this.editableViewer = editableViewer;
 		this.evolutionViewer = evolutionViewer;
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
-		Random random = new Random();
-		random.setSeed(seed);
+		this.random = new Random();
+		this.random.setSeed(seed);
 		for (int i = 0; i < this.populationSize; i++) {
-			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength);
+			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength, this.editableViewer);
 			this.chromosomeList.add(chromosome);
 		}
 	}
 
-//	public Population(EvolutionViewer evolutionViewer, int populationSize, long seed) {
-//		this.evolutionViewer = evolutionViewer;
-//		this.populationSize = populationSize;
-//		for (int i = 0; i < this.populationSize; i++) {
-//			Random random = new Random();
-//			random.setSeed(seed);
-//			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength);
-//			this.chromosomeList.add(chromosome);
+	/**
+	 * ensures: runs evolutionary loop to simulate biological evolution of a
+	 * chromosome
+	 * 
+	 * @return true if the evolution produced a chromosome with a fitness >= 100,
+	 *         else false
+	 */
+	public boolean evolutionLoop() {
+
+		updateFitessScores();
+		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+
+//		System.out.println("After sort:");
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
 //		}
-//	}
+//
+//		System.out.println(this.chromosomeList.get(0).getFitness() + " "
+//				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
+//				+ this.calculateAverageFitness());
+
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
+		if (this.chromosomeList.get(0).getFitness() >= 100) {
+			return true;
+		}
+		selection(50);
+		this.chromosomeList = repopulate();
+		mutate(this.evolutionViewer.getAverageNumMutations());
+		return false;
+	}
 
 	/**
 	 * ensures: sorts fitness of all chromosomes in the population, from highest to
@@ -87,6 +109,12 @@ public class Population {
 		}
 	}
 
+	/**
+	 * ensures: all chromosomes that are killed (truncated) or parents are replaced
+	 * my clones of the surviving parents
+	 * 
+	 * @return a repopulated list of cloned chromosomes
+	 */
 	private ArrayList<Chromosome> repopulate() {
 		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
 		int index = 0;
@@ -95,7 +123,6 @@ public class Population {
 				index = 0;
 			}
 			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
-			newChromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
 			repopulatedChromosomeList.add(newChromosome);
 
 			index++;
@@ -103,120 +130,86 @@ public class Population {
 		return repopulatedChromosomeList;
 	}
 
+	/**
+	 * ensures: the each chromosome in the population is mutated according to the
+	 * average number of expected mutations
+	 * 
+	 * @param averageNumMutations the statistically expected number of mutations
+	 */
 	private void mutate(int averageNumMutations) {
+		Random randomMutate = new Random(this.random.nextLong());
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.mutate(averageNumMutations);
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
+			chromosome.mutate(averageNumMutations, randomMutate.nextLong());
 		}
 	}
 
+	/**
+	 * ensures: iterates through each chromosome at the start of each evolutionary
+	 * loop to have accurate fitness before sorting
+	 */
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.editableViewer);
+			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.evolutionViewer);
 		}
 	}
 
-	public void evolutionLoop() {
-
-		updateFitessScores();
-
-		System.out.println("Before sort:");
-		for (Chromosome chromosome : this.chromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
-
-		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
-
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList.get(0).getFitness(),
-				this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness(), this.calculateAverageFitness());
-
-//		System.out.println("After sort:");
-//
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-
-		selection(50);
-
-//		System.out.println();
-//		System.out.println("After truncate:");
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-
-		this.chromosomeList = repopulate();
-
-//		System.out.println();
-//		System.out.println("After repopulated:");
-//
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-
-		mutate(this.evolutionViewer.getAverageNumMutations());
-		updateFitessScores();
-
-//		System.out.println();
-//		System.out.println("After mutate:");
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-	}
-
+	/**
+	 * ensures: the populations fitness function can be set by the evolution viewer
+	 * 
+	 * @param fitnessFunction the selected fitness function from the user drop down
+	 */
 	public void setFitnessFunction(String fitnessFunction) {
 		this.fitnessFunction = fitnessFunction;
 	}
 
-	public double calculateAverageFitness() {
-		int sum = 0;
-		int count = 0;
-		for (int i = 0; i < this.chromosomeList.size(); i++) {
-			int current = this.chromosomeList.get(i).getFitness();
-			sum += current;
-			count++;
-		}
-		double average = sum / count;
-		return average;
+	/**
+	 * ensures: the population's selection method can be set by the evolution viewer
+	 * 
+	 * @param selectionMethod the selected selection method from the user's drop
+	 *                        down
+	 */
+	public void setSelectionMethod(String selectionMethod) {
+		this.selectionMethod = selectionMethod;
 	}
 
-	public int calculate1sBinaryAddition(long binary1, long binary2) {
-		int[] newBinary = new int[10];
-		int i = 0;
-		int carry = 0;
-		int ones = 0;
+//	public int calculate1sBinaryAddition(long binary1, long binary2) {
+//		int[] newBinary = new int[10];
+//		int i = 0;
+//		int carry = 0;
+//		int ones = 0;
+//
+//		while (binary1 != 0 || binary2 != 0) {
+//			newBinary[i++] = (int) ((binary1 % 10 + binary2 % 10 + carry) % 2);
+//			carry = (int) ((binary1 % 10 + binary2 % 10 + carry) / 2);
+//			binary1 = 10;
+//			binary2 /= 10;
+//		}
+//		if (carry != 0) {
+//			newBinary[i++] = carry;
+//		}
+//		for (int j = 0; j < newBinary.length; j++) {
+//			if (newBinary[j] == 1) {
+//				ones++;
+//			}
+//		}
+//		return ones;
+//	}
 
-		while (binary1 != 0 || binary2 != 0) {
-			newBinary[i++] = (int) ((binary1 % 10 + binary2 % 10 + carry) % 2);
-			carry = (int) ((binary1 % 10 + binary2 % 10 + carry) / 2);
-			binary1 = 10;
-			binary2 /= 10;
-		}
-		if (carry != 0) {
-			newBinary[i++] = carry;
-		}
-		for (int j = 0; j < newBinary.length; j++) {
-			if (newBinary[j] == 1) {
-				ones++;
-			}
-		}
-		return ones;
-	}
-
-	public double calculateAverageHammingDistance() {
-		int sum = 0;
-		int count = 0;
-		for(int i = 0; i < this.chromosomeList.size(); i++) {
-			Chromosome current = this.chromosomeList.get(i);
-			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
-			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
-				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
-				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
-				count++;
-			}
-		}
-		return sum / count;
-		//return 0;
-	}
+// 	public double calculateAverageHammingDistance() {
+// 		int sum = 0;
+// 		int count = 0;
+// 		for(int i = 0; i < this.chromosomeList.size(); i++) {
+// 			Chromosome current = this.chromosomeList.get(i);
+// 			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
+// 			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
+// 				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
+// 				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
+// 				count++;
+// 			}
+// 		}
+// 		return sum / count;
+// 		//return 0;
+// 	}
 
 	public void setSelectionMethod(String selectionMethod) {
 		this.selectionMethod = selectionMethod;

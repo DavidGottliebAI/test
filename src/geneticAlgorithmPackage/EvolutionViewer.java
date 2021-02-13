@@ -42,7 +42,7 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
-	private static final int GENERATION_LIMIT = 399;
+	protected static final int GENERATION_LIMIT = 400;
 	public static final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
@@ -54,20 +54,33 @@ public class EvolutionViewer {
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
+	private EditableViewer editableViewer;
 
-	public EvolutionViewer() {
+	/**
+	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
+	 * eventual use in target fitness function. Also creates the first population
+	 * for the evolutionaryLoop to build off. Also creates the template GUI
+	 * elements.
+	 * 
+	 * @param editableViewer the visualization of the editable target chromosome
+	 */
+	public EvolutionViewer(EditableViewer editableViewer) {
+		this.editableViewer = editableViewer;
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
 		this.lineGraph = new LineGraph();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+				this.editableViewer);
 
 		frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
 		createAdminPanel();
 
 		/**
-		 * purpose: Creates a timer to loop evolutionary process
+		 * purpose: Creates a timer to loop evolutionary process based on
+		 * evolutionRunnning boolean state and runs continuously while Evolution Viewer
+		 * is open and executing
 		 * 
 		 */
 		Timer t = new Timer(DELAY, new ActionListener() {
@@ -75,15 +88,20 @@ public class EvolutionViewer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
-					if (numLoops > maxGenerations || numLoops >= GENERATION_LIMIT) {
-						startButton.setText("Start Evolution");
+					if (getNumLoops() > maxGenerations) {
+						startButton.setText("Continue");
+						flipEvolutionRunning();
+						return;
+					} else if (getNumLoops() >= GENERATION_LIMIT) {
+						startButton.setText("Reset");
+						flipEvolutionRunning();
 						return;
 					}
-					System.out.println();
-					System.out.println("Generation: " + numLoops);
-					population.evolutionLoop();
+					if (population.evolutionLoop()) {
+						flipEvolutionRunning();
+					}
 					frame.repaint();
-					numLoops++;
+					numLoops = getNumLoops() + 1;
 				}
 			}
 		});
@@ -96,7 +114,10 @@ public class EvolutionViewer {
 		this.frame.setVisible(true);
 	}
 
-//
+	/**
+	 * ensures: creates, adds functionality and adds buttons to viewer frame
+	 * 
+	 */
 	private void createAdminPanel() {
 		JButton loadButton = new JButton("Load");
 		loadButton.addActionListener(new loadEvolutionListener(this));
@@ -115,7 +136,7 @@ public class EvolutionViewer {
 		this.fitnessField = new JComboBox<String>();
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
-		this.fitnessField.addItem("Editable");
+		this.fitnessField.addItem("Target");
 
 		JLabel selectionLabel = new JLabel("Selection");
 		this.selectionField = new JComboBox<String>();
@@ -146,7 +167,7 @@ public class EvolutionViewer {
 		elitismField.addActionListener(new elitismListener());
 		elitismField.setPreferredSize(new Dimension(30, 20));
 
-		this.startButton = new JButton("Start Evolution");
+		this.startButton = new JButton("Start");
 		this.startButton.addActionListener(new startListener(this, this.startButton));
 
 		JButton resetButton = new JButton("Reset");
@@ -178,6 +199,9 @@ public class EvolutionViewer {
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * ensures: the state of evolution is flipped to opposite of it's current state
+	 */
 	public void flipEvolutionRunning() {
 		if (evolutionRunning) {
 			evolutionRunning = false;
@@ -186,8 +210,13 @@ public class EvolutionViewer {
 		}
 	}
 
-	// Starts the simulator
-
+	/**
+	 * ensures: a general solution for extracting information from JTextFields in
+	 * GUI and handling exceptions
+	 * 
+	 * @param textField the text field a user entered number into
+	 * @return integer of the user input
+	 */
 	public int getTextFieldNumber(JTextField textField) { // may need refactoring
 		String text = textField.getText();
 		try {
@@ -218,6 +247,10 @@ public class EvolutionViewer {
 		this.averageNumMutations = getTextFieldNumber(mutateField);
 	}
 
+	/**
+	 * ensures: seed can be set based on user input from text field and resets GUI
+	 * if a change is made when start is clicked
+	 */
 	public void setSeed() {
 		int oldSeed = this.seed;
 		this.seed = getTextFieldNumber(seedField);
@@ -226,6 +259,10 @@ public class EvolutionViewer {
 		}
 	}
 
+	/**
+	 * ensures: chromosome length can be set based on user input from text field and
+	 * resets GUI if a change is made when start is clicked
+	 */
 	public void setChromosomeLength() {
 		int oldChromosomeLength = this.chromosomeLength;
 		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
@@ -234,6 +271,10 @@ public class EvolutionViewer {
 		}
 	}
 
+	/**
+	 * ensures: population size can be set based on user input from text field and
+	 * resets GUI if a change is made when start is clicked
+	 */
 	public void setPopulationSize() {
 		int oldPopulationSize = this.populationSize;
 		this.populationSize = getTextFieldNumber(this.populationSizeField);
@@ -252,13 +293,26 @@ public class EvolutionViewer {
 		this.population.setSelectionMethod(this.selectionMethod);
 	}
 
+	/**
+	 * ensures: GUI is reset when reset button is pressed and modifications require
+	 * a change in graphics
+	 */
 	public void reset() {
 		this.startButton.setText("Start");
 		this.evolutionRunning = false;
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize);
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+				this.editableViewer);
 		this.lineGraph.repaint();
 
+	}
+
+	public int getNumLoops() {
+		return numLoops;
+	}
+
+	public void setEvolutionRunning(boolean b) {
+		this.evolutionRunning = b;
 	}
 }
