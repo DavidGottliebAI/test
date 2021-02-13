@@ -55,7 +55,7 @@ public class BestChromosomeViewer {
 	public void createButtonGrid() {
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
-		Chromosome chromosome = new Chromosome(this);
+		Chromosome chromosome = new Chromosome();
 		for (EditableGene gene : chromosome.editableGeneList) {
 			gene.setSize(30, 30);
 			this.buttonGrid.add(gene);
