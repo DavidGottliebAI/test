@@ -81,6 +81,16 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
+	public Chromosome(BestChromosomeViewer bestChromosomeViewer) {
+		this.chromosomeLength = 100;
+		for (int i = 0; i < this.chromosomeLength; i++) {
+			EditableGene gene = new EditableGene(i);
+			gene.addActionListener(new editableGeneListener(gene, this.editableViewer));
+			this.editableGeneList.add(gene);
+			this.geneString = this.geneString + gene.getBit();
+		}
+	}
+
 	/**
 	 * ensures: adds genes to geneList based on specified geneString as well as
 	 * actionListeners, thereby creating a chromosome.
