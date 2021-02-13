@@ -42,6 +42,7 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
+	protected static final int FITNESS_LIMIT = 100;
 	protected static final int GENERATION_LIMIT = 400;
 	public static final String title = "Evolution Viewer";
 

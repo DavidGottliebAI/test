@@ -194,20 +194,20 @@ public class Population {
 //		}
 //		return ones;
 //	}
-
-// 	public double calculateAverageHammingDistance() {
-// 		int sum = 0;
-// 		int count = 0;
-// 		for(int i = 0; i < this.chromosomeList.size(); i++) {
-// 			Chromosome current = this.chromosomeList.get(i);
-// 			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
-// 			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
-// 				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
-// 				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
-// 				count++;
-// 			}
-// 		}
-// 		return sum / count;
-// 		//return 0;
-// 	}
+  
+//	public double calculateAverageHammingDistance() {
+//		int sum = 0;
+//		int count = 0;
+//		for(int i = 0; i < this.chromosomeList.size(); i++) {
+//			Chromosome current = this.chromosomeList.get(i);
+//			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
+//			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
+//				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
+//				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
+//				count++;
+//			}
+//		}
+//		return sum / count;
+//		return 0;
+//	}
 }
