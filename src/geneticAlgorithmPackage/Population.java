@@ -194,6 +194,7 @@ public class Population {
 //		}
 //		return ones;
 //	}
+  
 //	public double calculateAverageHammingDistance() {
 //		int sum = 0;
 //		int count = 0;

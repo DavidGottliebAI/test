@@ -134,7 +134,7 @@ public class Chromosome implements Comparable<Chromosome> {
 				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
-				// System.err.println("No Chromosome");
+
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
@@ -165,6 +165,20 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.geneString = this.geneString + gene.getBit();
 		}
 		return this.geneString;
+	}
+
+
+	/**
+	 * ensures: returns a long for use in the hamming distance 
+   * TODO: Ask David if these can be deleted
+	 */
+	public long getBits() {
+		String bits = "";
+		for (EditableGene gene : editableGeneList) {
+			bits += gene.getBit();
+		}
+		long bitString = Long.parseLong(bits);
+		return bitString;
 	}
 
 	/**

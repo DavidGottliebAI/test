@@ -18,17 +18,9 @@ public class startListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (this.startButton.getText().equals("Start Evolution")) {
-			this.evolutionViewer.reset();
-			this.startButton.setText("Pause");
-		} else if (this.startButton.getText().equals("Pause")) {
-			this.startButton.setText("Continue");
-		} else {
-			this.startButton.setText("Pause");
-		}
 
 		// takes all user inputs at runtime, right before starting the loop and passes
-		// them into necessary classes
+		// them into necesary classes
 		this.evolutionViewer.setMaxGenerations();
 		this.evolutionViewer.setAverageNumMutations();
 		this.evolutionViewer.setSeed();
@@ -56,8 +48,9 @@ public class startListener implements ActionListener {
 									+ (this.evolutionViewer.getNumLoops() - 1));
 					return;
 				} else if(this.evolutionViewer.lineGraph.getFitnesses()[0] >= this.evolutionViewer.FITNESS_LIMIT) {
-					this.evolutionViewer.frame.setTitle(this.evolutionViewer.title + ": Restart! Best fitness has maxed out!");
+					this.evolutionViewer.frame.setTitle(this.evolutionViewer.title + ": A chromosome has reached maximum fitness!");
 					return;
+
 				}
 				this.startButton.setText("Pause");
 			}

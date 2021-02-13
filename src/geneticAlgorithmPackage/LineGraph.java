@@ -28,11 +28,12 @@ public class LineGraph extends JComponent {
 	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 
 	/**
-	 * ensures: Constructs a line graph component and sets the preferred size
+	 * ensures: Constructs a line graph component and sets the preffered size
 	 */
 	public LineGraph() {
 		this.setPreferredSize(new Dimension(200, 200));
 	}
+
 	/**
 	 * ensures: the line graph can accept information from the population and store
 	 * each generations best, worst, and average fitness scores. along with the
@@ -75,7 +76,7 @@ public class LineGraph extends JComponent {
 			g2.drawLine(-10, -i * 30, 10, -i * 30);
 			g2.drawString("" + i * 10, -20, -i * 30);
 		}
-		
+    
 		for (int i = 0; i < 9; i++) {
 			g2.drawLine(i * 150, -10, i * 150, 10);
 			g2.drawString("" + i * 50, i * 150 - 5, 20);
@@ -119,7 +120,6 @@ public class LineGraph extends JComponent {
 		g2.drawString("Fitness", -30, -PLOT_HEIGHT / 2 + 35);
 		g2.rotate(Math.PI/2);
 		g2.translate(-85, -1*(-PLOT_HEIGHT / 2 + 10));
-		
 
 		g2.setStroke(new BasicStroke(3));
 
