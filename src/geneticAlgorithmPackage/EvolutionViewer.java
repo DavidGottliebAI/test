@@ -327,7 +327,7 @@ public class EvolutionViewer {
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 		this.lineGraph.repaint();
-
+		this.populationViewer.resetChromosomeGrid(this.populationSize, this.chromosomeLength);
 	}
 
 	public int getNumLoops() {

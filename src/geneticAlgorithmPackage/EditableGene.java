@@ -56,9 +56,8 @@ public class EditableGene extends JButton {
 		this.setText("" + index);
 	}
 
-	public EditableGene(Gene gene) {
-		this.bit = gene.getBit();
-		updateColor();
+	public EditableGene() {
+		this.bit = 0;
 	}
 
 	/**
@@ -93,5 +92,10 @@ public class EditableGene extends JButton {
 	 */
 	public int getBit() {
 		return this.bit;
+	}
+
+	public void setBit(int bit) {
+		this.bit = bit;
+		updateColor();
 	}
 }

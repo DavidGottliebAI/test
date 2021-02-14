@@ -104,7 +104,7 @@ public class Population {
 		double numberSurvive = this.chromosomeList.size()
 				- Math.ceil((double) percent / 100 * this.chromosomeList.size());
 		if (this.selectionMethod.equals("Truncation")) {
-			while (this.chromosomeList.size() > numberSurvive) {
+			while (this.chromosomeList.size() >= numberSurvive) {
 				this.chromosomeList.remove(this.chromosomeList.size() - 1);
 			}
 		} else if (this.selectionMethod.equals("Roulette Wheel")) {
