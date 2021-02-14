@@ -153,9 +153,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * 100 scale
 	 */
 	public void normalizeFitness() {
-		System.out.println("Before Normalized: " + this.fitness);
 		this.fitness = 100 * this.fitness / this.chromosomeLength;
-		System.out.println("After Normalized: " + this.fitness);
 	}
 
 	public int getFitness() {

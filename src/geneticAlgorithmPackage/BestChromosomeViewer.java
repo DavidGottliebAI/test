@@ -25,7 +25,7 @@ public class BestChromosomeViewer {
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.geneGrid = new JPanel();
-		createButtonGrid();
+		reset(100);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
 		this.frame.setLocation(0, 525);
@@ -37,11 +37,17 @@ public class BestChromosomeViewer {
 	 * @param chromosome <br>
 	 *                   requires: chromosome
 	 */
-	public void createButtonGrid() {
-		this.geneGrid.setLayout(new GridLayout(10, 10));
+	public void reset(int chromosomeLength) {
+		this.geneGrid.removeAll();
+
+		int chromosomeDimension = (int) Math.ceil(Math.sqrt(chromosomeLength));
+		this.geneGrid.setLayout(new GridLayout(chromosomeDimension, chromosomeDimension));
+		for (int j = 0; j < chromosomeLength; j++) {
+			this.geneGrid.add(new EditableGene(j, -1));
+		}
+
 		this.frame.add(this.geneGrid);
 		this.frame.setVisible(true);
-		this.frame.repaint();
 	}
 
 	/**
@@ -55,12 +61,8 @@ public class BestChromosomeViewer {
 
 	public void updateGeneGrid(Chromosome bestChromosome) {
 		this.bestChromosome = bestChromosome;
-		this.geneGrid.removeAll();
-		int index = 0;
-		for (Gene gene : this.bestChromosome.getGeneList()) {
-			this.geneGrid.add(new EditableGene(gene, index++));
+		for (int i = 0; i < this.geneGrid.getComponentCount(); i++) {
+			((EditableGene) this.geneGrid.getComponent(i)).setBit(this.bestChromosome.getGeneList().get(i).getBit());
 		}
-		this.frame.setVisible(true);
-		this.frame.repaint();
 	}
 }

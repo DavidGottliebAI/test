@@ -30,10 +30,12 @@ public class EditableGene extends JButton {
 	 * @param index of gene
 	 */
 	public EditableGene(int index) {
-		this.setFont(new Font("Helvetica", Font.BOLD, 10));
 		Random random = new Random();
+
 		this.bit = random.nextInt(2);
 		updateColor();
+
+		this.setFont(new Font("Helvetica", Font.BOLD, 10));
 		this.setText("" + index);
 	}
 
@@ -67,9 +69,12 @@ public class EditableGene extends JButton {
 		if (this.getBit() == 0) {
 			this.setBackground(zeroBitBackground);
 			this.setForeground(zeroBitForeground);
-		} else {
+		} else if (this.getBit() == 1) {
 			this.setBackground(oneBitBackground);
 			this.setForeground(oneBitForeground);
+		} else {
+			this.setBackground(Color.WHITE);
+			this.setForeground(Color.BLACK);
 		}
 	}
 

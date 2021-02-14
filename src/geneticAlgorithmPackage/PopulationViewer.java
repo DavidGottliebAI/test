@@ -1,6 +1,5 @@
 package geneticAlgorithmPackage;
 
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class PopulationViewer {
 		this.frame.setTitle(title);
 		this.chromosomeGrid = new JPanel();
 
-		resetChromosomeGrid(100, 100);
+		reset(100, 100);
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
@@ -44,7 +43,9 @@ public class PopulationViewer {
 	 * @param chromosome <br>
 	 *                   requires: chromosome
 	 */
-	public void resetChromosomeGrid(int populationSize, int chromosomeLength) {
+	public void reset(int populationSize, int chromosomeLength) {
+		this.chromosomeGrid.removeAll();
+
 		int populationDimension = (int) Math.ceil(Math.sqrt(populationSize));
 		int chromosomeDimension = (int) Math.ceil(Math.sqrt(chromosomeLength));
 
@@ -58,6 +59,7 @@ public class PopulationViewer {
 			}
 		}
 		this.frame.add(this.chromosomeGrid);
+		this.frame.setVisible(true);
 	}
 
 	/**
@@ -75,7 +77,6 @@ public class PopulationViewer {
 				((EditableGene) chromosomePanel.getComponent(j)).setBit(chromosome.getGeneList().get(j).getBit());
 			}
 		}
-		this.frame.setVisible(true);
 		this.frame.repaint();
 	}
 }

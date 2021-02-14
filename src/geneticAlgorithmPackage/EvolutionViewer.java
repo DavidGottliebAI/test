@@ -47,7 +47,7 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 	private JTextField truncationField;
 
-	private static final int DELAY = 10;
+	private static final int DELAY = 30;
 	protected static final int FITNESS_LIMIT = 100;
 	protected static final int GENERATION_LIMIT = 399;
 	public final String title = "Evolution Viewer";
@@ -327,7 +327,8 @@ public class EvolutionViewer {
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 		this.lineGraph.repaint();
-		this.populationViewer.resetChromosomeGrid(this.populationSize, this.chromosomeLength);
+		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
+		this.bestChromosomeViewer.reset(this.chromosomeLength);
 	}
 
 	public int getNumLoops() {
