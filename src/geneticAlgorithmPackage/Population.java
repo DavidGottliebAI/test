@@ -29,12 +29,17 @@ public class Population {
 	private Random random;
 	private BestChromosomeViewer bestChromosomeViewer;
 	private int truncationPercent;
+	private PopulationViewer populationViewer;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
-			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer) {
-		this.bestChromosomeViewer = bestChromosomeViewer;
+			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer,
+			PopulationViewer populationViewer) {
+
 		this.editableViewer = editableViewer;
+		this.bestChromosomeViewer = bestChromosomeViewer;
+		this.populationViewer = populationViewer;
 		this.evolutionViewer = evolutionViewer;
+
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
 		this.random = new Random();
@@ -67,6 +72,7 @@ public class Population {
 //				+ this.calculateAverageFitness());
 
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+		this.populationViewer.updateChromsomeGrid(this.chromosomeList);
 
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
 		if (this.chromosomeList.get(0).getFitness() >= 100) {

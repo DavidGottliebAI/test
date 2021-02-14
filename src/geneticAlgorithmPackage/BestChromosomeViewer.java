@@ -22,15 +22,13 @@ public class BestChromosomeViewer {
 	private static final String title = "Best Chromosome Viewer";
 
 	public BestChromosomeViewer() {
-		this.bestChromosome = new Chromosome();
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.geneGrid = new JPanel();
 		createButtonGrid();
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
-		this.frame.setLocation(0, 20);
-		this.frame.setVisible(true);
+		this.frame.setLocation(0, 525);
 	}
 
 	/**

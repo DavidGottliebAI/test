@@ -30,6 +30,10 @@ public class EvolutionViewer {
 	public LineGraph lineGraph;
 	private Population population;
 
+	private EditableViewer editableViewer;
+	private BestChromosomeViewer bestChromosomeViewer;
+	private PopulationViewer populationViewer;
+
 	public JFrame frame;
 	private JPanel southAdminPanel;
 	private JPanel eastAdminPanel;
@@ -43,10 +47,10 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 	private JTextField truncationField;
 
-	private static final int DELAY = 50;
+	private static final int DELAY = 10;
 	protected static final int FITNESS_LIMIT = 100;
 	protected static final int GENERATION_LIMIT = 399;
-	public static final String title = "Evolution Viewer";
+	public final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
 	private int maxGenerations = 100;
@@ -57,8 +61,6 @@ public class EvolutionViewer {
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
-	private EditableViewer editableViewer;
-	private BestChromosomeViewer bestChromosomeViewer;
 	private int truncationPercent = 50;
 
 	/**
@@ -69,16 +71,18 @@ public class EvolutionViewer {
 	 * 
 	 * @param editableViewer the visualization of the editable target chromosome
 	 */
-	public EvolutionViewer(EditableViewer editableViewer) {
+	public EvolutionViewer() {
+		this.editableViewer = new EditableViewer();
 		this.bestChromosomeViewer = new BestChromosomeViewer();
-		this.editableViewer = editableViewer;
+		this.populationViewer = new PopulationViewer();
+
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.southAdminPanel = new JPanel();
 		this.eastAdminPanel = new JPanel();
 		this.lineGraph = new LineGraph();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer);
+				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 
 		this.frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
@@ -119,8 +123,8 @@ public class EvolutionViewer {
 		t.start();
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(1450, 500);
-		this.frame.setLocation(450, 20); // might want to play with later
+		this.frame.setSize(1425, 500);
+		this.frame.setLocation(500, 25); // might want to play with later
 		this.frame.setVisible(true);
 	}
 
@@ -321,7 +325,7 @@ public class EvolutionViewer {
 		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer);
+				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 		this.lineGraph.repaint();
 
 	}

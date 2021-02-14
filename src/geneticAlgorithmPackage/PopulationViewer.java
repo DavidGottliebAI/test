@@ -1,10 +1,7 @@
 package geneticAlgorithmPackage;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.util.Random;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,27 +19,59 @@ import javax.swing.JPanel;
  */
 public class PopulationViewer {
 
-	public JFrame frame;
-	private JPanel populationGrid;
+	private ArrayList<Chromosome> chromosomeList;
+	private JFrame frame;
+	private JPanel chromosomeGrid;
+	private static final String title = "Population Viewer";
 
 	public PopulationViewer() {
+		this.frame = new JFrame();
+		this.frame.setTitle(title);
+		this.chromosomeGrid = new JPanel();
+		createChromosomeGrid();
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.frame.setSize(500, 500);
+		this.frame.setLocation(500, 525);
+		this.frame.setVisible(true);
+	}
 
-//		this.frame = new JFrame();
-//		this.populationGrid = new JPanel();
-//		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		this.frame.setSize(500, 500);
-//		this.frame.setLocation(1000, 0);
-//		this.frame.setVisible(true);
+	/**
+	 * ensures: accepts a loaded chromosome and adds it to a button grid
+	 * 
+	 * @param chromosome <br>
+	 *                   requires: chromosome
+	 */
+	public void createChromosomeGrid() {
+		this.chromosomeGrid.setLayout(new GridLayout(10, 10));
+		for (int i = 0; i < 100; i++) {
+			JPanel panel = new JPanel();
+			panel.setLayout(new GridLayout(10, 10));
+			chromosomeGrid.add(panel);
+		}
 
-//		JFrame frame = new JFrame();
-//		frame.setPreferredSize(new Dimension(500, 500));
-//	   
-//		Gene gene = new Gene();
-//	    frame.add(gene);
-//	    
-//	    
-//	    frame.pack();
-//	    frame.setVisible(true);
-//	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		for (int i = 0; i < 4; i++) {
+//			JPanel chromosomePanel = new JPanel();
+//			chromosomeGrid.add(chromosomePanel);
+//		}
+		this.frame.add(this.chromosomeGrid);
+	}
+
+	/**
+	 * ensures: returns the bestChromosome visualized in editable viewer
+	 * 
+	 * @return bestChromosome
+	 */
+
+	public void updateChromsomeGrid(ArrayList<Chromosome> chromosomeList) {
+		this.chromosomeList = chromosomeList;
+		for (int i = 0; i < 100; i++) {
+			JPanel panel = (JPanel) this.chromosomeGrid.getComponent(i);
+			panel.removeAll();
+			for (Gene gene : this.chromosomeList.get(i).getGeneList()) {
+				panel.add(new EditableGene(gene));
+			}
+		}
+		this.frame.setVisible(true);
+		this.frame.repaint();
 	}
 }

@@ -23,9 +23,7 @@ public class ViewerMain {
 	 * ensures: opens all viewers
 	 */
 	public static void handleOpenAll() {
-		EditableViewer editableViewer = new EditableViewer();
-		new PopulationViewer();
-		new EvolutionViewer(editableViewer);
+		new EvolutionViewer();
 	}
 
 }

@@ -29,6 +29,7 @@ public class startListener implements ActionListener {
 		this.evolutionViewer.setSelectionMethod();
 		this.evolutionViewer.setTruncationPercent();
 
+
 		// changes the name of the start button and decides what step to take
 		if (!this.evolutionViewer.evolutionRunning) {
 			if (this.startButton.getText().equals("Start")) {

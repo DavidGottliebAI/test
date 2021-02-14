@@ -135,7 +135,7 @@ public class Chromosome implements Comparable<Chromosome> {
 				// re-title EvolutionViewer
 
 				evolutionViewer.frame.setTitle(
-						EvolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
+						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		}
 		normalizeFitness();

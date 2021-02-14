@@ -56,6 +56,11 @@ public class EditableGene extends JButton {
 		this.setText("" + index);
 	}
 
+	public EditableGene(Gene gene) {
+		this.bit = gene.getBit();
+		updateColor();
+	}
+
 	/**
 	 * ensures: sets the color of the gene depending on its bit
 	 */
