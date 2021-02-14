@@ -162,7 +162,7 @@ public class Population {
 	 */
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.evolutionViewer);
+			chromosome.calculateFitness(this.fitnessFunction, this.chromosomeLength, this.evolutionViewer);
 		}
 	}
 

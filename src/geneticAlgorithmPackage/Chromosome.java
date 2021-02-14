@@ -117,7 +117,14 @@ public class Chromosome implements Comparable<Chromosome> {
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
+			System.out.println("Before calc: " + this.fitness);
+			System.out.println("Pop size: " + populationSize);
+			//System.out.println("Pop size : " + populationSize);
+
 			this.fitness = Math.abs(this.fitness - populationSize / 2) * 2;
+			System.out.println("After calc: " + this.fitness);
+			
+
 		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
@@ -146,7 +153,9 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * 100 scale
 	 */
 	public void normalizeFitness() {
+		System.out.println("Before Normalized: " + this.fitness);
 		this.fitness = 100 * this.fitness / this.chromosomeLength;
+		System.out.println("After Normalized: " + this.fitness);
 	}
 
 	public int getFitness() {
