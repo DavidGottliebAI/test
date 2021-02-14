@@ -59,6 +59,7 @@ public class EvolutionViewer {
 	private String selectionMethod = "Truncation";
 	private EditableViewer editableViewer;
 	private BestChromosomeViewer bestChromosomeViewer;
+	private int truncationPercent = 50;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -192,6 +193,8 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(this.fitnessField);
 		this.southAdminPanel.add(selectionLabel);
 		this.southAdminPanel.add(this.selectionField);
+		this.southAdminPanel.add(truncationLabel);
+		this.southAdminPanel.add(this.truncationField);
 		this.southAdminPanel.add(crossoverLabel);
 		this.southAdminPanel.add(crossoverBox);
 		this.southAdminPanel.add(populationSizeLabel);
@@ -301,6 +304,11 @@ public class EvolutionViewer {
 	public void setSelectionMethod() {
 		this.selectionMethod = this.selectionField.getSelectedItem().toString();
 		this.population.setSelectionMethod(this.selectionMethod);
+	}
+
+	public void setTruncationPercent() {
+		this.truncationPercent = getTextFieldNumber(this.truncationField);
+		this.population.setTruncationPercent(this.truncationPercent);
 	}
 
 	/**
