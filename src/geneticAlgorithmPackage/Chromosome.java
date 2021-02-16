@@ -155,7 +155,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	/**
-	 * ensures: creates a new geneString based on geneList
+	 * ensures: creates a new geneString based on editable geneList
 	 * 
 	 * @return geneString
 	 */
@@ -163,6 +163,14 @@ public class Chromosome implements Comparable<Chromosome> {
 		this.geneString = "";
 		for (EditableGene gene : editableGeneList) {
 			this.geneString = this.geneString + gene.getBit();
+		}
+		return this.geneString;
+	}
+	
+	public String getBits() {
+		this.geneString = "";
+		for (Gene gene : this.geneList) {
+			this.geneString += gene.getBit();
 		}
 		return this.geneString;
 	}
@@ -174,6 +182,10 @@ public class Chromosome implements Comparable<Chromosome> {
 	 */
 	public ArrayList<EditableGene> getGeneList() {
 		return editableGeneList;
+	}
+	
+	public int getGeneLength() {
+		return geneList.size();
 	}
 
 	@Override

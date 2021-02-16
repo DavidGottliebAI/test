@@ -18,7 +18,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Double> averageFitnessLog = new ArrayList<Double>();
-	// private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
+	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 
 	/**
 	 * ensures: Constructs a line graph component and sets the preffered size
@@ -43,7 +43,7 @@ public class LineGraph extends JComponent {
 			sum += chromosome.getFitness();
 		}
 		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
-		// this.averageHammingLog.add(averageHamming);
+		this.averageHammingLog.add(calculateAverageHammingDistance(chromosomeList));
 	}
 
 	/**
@@ -69,6 +69,8 @@ public class LineGraph extends JComponent {
 			g2.drawLine(-10, -i * 30, 10, -i * 30);
 			g2.drawString("" + i * 10, -20, -i * 30);
 		}
+		
+		// outline of graph and every 50 generation ticks
 
 		for (int i = 0; i < 9; i++) {
 			g2.drawLine(i * 150, -10, i * 150, 10);
@@ -115,7 +117,7 @@ public class LineGraph extends JComponent {
 		int previousYBest = 0; // consider setting to -150 or -180
 		int previousYWorst = 0;
 		int previousYAverage = 0;
-		// int previousYAverageHamming = 0;
+		int previousYAverageHamming = 0;
 
 		// graphs each line
 
@@ -132,9 +134,9 @@ public class LineGraph extends JComponent {
 			g2.drawLine(x * 3, previousYAverage, x * 3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 
-//			g2.setColor(Color.YELLOW);
-//			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
-//			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
+			g2.setColor(Color.YELLOW);
+			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
+			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
 
 			g2.setColor(Color.GREEN);
 			g2.drawString("" + this.getFitnesses()[0], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 15);
@@ -161,5 +163,38 @@ public class LineGraph extends JComponent {
 		this.bestFitnessLog.clear();
 		this.averageFitnessLog.clear();
 		this.worstFitnessLog.clear();
+		this.averageHammingLog.clear();
+	}
+  
+	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList) {
+//		int sum = 0;
+//		int count = 0;
+//		for(int i = 0; i < chromosomeList.size(); i++) {
+//			Chromosome current = chromosomeList.get(i);
+//			int firstBinary = current.getBits();
+//			for(int j = 0; j < chromosomeList.size() - i; j++) {
+//				int secondBinary = current.getBits();
+//				sum += 
+//				count++;
+//			}
+//		}
+//		return sum / count;
+		int sum = 0;
+		int pairs = 0;
+		for(int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
+			int zeros = 0;
+			int ones = 0;
+			for(int j = 0; j < chromosomeList.size(); j++) {
+				Chromosome current = chromosomeList.get(j);
+				if(current.getBits().substring(i,i+1).equals("0")) {
+					zeros += 1;
+				} else {
+					ones += 1;
+				}
+			}
+			sum += ones * zeros;
+		}	
+		pairs += chromosomeList.size() * (chromosomeList.size() - 1) / 2;
+		return sum / pairs;
 	}
 }
