@@ -34,6 +34,7 @@ public class EvolutionViewer {
 	private JPanel buttonGrid;
 	private JTextField mutateField;
 	private JTextField generationsField;
+	private JTextField maxFitnessField;
 	private JButton startButton;
 	private JTextField seedField;
 	private JTextField chromosomeLengthField;
@@ -42,12 +43,13 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
-	protected static final int FITNESS_LIMIT = 100;
+	//protected static final int FITNESS_LIMIT = 50;
 	protected static final int GENERATION_LIMIT = 399;
 	public static final String title = "Evolution Viewer";
 
 
 	public boolean evolutionRunning = false;
+	public int maxFitness = 100;
 	private int maxGenerations = 100;
 	private int averageNumMutations = 1;
 	private int numLoops = 0;
@@ -144,6 +146,10 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
+		
+		JLabel maxFitnessLabel = new JLabel("Max Fitness");
+		this.maxFitnessField = new JTextField("100");
+		this.maxFitnessField.setPreferredSize(new Dimension(40, 20));
 
 		JLabel selectionLabel = new JLabel("Selection");
 		this.selectionField = new JComboBox<String>();
@@ -188,6 +194,8 @@ public class EvolutionViewer {
 		this.buttonGrid.add(this.mutateField);
 		this.buttonGrid.add(fitnessLabel);
 		this.buttonGrid.add(this.fitnessField);
+		this.buttonGrid.add(maxFitnessLabel);
+		this.buttonGrid.add(this.maxFitnessField);
 		this.buttonGrid.add(selectionLabel);
 		this.buttonGrid.add(this.selectionField);
 		this.buttonGrid.add(crossoverLabel);
@@ -252,6 +260,10 @@ public class EvolutionViewer {
 
 	public void setAverageNumMutations() {
 		this.averageNumMutations = getTextFieldNumber(mutateField);
+	}
+	
+	public void setMaxFitness() {
+		this.maxFitness = getTextFieldNumber(maxFitnessField);
 	}
 
 	/**

@@ -68,7 +68,7 @@ public class Population {
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
 
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
-		if (this.chromosomeList.get(0).getFitness() >= 100) {
+		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
 			return true;
 		}
 
@@ -146,7 +146,6 @@ public class Population {
 				}
 			}
 		}
-		System.out.println(unique);
 		return unique;
 	}
 
