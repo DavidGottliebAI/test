@@ -117,7 +117,14 @@ public class Chromosome implements Comparable<Chromosome> {
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
+			System.out.println("Before calc: " + this.fitness);
+			System.out.println("Pop size: " + populationSize);
+			//System.out.println("Pop size : " + populationSize);
+
 			this.fitness = Math.abs(this.fitness - populationSize / 2) * 2;
+			System.out.println("After calc: " + this.fitness);
+			
+
 		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
@@ -127,11 +134,10 @@ public class Chromosome implements Comparable<Chromosome> {
 			try {
 				this.fitness = this.chromosomeLength;
 				for (int i = 0; i < this.geneList.size(); i++) {
-					int currentEditableBit = this.editableViewer.getChromosome().getGeneList().get(i).getBit();
+					int currentEditableBit = this.editableViewer.getChromosome().getEditableGeneList().get(i).getBit();
 					int currentPopulationBit = this.geneList.get(i).getBit();
 					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
-				this.fitness = 100 - this.fitness;
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
 
@@ -180,8 +186,12 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * 
 	 * @return geneList
 	 */
-	public ArrayList<EditableGene> getGeneList() {
-		return editableGeneList;
+	public ArrayList<EditableGene> getEditableGeneList() {
+		return this.editableGeneList;
+	}
+
+	public ArrayList<Gene> getGeneList() {
+		return this.geneList;
 	}
 
 	public int getGeneLength() {

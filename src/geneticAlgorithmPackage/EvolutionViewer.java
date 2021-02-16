@@ -31,8 +31,13 @@ public class EvolutionViewer {
 	public ScatterPlot scatterPlot;
 	private Population population;
 
+	private EditableViewer editableViewer;
+	private BestChromosomeViewer bestChromosomeViewer;
+	private PopulationViewer populationViewer;
+
 	public JFrame frame;
-	private JPanel buttonGrid;
+	private JPanel southAdminPanel;
+	private JPanel eastAdminPanel;
 	private JTextField mutateField;
 	private JTextField generationsField;
 	private JTextField maxFitnessField;
@@ -44,10 +49,12 @@ public class EvolutionViewer {
 	private JTextField populationSizeField;
 	private JComboBox<String> fitnessField;
 	private JComboBox<String> selectionField;
+	private JTextField truncationField;
 
 	private static final int DELAY = 50;
 	protected static final int GENERATION_LIMIT = 399;
 	public static final String title = "Evolution Viewer";
+
 
 	public boolean evolutionRunning = false;
 	public boolean crossover = false;
@@ -61,8 +68,7 @@ public class EvolutionViewer {
 	private int populationSize = 100;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
-	private EditableViewer editableViewer;
-	private BestChromosomeViewer bestChromosomeViewer;
+	private int truncationPercent = 50;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -72,20 +78,23 @@ public class EvolutionViewer {
 	 * 
 	 * @param editableViewer the visualization of the editable target chromosome
 	 */
-	public EvolutionViewer(EditableViewer editableViewer) {
+	public EvolutionViewer() {
+		this.editableViewer = new EditableViewer();
 		this.bestChromosomeViewer = new BestChromosomeViewer();
-		this.editableViewer = editableViewer;
+		this.populationViewer = new PopulationViewer();
+
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
-		this.buttonGrid = new JPanel();
+		this.southAdminPanel = new JPanel();
+		this.eastAdminPanel = new JPanel();
 		this.lineGraph = new LineGraph();
 		this.scatterPlot = new ScatterPlot();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer);
+				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 
-		frame.add(this.lineGraph, BorderLayout.CENTER);
+		this.frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
-		createAdminPanel();
+		createAdminPanels();
 
 		/**
 		 * purpose: Creates a timer to loop evolutionary process based on
@@ -139,12 +148,12 @@ public class EvolutionViewer {
 	 * ensures: creates, adds functionality and adds buttons to viewer frame
 	 * 
 	 */
-	private void createAdminPanel() {
+	private void createAdminPanels() {
 		JButton loadButton = new JButton("Load");
 		loadButton.addActionListener(new loadEvolutionListener());
 
 		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(new saveEvolutionListener(this.buttonGrid));
+		saveButton.addActionListener(new saveEvolutionListener(this.southAdminPanel));
 
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
 		this.mutateField = new JTextField("1");
@@ -167,6 +176,10 @@ public class EvolutionViewer {
 		this.selectionField = new JComboBox<String>();
 		this.selectionField.addItem("Truncation");
 		this.selectionField.addItem("Roulette Wheel");
+
+		JLabel truncationLabel = new JLabel("Truncate %");
+		this.truncationField = new JTextField("50");
+		this.truncationField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel crossoverLabel = new JLabel("Crossover?");
 		JCheckBox crossoverBox = new JCheckBox();
@@ -194,32 +207,36 @@ public class EvolutionViewer {
 		this.resetButton = new JButton("Reset");
 		this.resetButton.addActionListener(new resetListener(this));
 
-		this.buttonGrid.add(saveButton);
-		this.buttonGrid.add(loadButton);
-		this.buttonGrid.add(seedLabel);
-		this.buttonGrid.add(this.seedField);
-		this.buttonGrid.add(mutateLabel);
-		this.buttonGrid.add(this.mutateField);
-		this.buttonGrid.add(fitnessLabel);
-		this.buttonGrid.add(this.fitnessField);
-		this.buttonGrid.add(maxFitnessLabel);
-		this.buttonGrid.add(this.maxFitnessField);
-		this.buttonGrid.add(selectionLabel);
-		this.buttonGrid.add(this.selectionField);
-		this.buttonGrid.add(crossoverLabel);
-		this.buttonGrid.add(crossoverBox);
-		this.buttonGrid.add(populationSizeLabel);
-		this.buttonGrid.add(this.populationSizeField);
-		this.buttonGrid.add(generationsLabel);
-		this.buttonGrid.add(this.generationsField);
-		this.buttonGrid.add(chromosomeLength);
-		this.buttonGrid.add(this.chromosomeLengthField);
-		this.buttonGrid.add(elitismLabel);
-		this.buttonGrid.add(this.elitismField);
-		this.buttonGrid.add(this.startButton);
-		this.buttonGrid.add(this.resetButton);
+		this.eastAdminPanel.add(saveButton);
+		this.eastAdminPanel.add(loadButton);
+		this.southAdminPanel.add(seedLabel);
+		this.southAdminPanel.add(this.seedField);
+		this.southAdminPanel.add(mutateLabel);
+		this.southAdminPanel.add(this.mutateField);
+		this.southAdminPanel.add(fitnessLabel);
+		this.southAdminPanel.add(this.fitnessField);
+    this.southAdminPanel.add(maxFitnessLabel);
+		this.southAdminPanel.add(this.maxFitnessField);
+		this.southAdminPanel.add(selectionLabel);
+		this.southAdminPanel.add(this.selectionField);
+		this.southAdminPanel.add(truncationLabel);
+		this.southAdminPanel.add(this.truncationField);
+		this.southAdminPanel.add(crossoverLabel);
+		this.southAdminPanel.add(crossoverBox);
+		this.southAdminPanel.add(populationSizeLabel);
+		this.southAdminPanel.add(this.populationSizeField);
+		this.southAdminPanel.add(generationsLabel);
+		this.southAdminPanel.add(this.generationsField);
+		this.southAdminPanel.add(chromosomeLength);
+		this.southAdminPanel.add(this.chromosomeLengthField);
+		this.southAdminPanel.add(elitismLabel);
+		this.southAdminPanel.add(this.elitismField);
+		this.southAdminPanel.add(this.startButton);
+		this.southAdminPanel.add(resetButton);
 
-		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
+		this.frame.add(this.southAdminPanel, BorderLayout.SOUTH);
+		this.frame.add(this.eastAdminPanel, BorderLayout.EAST);
+
 	}
 
 	/**
@@ -324,6 +341,11 @@ public class EvolutionViewer {
 		this.population.setSelectionMethod(this.selectionMethod);
 	}
 
+	public void setTruncationPercent() {
+		this.truncationPercent = getTextFieldNumber(this.truncationField);
+		this.population.setTruncationPercent(this.truncationPercent);
+	}
+
 	/**
 	 * ensures: GUI is reset when reset button is pressed and modifications require
 	 * a change in graphics
@@ -334,9 +356,10 @@ public class EvolutionViewer {
 		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer);
+				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 		this.lineGraph.repaint();
-
+		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
+		this.bestChromosomeViewer.reset(this.chromosomeLength);
 	}
 
 	public int getNumLoops() {

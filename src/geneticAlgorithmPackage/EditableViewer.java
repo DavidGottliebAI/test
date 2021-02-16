@@ -38,7 +38,7 @@ public class EditableViewer {
 		createAdminPanel();
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
-		this.frame.setLocation(0, 20);
+		this.frame.setLocation(0, 25);
 		this.frame.setVisible(true);
 	}
 
@@ -127,7 +127,7 @@ public class EditableViewer {
 		String text = textField.getText();
 		try {
 			int mutationNumber = Integer.parseInt(text);
-			if (mutationNumber < 0 || mutationNumber > this.getChromosome().getGeneList().size()) {
+			if (mutationNumber < 0 || mutationNumber > this.getChromosome().getEditableGeneList().size()) {
 				throw new NumberFormatException();
 			}
 			return mutationNumber;
@@ -136,7 +136,7 @@ public class EditableViewer {
 				this.frame.setTitle("Your Power Levels Are Too High!");
 				return 0;
 			}
-			this.frame.setTitle("Enter Mutation Rate between 0 and " + this.getChromosome().getGeneList().size());
+			this.frame.setTitle("Enter Mutation Rate between 0 and " + this.getChromosome().getEditableGeneList().size());
 			return 0;
 		}
 	}

@@ -28,12 +28,18 @@ public class Population {
 	private EditableViewer editableViewer;
 	private Random random;
 	private BestChromosomeViewer bestChromosomeViewer;
+	private int truncationPercent;
+	private PopulationViewer populationViewer;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
-			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer) {
-		this.bestChromosomeViewer = bestChromosomeViewer;
+			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer,
+			PopulationViewer populationViewer) {
+
 		this.editableViewer = editableViewer;
+		this.bestChromosomeViewer = bestChromosomeViewer;
+		this.populationViewer = populationViewer;
 		this.evolutionViewer = evolutionViewer;
+
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
 		this.random = new Random();
@@ -57,6 +63,7 @@ public class Population {
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 		
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+    this.populationViewer.updateChromsomeGrid(this.chromosomeList);
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
 		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
 		
@@ -89,8 +96,7 @@ public class Population {
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
 		
-		selection(50);
-
+    selection(this.truncationPercent);
 		this.chromosomeList = repopulate(numElite);
 
 		mutate(this.evolutionViewer.getAverageNumMutations());
@@ -98,13 +104,7 @@ public class Population {
 		for (int i = 0; i < numElite; i++) {
 			this.chromosomeList.add(0, elite.get((int) (numElite - i - 1)));
 		}
-
 		return "";
-	}
-
-	private void crossover() {
-		
-		
 	}
 
 	/**
@@ -123,9 +123,10 @@ public class Population {
 	 * @param percent
 	 */
 	public void selection(int percent) {
-		double numberSurvive = Math.ceil((double) percent / 100 * this.chromosomeList.size());
+		double numberSurvive = this.chromosomeList.size()
+				- Math.ceil((double) percent / 100 * this.chromosomeList.size());
 		if (this.selectionMethod.equals("Truncation")) {
-			while (this.chromosomeList.size() > numberSurvive) {
+			while (this.chromosomeList.size() >= numberSurvive) {
 				this.chromosomeList.remove(this.chromosomeList.size() - 1);
 			}
 		} else if (this.selectionMethod.equals("Roulette Wheel")) {
@@ -203,7 +204,7 @@ public class Population {
 	 */
 	private void updateFitessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.calculateFitness(this.fitnessFunction, this.populationSize, this.evolutionViewer);
+			chromosome.calculateFitness(this.fitnessFunction, this.chromosomeLength, this.evolutionViewer);
 		}
 	}
 
@@ -226,4 +227,7 @@ public class Population {
 		this.selectionMethod = selectionMethod;
 	}
 
+	public void setTruncationPercent(int truncationPercent) {
+		this.truncationPercent = truncationPercent;
+	}
 }
