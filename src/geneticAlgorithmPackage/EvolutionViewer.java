@@ -50,6 +50,7 @@ public class EvolutionViewer {
 	public static final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
+	public boolean crossover = false;
 	public int maxFitness = 100;
 	private int maxGenerations = 100;
 	private int elitismPercent = 1;
@@ -96,7 +97,6 @@ public class EvolutionViewer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
 				if (evolutionRunning) {
 					resetButton.setVisible(true);
 					if (getNumLoops() > maxGenerations) {
@@ -122,7 +122,7 @@ public class EvolutionViewer {
 						flipEvolutionRunning();
 					}
 					frame.repaint();
-					numLoops = getNumLoops() + 1;
+					numLoops += 1;
 				}
 			}
 		});
@@ -130,8 +130,8 @@ public class EvolutionViewer {
 		t.start();
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(1450, 500);
-		this.frame.setLocation(450, 20); // might want to play with later
+		this.frame.setSize(1600, 500);
+		this.frame.setLocation(0, 530); // might want to play with later
 		this.frame.setVisible(true);
 	}
 
@@ -170,7 +170,7 @@ public class EvolutionViewer {
 
 		JLabel crossoverLabel = new JLabel("Crossover?");
 		JCheckBox crossoverBox = new JCheckBox();
-		crossoverBox.addActionListener(new crossoverListener());
+		crossoverBox.addItemListener(new crossoverListener(this));
 
 		JLabel populationSizeLabel = new JLabel("Population Size");
 		this.populationSizeField = new JTextField("100");

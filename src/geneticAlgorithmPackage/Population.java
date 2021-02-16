@@ -56,23 +56,26 @@ public class Population {
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 		
+		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
+		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
+		
 		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
 			return "fitness";
 		} else if(this.evolutionViewer.getElitismPercent() > 100) {
 			return "elitism";
 		}
 		
-		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
-		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
-		
-
 		double numElite = Math.ceil(this.evolutionViewer.getElitismPercent() / (double) 100 * this.populationSize);
 
 		ArrayList<Chromosome> elite = new ArrayList<Chromosome>();
 		for (int i = 0; i < numElite; i++) {
 			elite.add(this.chromosomeList.get(0));
 			this.chromosomeList.remove(0);
+		}
+		
+		if(this.evolutionViewer.crossover) {
+			populationCrossover();
 		}
 
 		// System.out.println(this.chromosomeList.get(98));
@@ -85,7 +88,7 @@ public class Population {
 //		System.out.println(this.chromosomeList.get(0).getFitness() + " "
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
-
+		
 		selection(50);
 
 		this.chromosomeList = repopulate(numElite);
@@ -97,6 +100,11 @@ public class Population {
 		}
 
 		return "";
+	}
+
+	private void crossover() {
+		
+		
 	}
 
 	/**
