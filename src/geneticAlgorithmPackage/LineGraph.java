@@ -19,6 +19,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Double> averageFitnessLog = new ArrayList<Double>();
 	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
+	private ArrayList<Integer> uniqueLog = new ArrayList<Integer>();
 
 	/**
 	 * ensures: Constructs a line graph component and sets the preffered size
@@ -34,8 +35,9 @@ public class LineGraph extends JComponent {
 	 * 
 	 * @param chromosomeList the list of chromosomes in the population to be
 	 *                       analayzed
+	 * @param totalUnique 
 	 */
-	public void addEntry(ArrayList<Chromosome> chromosomeList) { // add hamming
+	public void addEntry(ArrayList<Chromosome> chromosomeList, int totalUnique) { // add hamming
 		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
 		this.worstFitnessLog.add(chromosomeList.get(chromosomeList.size() - 1).getFitness());
 		int sum = 0;
@@ -44,6 +46,7 @@ public class LineGraph extends JComponent {
 		}
 		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
 		this.averageHammingLog.add(calculateAverageHammingDistance(chromosomeList));
+		this.uniqueLog.add(totalUnique);
 	}
 
 	/**
@@ -83,6 +86,7 @@ public class LineGraph extends JComponent {
 		g2.drawString("Average Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 10);
 		g2.drawString("Worst Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 60);
 		g2.drawString("Average Hamming", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 110);
+		g2.drawString("Unique Chromosomes", PLOT_WIDTH - 120, -PLOT_HEIGHT / 2 - 90);
 
 		Font font = new Font(null, Font.BOLD, 15);
 		g2.setFont(font);
@@ -150,15 +154,18 @@ public class LineGraph extends JComponent {
 			g2.drawString("" + this.getFitnesses()[2], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 85);
 			g2.setColor(Color.YELLOW);
 			g2.drawString("" + this.getFitnesses()[3], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 135);
+			g2.setColor(Color.BLACK);
+			g2.drawString("" + this.getFitnesses()[4], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 65);
 		}
 	}
 
 	public double[] getFitnesses() {
-		double[] fitnesses = new double[4];
+		double[] fitnesses = new double[5];
 		fitnesses[0] = bestFitnessLog.get(bestFitnessLog.size() - 1);
 		fitnesses[1] = averageFitnessLog.get(averageFitnessLog.size() - 1);
 		fitnesses[2] = worstFitnessLog.get(worstFitnessLog.size() - 1);
 		fitnesses[3] = averageHammingLog.get(averageHammingLog.size() - 1);
+		fitnesses[4] = uniqueLog.get(uniqueLog.size() - 1);
 		return fitnesses;
 	}
 

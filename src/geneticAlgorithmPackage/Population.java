@@ -66,10 +66,8 @@ public class Population {
 //				+ this.calculateAverageFitness());
 
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
-		
-		this.totalUnique();
 
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
 		if (this.chromosomeList.get(0).getFitness() >= 100) {
 			return true;
 		}
