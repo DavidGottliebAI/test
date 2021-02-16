@@ -28,6 +28,7 @@ import javax.swing.Timer;
 public class EvolutionViewer {
 
 	public LineGraph lineGraph;
+	public ScatterPlot scatterPlot;
 	private Population population;
 
 	private EditableViewer editableViewer;
@@ -39,6 +40,9 @@ public class EvolutionViewer {
 	private JPanel eastAdminPanel;
 	private JTextField mutateField;
 	private JTextField generationsField;
+	private JTextField maxFitnessField;
+	private JTextField elitismField;
+	private JButton resetButton;
 	private JButton startButton;
 	private JTextField seedField;
 	private JTextField chromosomeLengthField;
@@ -47,13 +51,16 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 	private JTextField truncationField;
 
-	private static final int DELAY = 30;
-	protected static final int FITNESS_LIMIT = 100;
+	private static final int DELAY = 50;
 	protected static final int GENERATION_LIMIT = 399;
-	public final String title = "Evolution Viewer";
+	public static final String title = "Evolution Viewer";
+
 
 	public boolean evolutionRunning = false;
+	public boolean crossover = false;
+	public int maxFitness = 100;
 	private int maxGenerations = 100;
+	private int elitismPercent = 1;
 	private int averageNumMutations = 1;
 	private int numLoops = 0;
 	private int seed = 0;
@@ -81,6 +88,7 @@ public class EvolutionViewer {
 		this.southAdminPanel = new JPanel();
 		this.eastAdminPanel = new JPanel();
 		this.lineGraph = new LineGraph();
+		this.scatterPlot = new ScatterPlot();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
 
@@ -99,23 +107,31 @@ public class EvolutionViewer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
+					resetButton.setVisible(true);
 					if (getNumLoops() > maxGenerations) {
 						startButton.setText("Continue");
 						flipEvolutionRunning();
 						return;
 					} else if (getNumLoops() >= GENERATION_LIMIT) {
 						frame.setTitle(title + ": Restart! Number of generations exceeded 400!");
+						resetButton.setVisible(false);
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 						return;
 					}
-					if (population.evolutionLoop()) {
+					if (population.evolutionLoop().equals("fitness")) {
 						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
+						resetButton.setVisible(false);
+						startButton.setText("Reset");
+						flipEvolutionRunning();
+					} else if (population.evolutionLoop().equals("elitism")) {
+						frame.setTitle(title + ": Your elitism is too high!");
+						resetButton.setVisible(false);
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 					}
 					frame.repaint();
-					numLoops = getNumLoops() + 1;
+					numLoops += 1;
 				}
 			}
 		});
@@ -123,8 +139,8 @@ public class EvolutionViewer {
 		t.start();
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(1425, 500);
-		this.frame.setLocation(500, 25); // might want to play with later
+		this.frame.setSize(1600, 500);
+		this.frame.setLocation(0, 530); // might want to play with later
 		this.frame.setVisible(true);
 	}
 
@@ -152,6 +168,10 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
 
+		JLabel maxFitnessLabel = new JLabel("Max Fitness");
+		this.maxFitnessField = new JTextField("100");
+		this.maxFitnessField.setPreferredSize(new Dimension(40, 20));
+
 		JLabel selectionLabel = new JLabel("Selection");
 		this.selectionField = new JComboBox<String>();
 		this.selectionField.addItem("Truncation");
@@ -163,7 +183,7 @@ public class EvolutionViewer {
 
 		JLabel crossoverLabel = new JLabel("Crossover?");
 		JCheckBox crossoverBox = new JCheckBox();
-		crossoverBox.addActionListener(new crossoverListener());
+		crossoverBox.addItemListener(new crossoverListener(this));
 
 		JLabel populationSizeLabel = new JLabel("Population Size");
 		this.populationSizeField = new JTextField("100");
@@ -178,14 +198,14 @@ public class EvolutionViewer {
 		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel elitismLabel = new JLabel("Elitism %");
-		JTextField elitismField = new JTextField("0");
-		elitismField.setPreferredSize(new Dimension(30, 20));
+		this.elitismField = new JTextField("1");
+		this.elitismField.setPreferredSize(new Dimension(30, 20));
 
 		this.startButton = new JButton("Start");
 		this.startButton.addActionListener(new startListener(this, this.startButton));
 
-		JButton resetButton = new JButton("Reset");
-		resetButton.addActionListener(new resetListener(this));
+		this.resetButton = new JButton("Reset");
+		this.resetButton.addActionListener(new resetListener(this));
 
 		this.eastAdminPanel.add(saveButton);
 		this.eastAdminPanel.add(loadButton);
@@ -195,6 +215,8 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(this.mutateField);
 		this.southAdminPanel.add(fitnessLabel);
 		this.southAdminPanel.add(this.fitnessField);
+    this.southAdminPanel.add(maxFitnessLabel);
+		this.southAdminPanel.add(this.maxFitnessField);
 		this.southAdminPanel.add(selectionLabel);
 		this.southAdminPanel.add(this.selectionField);
 		this.southAdminPanel.add(truncationLabel);
@@ -208,12 +230,13 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(chromosomeLength);
 		this.southAdminPanel.add(this.chromosomeLengthField);
 		this.southAdminPanel.add(elitismLabel);
-		this.southAdminPanel.add(elitismField);
+		this.southAdminPanel.add(this.elitismField);
 		this.southAdminPanel.add(this.startButton);
 		this.southAdminPanel.add(resetButton);
 
 		this.frame.add(this.southAdminPanel, BorderLayout.SOUTH);
 		this.frame.add(this.eastAdminPanel, BorderLayout.EAST);
+
 	}
 
 	/**
@@ -262,6 +285,14 @@ public class EvolutionViewer {
 
 	public void setAverageNumMutations() {
 		this.averageNumMutations = getTextFieldNumber(mutateField);
+	}
+
+	public void setMaxFitness() {
+		this.maxFitness = getTextFieldNumber(maxFitnessField);
+	}
+
+	public void setElitism() {
+		this.elitismPercent = getTextFieldNumber(elitismField);
 	}
 
 	/**
@@ -337,5 +368,9 @@ public class EvolutionViewer {
 
 	public void setEvolutionRunning(boolean b) {
 		this.evolutionRunning = b;
+	}
+
+	public int getElitismPercent() {
+		return this.elitismPercent;
 	}
 }

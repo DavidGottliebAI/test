@@ -21,6 +21,8 @@ public class startListener implements ActionListener {
 		// takes all user inputs at runtime, right before starting the loop and passes
 		// them into necesary classes
 		this.evolutionViewer.setMaxGenerations();
+		this.evolutionViewer.setMaxFitness();
+		this.evolutionViewer.setElitism();
 		this.evolutionViewer.setAverageNumMutations();
 		this.evolutionViewer.setSeed();
 		this.evolutionViewer.setChromosomeLength();

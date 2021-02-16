@@ -57,10 +57,35 @@ public class Population {
 	 * @return true if the evolution produced a chromosome with a fitness >= 100,
 	 *         else false
 	 */
-	public boolean evolutionLoop() {
+	public String evolutionLoop() {
 
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+		
+		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+    this.populationViewer.updateChromsomeGrid(this.chromosomeList);
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
+		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
+		
+		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
+			return "fitness";
+		} else if(this.evolutionViewer.getElitismPercent() > 100) {
+			return "elitism";
+		}
+		
+		double numElite = Math.ceil(this.evolutionViewer.getElitismPercent() / (double) 100 * this.populationSize);
+
+		ArrayList<Chromosome> elite = new ArrayList<Chromosome>();
+		for (int i = 0; i < numElite; i++) {
+			elite.add(this.chromosomeList.get(0));
+			this.chromosomeList.remove(0);
+		}
+		
+		if(this.evolutionViewer.crossover) {
+			populationCrossover();
+		}
+
+		// System.out.println(this.chromosomeList.get(98));
 
 //		System.out.println("After sort:");
 //		for (Chromosome chromosome : this.chromosomeList) {
@@ -70,19 +95,16 @@ public class Population {
 //		System.out.println(this.chromosomeList.get(0).getFitness() + " "
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
+		
+    selection(this.truncationPercent);
+		this.chromosomeList = repopulate(numElite);
 
-		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
-		this.populationViewer.updateChromsomeGrid(this.chromosomeList);
-
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
-		if (this.chromosomeList.get(0).getFitness() >= 100) {
-			return true;
-		}
-
-		selection(this.truncationPercent);
-		this.chromosomeList = repopulate();
 		mutate(this.evolutionViewer.getAverageNumMutations());
-		return false;
+
+		for (int i = 0; i < numElite; i++) {
+			this.chromosomeList.add(0, elite.get((int) (numElite - i - 1)));
+		}
+		return "";
 	}
 
 	/**
@@ -124,14 +146,16 @@ public class Population {
 
 	/**
 	 * ensures: all chromosomes that are killed (truncated) or parents are replaced
-	 * my clones of the surviving parents
+	 * by clones of the surviving parents
+	 * 
+	 * @param elitismPercent
 	 * 
 	 * @return a repopulated list of cloned chromosomes
 	 */
-	private ArrayList<Chromosome> repopulate() {
+	private ArrayList<Chromosome> repopulate(double numElite) {
 		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
 		int index = 0;
-		while (repopulatedChromosomeList.size() < this.populationSize) {
+		while (repopulatedChromosomeList.size() < this.populationSize - numElite) {
 			if (index > this.chromosomeList.size() - 1) {
 				index = 0;
 			}
@@ -141,6 +165,24 @@ public class Population {
 			index++;
 		}
 		return repopulatedChromosomeList;
+	}
+
+	/**
+	 * ensures: counts the number of unique chromosomes in the population
+	 * 
+	 */
+	private int totalUnique() {
+		int unique = this.populationSize;
+		for (int i = 0; i < this.chromosomeList.size() - 1; i++) {
+			String current = this.chromosomeList.get(i).getBits();
+			for (int j = i + 1; j < this.chromosomeList.size(); j++) {
+				String other = this.chromosomeList.get(j).getBits();
+				if (current.equals(other)) {
+					unique -= 1;
+				}
+			}
+		}
+		return unique;
 	}
 
 	/**
@@ -188,43 +230,4 @@ public class Population {
 	public void setTruncationPercent(int truncationPercent) {
 		this.truncationPercent = truncationPercent;
 	}
-
-//	public int calculate1sBinaryAddition(long binary1, long binary2) {
-//		int[] newBinary = new int[10];
-//		int i = 0;
-//		int carry = 0;
-//		int ones = 0;
-//
-//		while (binary1 != 0 || binary2 != 0) {
-//			newBinary[i++] = (int) ((binary1 % 10 + binary2 % 10 + carry) % 2);
-//			carry = (int) ((binary1 % 10 + binary2 % 10 + carry) / 2);
-//			binary1 = 10;
-//			binary2 /= 10;
-//		}
-//		if (carry != 0) {
-//			newBinary[i++] = carry;
-//		}
-//		for (int j = 0; j < newBinary.length; j++) {
-//			if (newBinary[j] == 1) {
-//				ones++;
-//			}
-//		}
-//		return ones;
-//	}
-
-//	public double calculateAverageHammingDistance() {
-//		int sum = 0;
-//		int count = 0;
-//		for(int i = 0; i < this.chromosomeList.size(); i++) {
-//			Chromosome current = this.chromosomeList.get(i);
-//			long firstBinary = Long.parseLong(current.getUpdatedGeneString());
-//			for(int j = 0; j < this.chromosomeList.size() - i; j++) {
-//				long secondBinary = Long.parseLong(current.getUpdatedGeneString());
-//				sum += this.calculate1sBinaryAddition(firstBinary, secondBinary);
-//				count++;
-//			}
-//		}
-//		return sum / count;
-//		return 0;
-//	}
 }
