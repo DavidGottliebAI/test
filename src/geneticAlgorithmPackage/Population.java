@@ -56,6 +56,23 @@ public class Population {
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
+		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
+		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
+
+		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
+			return true;
+		}
+
+		double numElite = Math.ceil(this.evolutionViewer.getElitismPercent() / (double) 100 * this.populationSize);
+		ArrayList<Chromosome> elite = new ArrayList<Chromosome>();
+		for (int i = 0; i < numElite; i++) {
+			elite.add(this.chromosomeList.get(0));
+			this.chromosomeList.remove(0);
+		}
+		
+		//System.out.println(this.chromosomeList.get(98));
+
 //		System.out.println("After sort:");
 //		for (Chromosome chromosome : this.chromosomeList) {
 //			System.out.print(chromosome.getFitness() + ", ");
@@ -65,16 +82,16 @@ public class Population {
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
 
-		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+		selection(50);
 
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
-		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
-			return true;
+		this.chromosomeList = repopulate(numElite);
+
+		mutate(this.evolutionViewer.getAverageNumMutations());
+
+		for (int i = 0; i < numElite; i++) {
+			this.chromosomeList.add(0, elite.get((int) (numElite - i - 1)));
 		}
 
-		selection(50);
-		this.chromosomeList = repopulate();
-		mutate(this.evolutionViewer.getAverageNumMutations());
 		return false;
 	}
 
@@ -116,14 +133,16 @@ public class Population {
 
 	/**
 	 * ensures: all chromosomes that are killed (truncated) or parents are replaced
-	 * my clones of the surviving parents
+	 * by clones of the surviving parents
+	 * 
+	 * @param elitismPercent
 	 * 
 	 * @return a repopulated list of cloned chromosomes
 	 */
-	private ArrayList<Chromosome> repopulate() {
+	private ArrayList<Chromosome> repopulate(double numElite) {
 		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
 		int index = 0;
-		while (repopulatedChromosomeList.size() < this.populationSize) {
+		while (repopulatedChromosomeList.size() < this.populationSize - numElite) {
 			if (index > this.chromosomeList.size() - 1) {
 				index = 0;
 			}
@@ -135,13 +154,17 @@ public class Population {
 		return repopulatedChromosomeList;
 	}
 
+	/**
+	 * ensures: counts the number of unique chromosomes in the population
+	 * 
+	 */
 	private int totalUnique() {
 		int unique = this.populationSize;
-		for(int i = 0; i < this.chromosomeList.size() - 1; i++) {
+		for (int i = 0; i < this.chromosomeList.size() - 1; i++) {
 			String current = this.chromosomeList.get(i).getBits();
-			for(int j = i + 1; j < this.chromosomeList.size(); j++) {
+			for (int j = i + 1; j < this.chromosomeList.size(); j++) {
 				String other = this.chromosomeList.get(j).getBits();
-				if(current.equals(other)) {
+				if (current.equals(other)) {
 					unique -= 1;
 				}
 			}

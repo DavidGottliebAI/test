@@ -28,6 +28,7 @@ import javax.swing.Timer;
 public class EvolutionViewer {
 
 	public LineGraph lineGraph;
+	public ScatterPlot scatterPlot;
 	private Population population;
 
 	public JFrame frame;
@@ -35,6 +36,7 @@ public class EvolutionViewer {
 	private JTextField mutateField;
 	private JTextField generationsField;
 	private JTextField maxFitnessField;
+	private JTextField elitismField;
 	private JButton startButton;
 	private JTextField seedField;
 	private JTextField chromosomeLengthField;
@@ -43,14 +45,13 @@ public class EvolutionViewer {
 	private JComboBox<String> selectionField;
 
 	private static final int DELAY = 50;
-	//protected static final int FITNESS_LIMIT = 50;
 	protected static final int GENERATION_LIMIT = 399;
 	public static final String title = "Evolution Viewer";
-
 
 	public boolean evolutionRunning = false;
 	public int maxFitness = 100;
 	private int maxGenerations = 100;
+	private int elitismPercent = 1;
 	private int averageNumMutations = 1;
 	private int numLoops = 0;
 	private int seed = 0;
@@ -76,6 +77,7 @@ public class EvolutionViewer {
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
 		this.lineGraph = new LineGraph();
+		this.scatterPlot = new ScatterPlot();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer);
 
@@ -146,7 +148,7 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
-		
+
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
 		this.maxFitnessField = new JTextField("100");
 		this.maxFitnessField.setPreferredSize(new Dimension(40, 20));
@@ -176,9 +178,9 @@ public class EvolutionViewer {
 		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel elitismLabel = new JLabel("Elitism %");
-		JTextField elitismField = new JTextField("0");
-		elitismField.addActionListener(new elitismListener());
-		elitismField.setPreferredSize(new Dimension(30, 20));
+		this.elitismField = new JTextField("1");
+		this.elitismField.addActionListener(new elitismListener());
+		this.elitismField.setPreferredSize(new Dimension(30, 20));
 
 		this.startButton = new JButton("Start");
 		this.startButton.addActionListener(new startListener(this, this.startButton));
@@ -207,7 +209,7 @@ public class EvolutionViewer {
 		this.buttonGrid.add(chromosomeLength);
 		this.buttonGrid.add(this.chromosomeLengthField);
 		this.buttonGrid.add(elitismLabel);
-		this.buttonGrid.add(elitismField);
+		this.buttonGrid.add(this.elitismField);
 		this.buttonGrid.add(this.startButton);
 		this.buttonGrid.add(resetButton);
 
@@ -261,9 +263,13 @@ public class EvolutionViewer {
 	public void setAverageNumMutations() {
 		this.averageNumMutations = getTextFieldNumber(mutateField);
 	}
-	
+
 	public void setMaxFitness() {
 		this.maxFitness = getTextFieldNumber(maxFitnessField);
+	}
+
+	public void setElitism() {
+		this.elitismPercent = getTextFieldNumber(elitismField);
 	}
 
 	/**
@@ -333,5 +339,9 @@ public class EvolutionViewer {
 
 	public void setEvolutionRunning(boolean b) {
 		this.evolutionRunning = b;
+	}
+
+	public int getElitismPercent() {
+		return this.elitismPercent;
 	}
 }

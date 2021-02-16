@@ -35,7 +35,7 @@ public class LineGraph extends JComponent {
 	 * 
 	 * @param chromosomeList the list of chromosomes in the population to be
 	 *                       analayzed
-	 * @param totalUnique 
+	 * @param totalUnique
 	 */
 	public void addEntry(ArrayList<Chromosome> chromosomeList, int totalUnique) { // add hamming
 		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
@@ -72,7 +72,7 @@ public class LineGraph extends JComponent {
 			g2.drawLine(-10, -i * 30, 10, -i * 30);
 			g2.drawString("" + i * 10, -20, -i * 30);
 		}
-		
+
 		// outline of graph and every 50 generation ticks
 
 		for (int i = 0; i < 9; i++) {
@@ -127,7 +127,7 @@ public class LineGraph extends JComponent {
 		int previousYAverage = 0;
 		int previousYAverageHamming = 0;
 
-		// graphs each line and live updates for each 
+		// graphs each line and live updates for each
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.GREEN);
@@ -143,9 +143,8 @@ public class LineGraph extends JComponent {
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 
 			g2.setColor(Color.YELLOW);
-			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
+			g2.drawLine(x * 3, previousYAverageHamming, x * 3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
 			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
-			
 			g2.setColor(Color.GREEN);
 			g2.drawString("" + this.getFitnesses()[0], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 15);
 			g2.setColor(Color.ORANGE);
@@ -179,29 +178,29 @@ public class LineGraph extends JComponent {
 		this.worstFitnessLog.clear();
 		this.averageHammingLog.clear();
 	}
-	
+
 	/**
 	 * ensures: calculates hamming distance between population of chromosomes
 	 * 
 	 * @param current chromosome list
 	 */
-  
+
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList) {
 		int sum = 0;
 		int pairs = 0;
-		for(int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
+		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
 			int zeros = 0;
 			int ones = 0;
-			for(int j = 0; j < chromosomeList.size(); j++) {
+			for (int j = 0; j < chromosomeList.size(); j++) {
 				Chromosome current = chromosomeList.get(j);
-				if(current.getBits().substring(i,i+1).equals("0")) {
+				if (current.getBits().substring(i, i + 1).equals("0")) {
 					zeros += 1;
 				} else {
 					ones += 1;
 				}
 			}
 			sum += ones * zeros;
-		}	
+		}
 		pairs += chromosomeList.size() * (chromosomeList.size() - 1) / 2;
 		return sum / pairs;
 	}

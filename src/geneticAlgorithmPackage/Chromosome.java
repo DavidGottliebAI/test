@@ -166,7 +166,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 		return this.geneString;
 	}
-	
+
 	public String getBits() {
 		this.geneString = "";
 		for (Gene gene : this.geneList) {
@@ -183,7 +183,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	public ArrayList<EditableGene> getGeneList() {
 		return editableGeneList;
 	}
-	
+
 	public int getGeneLength() {
 		return geneList.size();
 	}
@@ -213,10 +213,10 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	/**
-	 * ensures: a new chromsome is created based off of the information of this
-	 * chromsome
+	 * ensures: a new chromosome is created based off of the information of this
+	 * chromosome
 	 * 
-	 * @return a cloned chromsome that is new and in a seperate location
+	 * @return a cloned chromosome that is new and in a seperate location
 	 */
 	public Chromosome deepCopy() {
 		Chromosome copiedChromosome = new Chromosome(this.seed, this.chromosomeLength, this.editableViewer);
