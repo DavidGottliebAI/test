@@ -64,14 +64,16 @@ public class Population {
 //		System.out.println(this.chromosomeList.get(0).getFitness() + " "
 //				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
 //				+ this.calculateAverageFitness());
-		
+
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
+		
+		this.totalUnique();
 
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList);
 		if (this.chromosomeList.get(0).getFitness() >= 100) {
 			return true;
 		}
-		
+
 		selection(50);
 		this.chromosomeList = repopulate();
 		mutate(this.evolutionViewer.getAverageNumMutations());
@@ -135,6 +137,21 @@ public class Population {
 		return repopulatedChromosomeList;
 	}
 
+	private int totalUnique() {
+		int unique = this.populationSize;
+		for(int i = 0; i < this.chromosomeList.size() - 1; i++) {
+			String current = this.chromosomeList.get(i).getBits();
+			for(int j = i + 1; j < this.chromosomeList.size(); j++) {
+				String other = this.chromosomeList.get(j).getBits();
+				if(current.equals(other)) {
+					unique -= 1;
+				}
+			}
+		}
+		System.out.println(unique);
+		return unique;
+	}
+
 	/**
 	 * ensures: the each chromosome in the population is mutated according to the
 	 * average number of expected mutations
@@ -177,5 +194,4 @@ public class Population {
 		this.selectionMethod = selectionMethod;
 	}
 
-	
 }

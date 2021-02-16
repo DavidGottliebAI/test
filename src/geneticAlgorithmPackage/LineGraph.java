@@ -172,6 +172,12 @@ public class LineGraph extends JComponent {
 		this.worstFitnessLog.clear();
 		this.averageHammingLog.clear();
 	}
+	
+	/**
+	 * ensures: calculates hamming distance between population of chromosomes
+	 * 
+	 * @param current chromosome list
+	 */
   
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList) {
 		int sum = 0;
