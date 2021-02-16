@@ -82,6 +82,7 @@ public class LineGraph extends JComponent {
 		g2.drawString("Best Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 - 40);
 		g2.drawString("Average Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 10);
 		g2.drawString("Worst Fitness", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 60);
+		g2.drawString("Average Hamming", PLOT_WIDTH - 100 + 5, -PLOT_HEIGHT / 2 + 110);
 
 		Font font = new Font(null, Font.BOLD, 15);
 		g2.setFont(font);
@@ -102,6 +103,9 @@ public class LineGraph extends JComponent {
 		g2.setColor(Color.RED);
 		g2.drawRect(PLOT_WIDTH - 120, -PLOT_HEIGHT / 2 + 50, 15, 15);
 		g2.fillRect(PLOT_WIDTH - 120, -PLOT_HEIGHT / 2 + 50, 15, 15);
+		g2.setColor(Color.YELLOW);
+		g2.drawRect(PLOT_WIDTH - 120, -PLOT_HEIGHT / 2 + 100, 15, 15);
+		g2.fillRect(PLOT_WIDTH - 120, -PLOT_HEIGHT / 2 + 100, 15, 15);
 		g2.setColor(Color.BLACK);
 
 		// rotates graph
@@ -119,7 +123,7 @@ public class LineGraph extends JComponent {
 		int previousYAverage = 0;
 		int previousYAverageHamming = 0;
 
-		// graphs each line
+		// graphs each line and live updates for each 
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.GREEN);
@@ -137,21 +141,24 @@ public class LineGraph extends JComponent {
 			g2.setColor(Color.YELLOW);
 			g2.drawLine(x*3, previousYAverageHamming, x*3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
 			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
-
+			
 			g2.setColor(Color.GREEN);
 			g2.drawString("" + this.getFitnesses()[0], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 15);
 			g2.setColor(Color.ORANGE);
 			g2.drawString("" + this.getFitnesses()[1], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 35);
 			g2.setColor(Color.RED);
 			g2.drawString("" + this.getFitnesses()[2], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 85);
+			g2.setColor(Color.YELLOW);
+			g2.drawString("" + this.getFitnesses()[3], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 135);
 		}
 	}
 
 	public double[] getFitnesses() {
-		double[] fitnesses = new double[3];
+		double[] fitnesses = new double[4];
 		fitnesses[0] = bestFitnessLog.get(bestFitnessLog.size() - 1);
 		fitnesses[1] = averageFitnessLog.get(averageFitnessLog.size() - 1);
 		fitnesses[2] = worstFitnessLog.get(worstFitnessLog.size() - 1);
+		fitnesses[3] = averageHammingLog.get(averageHammingLog.size() - 1);
 		return fitnesses;
 	}
 
@@ -167,18 +174,6 @@ public class LineGraph extends JComponent {
 	}
   
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList) {
-//		int sum = 0;
-//		int count = 0;
-//		for(int i = 0; i < chromosomeList.size(); i++) {
-//			Chromosome current = chromosomeList.get(i);
-//			int firstBinary = current.getBits();
-//			for(int j = 0; j < chromosomeList.size() - i; j++) {
-//				int secondBinary = current.getBits();
-//				sum += 
-//				count++;
-//			}
-//		}
-//		return sum / count;
 		int sum = 0;
 		int pairs = 0;
 		for(int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
