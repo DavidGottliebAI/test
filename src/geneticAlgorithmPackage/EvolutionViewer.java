@@ -168,22 +168,18 @@ public class EvolutionViewer {
 
 		JLabel populationSizeLabel = new JLabel("Population Size");
 		this.populationSizeField = new JTextField("100");
-		this.populationSizeField.addActionListener(new populationSizeListener());
 		this.populationSizeField.setPreferredSize(new Dimension(40, 20));
 
 		JLabel generationsLabel = new JLabel("Generations");
 		this.generationsField = new JTextField("100");
-		this.generationsField.addActionListener(new generationsListener());
 		this.generationsField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel chromosomeLength = new JLabel("Chromosome Length");
 		this.chromosomeLengthField = new JTextField("100");
-		this.chromosomeLengthField.addActionListener(new genomeLengthListener());
 		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel elitismLabel = new JLabel("Elitism %");
 		this.elitismField = new JTextField("1");
-		this.elitismField.addActionListener(new elitismListener());
 		this.elitismField.setPreferredSize(new Dimension(30, 20));
 
 		this.startButton = new JButton("Start");
