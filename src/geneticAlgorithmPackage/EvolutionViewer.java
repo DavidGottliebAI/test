@@ -37,6 +37,7 @@ public class EvolutionViewer {
 	private JTextField generationsField;
 	private JTextField maxFitnessField;
 	private JTextField elitismField;
+	private JButton resetButton;
 	private JButton startButton;
 	private JTextField seedField;
 	private JTextField chromosomeLengthField;
@@ -95,23 +96,28 @@ public class EvolutionViewer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
 				if (evolutionRunning) {
+					resetButton.setVisible(true);
 					if (getNumLoops() > maxGenerations) {
 						startButton.setText("Continue");
 						flipEvolutionRunning();
 						return;
 					} else if (getNumLoops() >= GENERATION_LIMIT) {
 						frame.setTitle(title + ": Restart! Number of generations exceeded 400!");
+						resetButton.setVisible(false);
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 						return;
 					}
 					if (population.evolutionLoop().equals("fitness")) {
 						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
+						resetButton.setVisible(false);
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 					} else if (population.evolutionLoop().equals("elitism")) {
 						frame.setTitle(title + ": Your elitism is too high!");
+						resetButton.setVisible(false);
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 					}
@@ -185,8 +191,8 @@ public class EvolutionViewer {
 		this.startButton = new JButton("Start");
 		this.startButton.addActionListener(new startListener(this, this.startButton));
 
-		JButton resetButton = new JButton("Reset");
-		resetButton.addActionListener(new resetListener(this));
+		this.resetButton = new JButton("Reset");
+		this.resetButton.addActionListener(new resetListener(this));
 
 		this.buttonGrid.add(saveButton);
 		this.buttonGrid.add(loadButton);
@@ -211,7 +217,7 @@ public class EvolutionViewer {
 		this.buttonGrid.add(elitismLabel);
 		this.buttonGrid.add(this.elitismField);
 		this.buttonGrid.add(this.startButton);
-		this.buttonGrid.add(resetButton);
+		this.buttonGrid.add(this.resetButton);
 
 		this.frame.add(this.buttonGrid, BorderLayout.SOUTH);
 	}

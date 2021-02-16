@@ -61,10 +61,11 @@ public class Population {
 		} else if(this.evolutionViewer.getElitismPercent() > 100) {
 			return "elitism";
 		}
-
+		
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
 		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
+		
 
 		double numElite = Math.ceil(this.evolutionViewer.getElitismPercent() / (double) 100 * this.populationSize);
 
