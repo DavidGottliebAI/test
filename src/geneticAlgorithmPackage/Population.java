@@ -51,27 +51,30 @@ public class Population {
 	 * @return true if the evolution produced a chromosome with a fitness >= 100,
 	 *         else false
 	 */
-	public boolean evolutionLoop() {
+	public String evolutionLoop() {
 
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
+		
+		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
+			return "fitness";
+		} else if(this.evolutionViewer.getElitismPercent() > 100) {
+			return "elitism";
+		}
 
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
 		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
 
-		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
-			return true;
-		}
-
 		double numElite = Math.ceil(this.evolutionViewer.getElitismPercent() / (double) 100 * this.populationSize);
+
 		ArrayList<Chromosome> elite = new ArrayList<Chromosome>();
 		for (int i = 0; i < numElite; i++) {
 			elite.add(this.chromosomeList.get(0));
 			this.chromosomeList.remove(0);
 		}
-		
-		//System.out.println(this.chromosomeList.get(98));
+
+		// System.out.println(this.chromosomeList.get(98));
 
 //		System.out.println("After sort:");
 //		for (Chromosome chromosome : this.chromosomeList) {
@@ -92,7 +95,7 @@ public class Population {
 			this.chromosomeList.add(0, elite.get((int) (numElite - i - 1)));
 		}
 
-		return false;
+		return "";
 	}
 
 	/**

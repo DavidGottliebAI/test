@@ -106,8 +106,12 @@ public class EvolutionViewer {
 						flipEvolutionRunning();
 						return;
 					}
-					if (population.evolutionLoop()) {
+					if (population.evolutionLoop().equals("fitness")) {
 						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
+						startButton.setText("Reset");
+						flipEvolutionRunning();
+					} else if (population.evolutionLoop().equals("elitism")) {
+						frame.setTitle(title + ": Your elitism is too high!");
 						startButton.setText("Reset");
 						flipEvolutionRunning();
 					}
