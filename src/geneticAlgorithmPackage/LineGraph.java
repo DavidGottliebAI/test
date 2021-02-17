@@ -13,7 +13,7 @@ import java.awt.Color;
 public class LineGraph extends JComponent {
 
 	private static final int PLOT_HEIGHT = 300;
-	private static final int PLOT_WIDTH = 1200;
+	private static final int PLOT_WIDTH = 1500;
 
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
@@ -75,7 +75,7 @@ public class LineGraph extends JComponent {
 
 		// outline of graph and every 50 generation ticks
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 11; i++) {
 			g2.drawLine(i * 150, -10, i * 150, 10);
 			g2.drawString("" + i * 50, i * 150 - 5, 20);
 		}

@@ -52,7 +52,7 @@ public class EvolutionViewer {
 	private JTextField truncationField;
 
 	private static final int DELAY = 50;
-	protected static final int GENERATION_LIMIT = 499;
+	protected static final int GENERATION_LIMIT = 500;
 	public final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
@@ -68,6 +68,7 @@ public class EvolutionViewer {
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
 	private int truncationPercent = 50;
+	private JLabel numberGenerationsLabel;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -107,6 +108,7 @@ public class EvolutionViewer {
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
 					resetButton.setVisible(true);
+
 					if (getNumLoops() > maxGenerations) {
 						startButton.setText("Continue");
 						flipEvolutionRunning();
@@ -123,12 +125,8 @@ public class EvolutionViewer {
 						resetButton.setVisible(false);
 						startButton.setText("Reset");
 						flipEvolutionRunning();
-					} else if (population.evolutionLoop().equals("elitism")) {
-						frame.setTitle(title + ": Your elitism is too high!");
-						resetButton.setVisible(false);
-						startButton.setText("Reset");
-						flipEvolutionRunning();
 					}
+					numberGenerationsLabel.setText("Number of Generations: " + getNumLoops());
 					frame.repaint();
 					numLoops += 1;
 				}
@@ -206,8 +204,12 @@ public class EvolutionViewer {
 		this.resetButton = new JButton("Reset");
 		this.resetButton.addActionListener(new resetListener(this));
 
-		this.eastAdminPanel.add(saveButton);
-		this.eastAdminPanel.add(loadButton);
+		this.numberGenerationsLabel = new JLabel("Number of Generations: ");
+
+		this.eastAdminPanel.add(this.numberGenerationsLabel);
+
+		this.southAdminPanel.add(saveButton);
+		this.southAdminPanel.add(loadButton);
 		this.southAdminPanel.add(seedLabel);
 		this.southAdminPanel.add(this.seedField);
 		this.southAdminPanel.add(mutateLabel);
@@ -290,6 +292,11 @@ public class EvolutionViewer {
 	public void setElitismPercent() {
 		this.elitismPercent = getTextFieldNumber(elitismField);
 		this.population.setNumberElite(this.elitismPercent);
+//	} else if (population.evolutionLoop().equals("elitism")) {
+//		frame.setTitle(title + ": Your elitism is too high!");
+//		resetButton.setVisible(false);
+//		startButton.setText("Reset");
+//		flipEvolutionRunning();
 	}
 
 	/**
