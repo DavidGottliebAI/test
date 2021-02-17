@@ -193,7 +193,7 @@ public class LineGraph extends JComponent {
 			int ones = 0;
 			for (int j = 0; j < chromosomeList.size(); j++) {
 				Chromosome current = chromosomeList.get(j);
-				if (current.getBits().substring(i, i + 1).equals("0")) {
+				if (current.getGeneString().substring(i, i + 1).equals("0")) {
 					zeros += 1;
 				} else {
 					ones += 1;
@@ -215,9 +215,9 @@ public class LineGraph extends JComponent {
 	private int totalUnique(ArrayList<Chromosome> chromosomeList, int populationSize) {
 		int unique = populationSize;
 		for (int index = 0; index < populationSize; index++) {
-			String current = chromosomeList.get(index).getBits();
+			String current = chromosomeList.get(index).getGeneString();
 			for (int j = index + 1; j < chromosomeList.size(); j++) {
-				String other = chromosomeList.get(j).getBits();
+				String other = chromosomeList.get(j).getGeneString();
 				if (current.equals(other)) {
 					unique -= 1;
 					break;

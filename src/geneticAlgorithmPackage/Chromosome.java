@@ -119,11 +119,10 @@ public class Chromosome implements Comparable<Chromosome> {
 			}
 			System.out.println("Before calc: " + this.fitness);
 			System.out.println("Pop size: " + populationSize);
-			//System.out.println("Pop size : " + populationSize);
+			// System.out.println("Pop size : " + populationSize);
 
 			this.fitness = Math.abs(this.fitness - populationSize / 2) * 2;
 			System.out.println("After calc: " + this.fitness);
-			
 
 		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
@@ -165,7 +164,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * 
 	 * @return geneString
 	 */
-	public String getUpdatedGeneString() {
+	public String getEditableGeneString() {
 		this.geneString = "";
 		for (EditableGene gene : editableGeneList) {
 			this.geneString = this.geneString + gene.getBit();
@@ -173,7 +172,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		return this.geneString;
 	}
 
-	public String getBits() {
+	public String getGeneString() {
 		this.geneString = "";
 		for (Gene gene : this.geneList) {
 			this.geneString += gene.getBit();
@@ -237,5 +236,30 @@ public class Chromosome implements Comparable<Chromosome> {
 			copiedChromosome.geneList.add(newGene);
 		}
 		return copiedChromosome;
+	}
+
+	public void crossover(Chromosome chromosome, long seed) {
+		Random newRandom = new Random(seed);
+		int crossoverIndex = newRandom.nextInt(chromosomeLength);
+
+		System.out.println("Before: ");
+		System.out.println("This chromosome: " + this.getGeneString());
+		System.out.println("Other chromosome: " + chromosome.getGeneString());
+
+		chromosome.getGeneString();
+		if (newRandom.nextBoolean()) {
+			for (int index = 0; index < crossoverIndex; index++) {
+				chromosome.geneList.set(index, this.geneList.get(index));
+				this.geneList.set(index, new Gene(chromosome.geneString.charAt(index) - '0'));
+			}
+		} else {
+			for (int index = crossoverIndex; index < this.chromosomeLength; index++) {
+				chromosome.geneList.set(index, this.geneList.get(index));
+				this.geneList.set(index, new Gene(chromosome.geneString.charAt(index) - '0'));
+			}
+		}
+		System.out.println("After (crossover at " + crossoverIndex + "): ");
+		System.out.println("Chromosome 1: " + this.getGeneString());
+		System.out.println("Chromosome 2: " + chromosome.getGeneString());
 	}
 }

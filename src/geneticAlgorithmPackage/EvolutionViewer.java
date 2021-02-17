@@ -278,12 +278,9 @@ public class EvolutionViewer {
 		this.maxGenerations = getTextFieldNumber(generationsField);
 	}
 
-	public int getAverageNumMutations() {
-		return this.averageNumMutations;
-	}
-
 	public void setAverageNumMutations() {
 		this.averageNumMutations = getTextFieldNumber(mutateField);
+		this.population.setAverageNumMutations(this.averageNumMutations);
 	}
 
 	public void setMaxFitness() {
