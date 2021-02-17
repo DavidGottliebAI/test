@@ -63,7 +63,7 @@ public class Population {
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 		
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
-    this.populationViewer.updateChromsomeGrid(this.chromosomeList);
+		this.populationViewer.updateChromsomeGrid(this.chromosomeList);
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
 		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
 		
