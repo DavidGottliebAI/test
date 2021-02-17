@@ -28,12 +28,13 @@ import javax.swing.Timer;
 public class EvolutionViewer {
 
 	public LineGraph lineGraph;
-	public ScatterPlot scatterPlot;
+	public ScatterGraph scatterGraph;
 	private Population population;
 
 	private EditableViewer editableViewer;
 	private BestChromosomeViewer bestChromosomeViewer;
 	private PopulationViewer populationViewer;
+	private FitnessViewer fitnessViewer;
 
 	public JFrame frame;
 	private JPanel southAdminPanel;
@@ -50,6 +51,7 @@ public class EvolutionViewer {
 	private JComboBox<String> fitnessField;
 	private JComboBox<String> selectionField;
 	private JTextField truncationField;
+	private JLabel numberGenerationsLabel;
 
 	private static final int DELAY = 50;
 	protected static final int GENERATION_LIMIT = 500;
@@ -68,7 +70,6 @@ public class EvolutionViewer {
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
 	private int truncationPercent = 50;
-	private JLabel numberGenerationsLabel;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -82,15 +83,15 @@ public class EvolutionViewer {
 		this.editableViewer = new EditableViewer();
 		this.bestChromosomeViewer = new BestChromosomeViewer();
 		this.populationViewer = new PopulationViewer();
+		this.fitnessViewer = new FitnessViewer();
 
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.southAdminPanel = new JPanel();
 		this.eastAdminPanel = new JPanel();
 		this.lineGraph = new LineGraph();
-		this.scatterPlot = new ScatterPlot();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
+				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
 
 		this.frame.add(this.lineGraph, BorderLayout.CENTER);
 		this.lineGraph.repaint();
@@ -128,6 +129,7 @@ public class EvolutionViewer {
 					}
 					numberGenerationsLabel.setText("Number of Generations: " + getNumLoops());
 					frame.repaint();
+					fitnessViewer.scatterGraph.repaint();
 					numLoops += 1;
 				}
 			}
@@ -369,10 +371,11 @@ public class EvolutionViewer {
 		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer, this.populationViewer);
+				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
 		this.lineGraph.repaint();
 		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
 		this.bestChromosomeViewer.reset(this.chromosomeLength);
+		this.fitnessViewer.scatterGraph.reset(this.populationSize, this.chromosomeLength);
 	}
 
 }

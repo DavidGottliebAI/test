@@ -22,7 +22,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Integer> uniqueLog = new ArrayList<Integer>();
 
 	/**
-	 * ensures: Constructs a line graph component and sets the preffered size
+	 * ensures: Constructs a line graph component and sets the preferred size
 	 */
 	public LineGraph() {
 		this.setPreferredSize(new Dimension(200, 200));

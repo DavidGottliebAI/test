@@ -23,6 +23,7 @@ public class Population {
 	private PopulationViewer populationViewer;
 	private BestChromosomeViewer bestChromosomeViewer;
 	private EditableViewer editableViewer;
+	private FitnessViewer fitnessViewer;
 
 	private int chromosomeLength;
 	private int populationSize;
@@ -35,13 +36,14 @@ public class Population {
 	private int maxFitness;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
-			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer,
-			PopulationViewer populationViewer) {
+			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer, PopulationViewer populationViewer,
+			FitnessViewer fitnessViewer) {
 
 		this.editableViewer = editableViewer;
 		this.bestChromosomeViewer = bestChromosomeViewer;
 		this.populationViewer = populationViewer;
 		this.evolutionViewer = evolutionViewer;
+		this.fitnessViewer = fitnessViewer;
 
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
@@ -68,7 +70,7 @@ public class Population {
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
 		this.populationViewer.updateChromsomeGrid(this.chromosomeList);
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.populationSize);
-		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
+		this.fitnessViewer.scatterGraph.updateChromosomeList(this.chromosomeList);
 
 		if (this.chromosomeList.get(0).getFitness() >= this.maxFitness) {
 			return "fitness";
