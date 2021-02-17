@@ -53,8 +53,7 @@ public class EvolutionViewer {
 
 	private static final int DELAY = 50;
 	protected static final int GENERATION_LIMIT = 399;
-	public static final String title = "Evolution Viewer";
-
+	public final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
 	public boolean crossover = false;
@@ -198,7 +197,7 @@ public class EvolutionViewer {
 		this.chromosomeLengthField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel elitismLabel = new JLabel("Elitism %");
-		this.elitismField = new JTextField("1");
+		this.elitismField = new JTextField("0");
 		this.elitismField.setPreferredSize(new Dimension(30, 20));
 
 		this.startButton = new JButton("Start");
@@ -291,8 +290,9 @@ public class EvolutionViewer {
 		this.maxFitness = getTextFieldNumber(maxFitnessField);
 	}
 
-	public void setElitism() {
+	public void setElitismPercent() {
 		this.elitismPercent = getTextFieldNumber(elitismField);
+		this.population.setNumberElite(this.elitismPercent);
 	}
 
 	/**
@@ -346,6 +346,14 @@ public class EvolutionViewer {
 		this.population.setTruncationPercent(this.truncationPercent);
 	}
 
+	public int getNumLoops() {
+		return numLoops;
+	}
+
+	public void setEvolutionRunning(boolean b) {
+		this.evolutionRunning = b;
+	}
+
 	/**
 	 * ensures: GUI is reset when reset button is pressed and modifications require
 	 * a change in graphics
@@ -362,15 +370,4 @@ public class EvolutionViewer {
 		this.bestChromosomeViewer.reset(this.chromosomeLength);
 	}
 
-	public int getNumLoops() {
-		return numLoops;
-	}
-
-	public void setEvolutionRunning(boolean b) {
-		this.evolutionRunning = b;
-	}
-
-	public int getElitismPercent() {
-		return this.elitismPercent;
-	}
 }

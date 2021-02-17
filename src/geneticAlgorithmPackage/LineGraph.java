@@ -35,9 +35,9 @@ public class LineGraph extends JComponent {
 	 * 
 	 * @param chromosomeList the list of chromosomes in the population to be
 	 *                       analayzed
-	 * @param totalUnique
+	 * @param populationSize
 	 */
-	public void addEntry(ArrayList<Chromosome> chromosomeList, int totalUnique) { // add hamming
+	public void addEntry(ArrayList<Chromosome> chromosomeList, int populationSize) { // add hamming
 		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
 		this.worstFitnessLog.add(chromosomeList.get(chromosomeList.size() - 1).getFitness());
 		int sum = 0;
@@ -45,8 +45,8 @@ public class LineGraph extends JComponent {
 			sum += chromosome.getFitness();
 		}
 		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
-		this.averageHammingLog.add(calculateAverageHammingDistance(chromosomeList));
-		this.uniqueLog.add(totalUnique);
+		// this.averageHammingLog.add(calculateAverageHammingDistance(chromosomeList));
+		this.uniqueLog.add(this.totalUnique(chromosomeList, populationSize));
 	}
 
 	/**
@@ -142,9 +142,9 @@ public class LineGraph extends JComponent {
 			g2.drawLine(x * 3, previousYAverage, x * 2 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 
-			g2.setColor(Color.YELLOW);
-			g2.drawLine(x * 3, previousYAverageHamming, x * 3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
-			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
+//			g2.setColor(Color.YELLOW);
+//			g2.drawLine(x * 3, previousYAverageHamming, x * 3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
+//			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
 			g2.setColor(Color.GREEN);
 			g2.drawString("" + this.getFitnesses()[0], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 15);
 			g2.setColor(Color.ORANGE);
@@ -163,7 +163,7 @@ public class LineGraph extends JComponent {
 		fitnesses[0] = bestFitnessLog.get(bestFitnessLog.size() - 1);
 		fitnesses[1] = averageFitnessLog.get(averageFitnessLog.size() - 1);
 		fitnesses[2] = worstFitnessLog.get(worstFitnessLog.size() - 1);
-		fitnesses[3] = averageHammingLog.get(averageHammingLog.size() - 1);
+		// fitnesses[3] = averageHammingLog.get(averageHammingLog.size() - 1);
 		fitnesses[4] = uniqueLog.get(uniqueLog.size() - 1);
 		return fitnesses;
 	}
@@ -203,5 +203,27 @@ public class LineGraph extends JComponent {
 		}
 		pairs += chromosomeList.size() * (chromosomeList.size() - 1) / 2;
 		return sum / pairs;
+	}
+
+	/**
+	 * ensures: counts the number of unique chromosomes in the population
+	 * 
+	 * @param chromosomeList
+	 * @param populationSize
+	 * 
+	 */
+	private int totalUnique(ArrayList<Chromosome> chromosomeList, int populationSize) {
+		int unique = populationSize;
+		for (int index = 0; index < populationSize; index++) {
+			String current = chromosomeList.get(index).getBits();
+			for (int j = index + 1; j < chromosomeList.size(); j++) {
+				String other = chromosomeList.get(j).getBits();
+				if (current.equals(other)) {
+					unique -= 1;
+					break;
+				}
+			}
+		}
+		return unique;
 	}
 }

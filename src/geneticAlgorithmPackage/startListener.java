@@ -22,7 +22,7 @@ public class startListener implements ActionListener {
 		// them into necesary classes
 		this.evolutionViewer.setMaxGenerations();
 		this.evolutionViewer.setMaxFitness();
-		this.evolutionViewer.setElitism();
+		this.evolutionViewer.setElitismPercent();
 		this.evolutionViewer.setAverageNumMutations();
 		this.evolutionViewer.setSeed();
 		this.evolutionViewer.setChromosomeLength();

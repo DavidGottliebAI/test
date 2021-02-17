@@ -28,7 +28,7 @@ public class BestChromosomeViewer {
 		reset(100);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
-		this.frame.setLocation(0, 525);
+		this.frame.setLocation(500, 25);
 	}
 
 	/**
@@ -48,6 +48,7 @@ public class BestChromosomeViewer {
 
 		this.frame.add(this.geneGrid);
 		this.frame.setVisible(true);
+		this.frame.repaint();
 	}
 
 	/**

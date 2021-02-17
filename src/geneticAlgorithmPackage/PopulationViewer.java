@@ -33,7 +33,7 @@ public class PopulationViewer {
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(500, 500);
-		this.frame.setLocation(500, 525);
+		this.frame.setLocation(1000, 25);
 		this.frame.setVisible(true);
 	}
 
