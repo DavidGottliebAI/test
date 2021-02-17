@@ -1,0 +1,29 @@
+big-o-analysis
+
+Both Average Hamming Distance (AHD) and Unique Individuals (UI) are calculated via nested for loops. 
+AHD must look for 1s and 0s in the 1st index of each chromosome, then all of the 1s and 0s from the 2nd index of each chromosome, and so on. 
+This requires an outer loop to loop over each index, and an inner loop to count the 1 or 0 from each chromosome. 
+Similarly, UI uses an outer loop to loop over each chromosome, while the inner loop compares that chromosome to the remaining chromosomes in the list. 
+This means that the inner for loop will get smaller over time until there is only one chromosome left. This being said, the BigO notation will be O(N^2), 
+where N is the population size.
+
+
+At the time of writing this (February 16th), we have 3 fitness functions with similar BigO notation. 
+One For All simply loops over all bits in the chromosome to see if they equal 1. 
+Absolutely calculates fitness to either be all 1s or all 0s, by looping over all bits in the chromosome to add to the fitness, 
+and then taking the absolute value of the difference between the fitness and the population size / 2, 
+all multiplied by two. The target chromosome fitness starts with a fitness equal to the population size and loops over all the bits in the chromosome’s genes, 
+subtracting any differences between itself and the target from the max fitness. Since each uses a single for loop with slight variance in fitness calculation, 
+the BigO notation will be O(N), where N is the length of the bit string.
+
+Our Roulette Wheel selection creates a new arrayList and adds each chromosome to it [its calculated fitness] number of times; this is done within a nested for loop, 
+looping through each chromosome and then adding it to the new arrayList in another loop. 
+After this, the original chromosome list is cleared and chromosomes are randomly selected from the new arrayList and placed in the now empty original, 
+inside a new loop. This will be N^2 + N which is BigO of O(N^2), where N is the size of the population. Fitness is only calculated N number of times.
+
+We could certainly improve the speed of Roulette Wheel selection by not creating a new arrayList with the same chromosomes added in [fitness] number of times. 
+We might be able to simply have a new ArrayList that holds fitness values of each chromosome from one for loop, 
+and a second non-nested for loop that adds each chromosome to the new list depending on what number is drawn at random.
+
+This only speeds up the program marginally, since (despite a jump from O(n^2) to O(n)) where n is the size of the population, 
+there are still two for loops running, they are just not nested.
