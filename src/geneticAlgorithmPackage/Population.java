@@ -116,16 +116,16 @@ public class Population {
 		} else if (this.selectionMethod.equals("Roulette Wheel")) {
 			ArrayList<Chromosome> rouletteList = new ArrayList<Chromosome>();
 			
-//			for (Chromosome chromosome : this.chromosomeList) {
-//				for (int i = 0; i < chromosome.getFitness(); i++) {
-//					rouletteList.add(chromosome);
-//				}
-//			}
-//			Random random = new Random();
-//			this.chromosomeList.clear();
-//			for (int i = 0; i < this.populationSize; i++) {
-//				this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
-//			}
+			for (Chromosome chromosome : this.chromosomeList) {
+				for (int i = 0; i < chromosome.getFitness(); i++) {
+					rouletteList.add(chromosome);
+				}
+			}
+			Random random = new Random();
+			this.chromosomeList.clear();
+			for (int i = 0; i < this.populationSize; i++) {
+				this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
+			}
 			
 		}
 	}
