@@ -81,9 +81,9 @@ public class Population {
 			this.chromosomeList.remove(0);
 		}
 		
-		if(this.evolutionViewer.crossover) {
-			populationCrossover();
-		}
+//		if(this.evolutionViewer.crossover) {
+//			populationCrossover();
+//		}
 
 		// System.out.println(this.chromosomeList.get(98));
 

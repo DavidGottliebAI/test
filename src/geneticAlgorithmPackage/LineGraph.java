@@ -131,15 +131,15 @@ public class LineGraph extends JComponent {
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.GREEN);
-			g2.drawLine(x * 3, previousYBest, x * 3 + 3, -this.bestFitnessLog.get(x) * plotRatio);
+			g2.drawLine(x * 3, previousYBest, x * 2 + 3, -this.bestFitnessLog.get(x) * plotRatio);
 			previousYBest = -this.bestFitnessLog.get(x) * plotRatio;
 
 			g2.setColor(Color.RED);
-			g2.drawLine(x * 3, previousYWorst, x * 3 + 3, -this.worstFitnessLog.get(x) * plotRatio);
+			g2.drawLine(x * 3, previousYWorst, x * 2 + 3, -this.worstFitnessLog.get(x) * plotRatio);
 			previousYWorst = -this.worstFitnessLog.get(x) * plotRatio;
 
 			g2.setColor(Color.ORANGE);
-			g2.drawLine(x * 3, previousYAverage, x * 3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
+			g2.drawLine(x * 3, previousYAverage, x * 2 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 
 			g2.setColor(Color.YELLOW);

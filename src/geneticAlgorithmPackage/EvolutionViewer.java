@@ -215,7 +215,7 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(this.mutateField);
 		this.southAdminPanel.add(fitnessLabel);
 		this.southAdminPanel.add(this.fitnessField);
-    this.southAdminPanel.add(maxFitnessLabel);
+		this.southAdminPanel.add(maxFitnessLabel);
 		this.southAdminPanel.add(this.maxFitnessField);
 		this.southAdminPanel.add(selectionLabel);
 		this.southAdminPanel.add(this.selectionField);
