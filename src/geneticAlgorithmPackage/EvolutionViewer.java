@@ -52,7 +52,7 @@ public class EvolutionViewer {
 	private JTextField truncationField;
 
 	private static final int DELAY = 50;
-	protected static final int GENERATION_LIMIT = 399;
+	protected static final int GENERATION_LIMIT = 499;
 	public final String title = "Evolution Viewer";
 
 	public boolean evolutionRunning = false;
@@ -138,8 +138,8 @@ public class EvolutionViewer {
 		t.start();
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setSize(1600, 500);
-		this.frame.setLocation(0, 530); // might want to play with later
+		this.frame.setSize(1800, 500);
+		this.frame.setLocation(0, 525); // might want to play with later
 		this.frame.setVisible(true);
 	}
 
