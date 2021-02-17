@@ -1,0 +1,30 @@
+Big-O-Analysis
+
+Both Average Hamming Distance (AHD) and Unique Individuals (UI) are calculated via nested for loops. 
+AHD must look for 1s and 0s in the 1st index of each chromosome, then all of the 1s and 0s from the 2nd index of each chromosome, and so on. 
+This requires an outer loop to loop over each index, and an inner loop to count the 1 or 0 from each chromosome. 
+Similarly, UI uses an outer loop to loop over each chromosome, while the inner loop compares that chromosome to the remaining chromosomes in the list. 
+This means that the inner for loop will get smaller over time until there is only one chromosome left. This being said, the BigO notation will be O(N^2), 
+where N is the population size.
+
+
+At the time of writing this (February 16th), we have 3 fitness functions with similar BigO notation. 
+One For All simply loops over all bits in the chromosome to see if they equal 1. 
+Absolutely calculates fitness to either be all 1s or all 0s, by looping over all bits in the chromosome to add to the fitness, 
+and then taking the absolute value of the difference between the fitness and the population size / 2, 
+all multiplied by two. The target chromosome fitness starts with a fitness equal to the population size and loops over all the bits in the chromosome’s genes, 
+subtracting any differences between itself and the target from the max fitness. Since each uses a single for loop with slight variance in fitness calculation, 
+the BigO notation will be O(N), where N is the length of the bit string.
+
+Our Roulette Wheel selection creates a new arrayList and adds each chromosome to it [its calculated fitness] number of times; this is done within a nested for loop, 
+looping through each chromosome and then adding it to the new arrayList in another loop. 
+After this, the original chromosome list is cleared and chromosomes are randomly selected from the new arrayList and placed in the now empty original, 
+inside a new loop. This will be N^2 + N which is BigO of O(N^2), where N is the size of the population. Fitness is only calculated N number of times.
+
+For the AHD, we could (instead of using a nested for loop in order to go through each column of the bit string rows, we can instead have one long string that
+holds all of the bit strings (created in one for loop) and then loop through that long string, summing at specific intervals (in another for loop). This would
+turn an O(N^2) into O(2N)=O(N).
+
+This only speeds up the program marginally, since (despite a jump from O(N^2) to O(N)) where N is the size of the population, 
+there are still two for loops running, they are just not nested. One reason for this is the fact that a population of 100 with
+bit 100 genes each will be looping over a 10,000 long string each time. Again, this makes some impact, but it is barely noticeable

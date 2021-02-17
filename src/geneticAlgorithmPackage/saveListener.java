@@ -48,7 +48,7 @@ public class saveListener implements ActionListener {
 		try {
 			PrintWriter printWriter = new PrintWriter(this.selectedFile);
 			try {
-				printWriter.println(this.editableViewer.getChromosome().getUpdatedGeneString());
+				printWriter.println(this.editableViewer.getChromosome().getEditableGeneString());
 			} catch (NullPointerException e) {
 				this.editableViewer.frame.setTitle("Load chromosome before saving!");
 			}

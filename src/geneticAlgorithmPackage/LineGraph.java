@@ -13,7 +13,7 @@ import java.awt.Color;
 public class LineGraph extends JComponent {
 
 	private static final int PLOT_HEIGHT = 300;
-	private static final int PLOT_WIDTH = 1200;
+	private static final int PLOT_WIDTH = 1500;
 
 	private ArrayList<Integer> bestFitnessLog = new ArrayList<Integer>();
 	private ArrayList<Integer> worstFitnessLog = new ArrayList<Integer>();
@@ -22,7 +22,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Integer> uniqueLog = new ArrayList<Integer>();
 
 	/**
-	 * ensures: Constructs a line graph component and sets the preffered size
+	 * ensures: Constructs a line graph component and sets the preferred size
 	 */
 	public LineGraph() {
 		this.setPreferredSize(new Dimension(200, 200));
@@ -45,7 +45,7 @@ public class LineGraph extends JComponent {
 			sum += chromosome.getFitness();
 		}
 		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
-		// this.averageHammingLog.add(calculateAverageHammingDistance(chromosomeList));
+		this.averageHammingLog.add(calculateAverageHammingDistance(chromosomeList, populationSize));
 		this.uniqueLog.add(this.totalUnique(chromosomeList, populationSize));
 	}
 
@@ -75,7 +75,7 @@ public class LineGraph extends JComponent {
 
 		// outline of graph and every 50 generation ticks
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 11; i++) {
 			g2.drawLine(i * 150, -10, i * 150, 10);
 			g2.drawString("" + i * 50, i * 150 - 5, 20);
 		}
@@ -131,20 +131,20 @@ public class LineGraph extends JComponent {
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
 			g2.setColor(Color.GREEN);
-			g2.drawLine(x * 3, previousYBest, x * 2 + 3, -this.bestFitnessLog.get(x) * plotRatio);
+			g2.drawLine(x * 3, previousYBest, x * 3 + 3, -this.bestFitnessLog.get(x) * plotRatio);
 			previousYBest = -this.bestFitnessLog.get(x) * plotRatio;
 
 			g2.setColor(Color.RED);
-			g2.drawLine(x * 3, previousYWorst, x * 2 + 3, -this.worstFitnessLog.get(x) * plotRatio);
+			g2.drawLine(x * 3, previousYWorst, x * 3 + 3, -this.worstFitnessLog.get(x) * plotRatio);
 			previousYWorst = -this.worstFitnessLog.get(x) * plotRatio;
 
 			g2.setColor(Color.ORANGE);
-			g2.drawLine(x * 3, previousYAverage, x * 2 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
+			g2.drawLine(x * 3, previousYAverage, x * 3 + 3, (int) (-this.averageFitnessLog.get(x) * plotRatio));
 			previousYAverage = (int) (-this.averageFitnessLog.get(x) * plotRatio);
 
-//			g2.setColor(Color.YELLOW);
-//			g2.drawLine(x * 3, previousYAverageHamming, x * 3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
-//			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
+			g2.setColor(Color.YELLOW);
+			g2.drawLine(x * 3, previousYAverageHamming, x * 3 + 3, (int) (-this.averageHammingLog.get(x) * plotRatio));
+			previousYAverageHamming = (int) (-this.averageHammingLog.get(x) * plotRatio);
 			g2.setColor(Color.GREEN);
 			g2.drawString("" + this.getFitnesses()[0], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 15);
 			g2.setColor(Color.ORANGE);
@@ -163,7 +163,7 @@ public class LineGraph extends JComponent {
 		fitnesses[0] = bestFitnessLog.get(bestFitnessLog.size() - 1);
 		fitnesses[1] = averageFitnessLog.get(averageFitnessLog.size() - 1);
 		fitnesses[2] = worstFitnessLog.get(worstFitnessLog.size() - 1);
-		// fitnesses[3] = averageHammingLog.get(averageHammingLog.size() - 1);
+		fitnesses[3] = averageHammingLog.get(averageHammingLog.size() - 1);
 		fitnesses[4] = uniqueLog.get(uniqueLog.size() - 1);
 		return fitnesses;
 	}
@@ -181,27 +181,49 @@ public class LineGraph extends JComponent {
 
 	/**
 	 * ensures: calculates hamming distance between population of chromosomes
+	 * @param populationSize 
 	 * 
 	 * @param current chromosome list
 	 */
 
-	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList) {
+	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList, int populationSize) {
 		int sum = 0;
-		int pairs = 0;
-		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
-			int zeros = 0;
-			int ones = 0;
-			for (int j = 0; j < chromosomeList.size(); j++) {
-				Chromosome current = chromosomeList.get(j);
-				if (current.getBits().substring(i, i + 1).equals("0")) {
-					zeros += 1;
-				} else {
-					ones += 1;
-				}
-			}
-			sum += ones * zeros;
+//		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
+//			int zeros = 0;
+//			int ones = 0;
+//			for (int j = 0; j < chromosomeList.size(); j++) {
+//				Chromosome current = chromosomeList.get(j);
+//				if (current.getGeneString().charAt(i) == '0') {
+//					zeros += 1;
+//				} else {
+//					ones += 1;
+//				}
+//			}
+//			sum += ones * zeros;
+//		}
+		// alternate hamming method
+		String chromosomeStrings = "";
+		for (int j = 0; j < chromosomeList.size(); j++) {
+			String current = chromosomeList.get(j).getGeneString();
+			chromosomeStrings += current;
 		}
-		pairs += chromosomeList.size() * (chromosomeList.size() - 1) / 2;
+		int zeros = 0;
+		int ones = 0;
+		for (int i = 0; i < chromosomeList.get(0).getGeneLength() * populationSize; i++) {
+			
+			if(i % chromosomeList.get(0).getGeneLength() == 0) {
+				sum += zeros * ones;
+				zeros = 0;
+				ones = 0;
+			}
+		
+			if (chromosomeStrings.charAt(i) == '0') {
+				zeros += 1;
+			} else {
+				ones += 1;
+			}
+		}
+		int pairs = chromosomeList.size() * (chromosomeList.size() - 1) / 2;
 		return sum / pairs;
 	}
 
@@ -213,11 +235,11 @@ public class LineGraph extends JComponent {
 	 * 
 	 */
 	private int totalUnique(ArrayList<Chromosome> chromosomeList, int populationSize) {
-		int unique = populationSize;
+		int unique = populationSize - 1;
 		for (int index = 0; index < populationSize; index++) {
-			String current = chromosomeList.get(index).getBits();
+			String current = chromosomeList.get(index).getGeneString();
 			for (int j = index + 1; j < chromosomeList.size(); j++) {
-				String other = chromosomeList.get(j).getBits();
+				String other = chromosomeList.get(j).getGeneString();
 				if (current.equals(other)) {
 					unique -= 1;
 					break;
