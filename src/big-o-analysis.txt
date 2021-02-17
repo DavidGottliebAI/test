@@ -1,4 +1,4 @@
-big-o-analysis
+Big-O-Analysis
 
 Both Average Hamming Distance (AHD) and Unique Individuals (UI) are calculated via nested for loops. 
 AHD must look for 1s and 0s in the 1st index of each chromosome, then all of the 1s and 0s from the 2nd index of each chromosome, and so on. 
