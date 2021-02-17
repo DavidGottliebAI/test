@@ -20,16 +20,17 @@ public class Population {
 
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 	private EvolutionViewer evolutionViewer;
+	private PopulationViewer populationViewer;
+	private BestChromosomeViewer bestChromosomeViewer;
+	private EditableViewer editableViewer;
 
 	private int chromosomeLength;
 	private int populationSize;
+	private int truncationPercent;
+	private int numberElite;
 	private String fitnessFunction = "";
 	private String selectionMethod = "";
-	private EditableViewer editableViewer;
 	private Random random;
-	private BestChromosomeViewer bestChromosomeViewer;
-	private int truncationPercent;
-	private PopulationViewer populationViewer;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
 			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer,
@@ -61,49 +62,29 @@ public class Population {
 
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
-		
+
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
-    this.populationViewer.updateChromsomeGrid(this.chromosomeList);
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.totalUnique());
+		this.populationViewer.updateChromsomeGrid(this.chromosomeList);
+		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.populationSize);
 		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
-		
+
 		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
 			return "fitness";
-		} else if(this.evolutionViewer.getElitismPercent() > 100) {
-			return "elitism";
-		}
-		
-		double numElite = Math.ceil(this.evolutionViewer.getElitismPercent() / (double) 100 * this.populationSize);
-
-		ArrayList<Chromosome> elite = new ArrayList<Chromosome>();
-		for (int i = 0; i < numElite; i++) {
-			elite.add(this.chromosomeList.get(0));
-			this.chromosomeList.remove(0);
-		}
-		
-		if(this.evolutionViewer.crossover) {
-			populationCrossover();
 		}
 
-		// System.out.println(this.chromosomeList.get(98));
+		System.out.println();
+		System.out.println("After sort:");
+		for (Chromosome chromosome : this.chromosomeList) {
+			System.out.print(chromosome.getFitness() + ", ");
+		}
 
-//		System.out.println("After sort:");
-//		for (Chromosome chromosome : this.chromosomeList) {
-//			System.out.print(chromosome.getFitness() + ", ");
-//		}
-//
-//		System.out.println(this.chromosomeList.get(0).getFitness() + " "
-//				+ this.chromosomeList.get(this.chromosomeList.size() - 1).getFitness() + " "
-//				+ this.calculateAverageFitness());
-		
-    selection(this.truncationPercent);
-		this.chromosomeList = repopulate(numElite);
-
+		selection(this.truncationPercent);
+		this.chromosomeList = repopulate();
+		if (this.evolutionViewer.crossover) {
+			System.out.println("hi");
+			// populationCrossover();
+		}
 		mutate(this.evolutionViewer.getAverageNumMutations());
-
-		for (int i = 0; i < numElite; i++) {
-			this.chromosomeList.add(0, elite.get((int) (numElite - i - 1)));
-		}
 		return "";
 	}
 
@@ -123,10 +104,10 @@ public class Population {
 	 * @param percent
 	 */
 	public void selection(int percent) {
-		double numberSurvive = this.chromosomeList.size()
-				- Math.ceil((double) percent / 100 * this.chromosomeList.size());
+		double numberSurvive = (this.chromosomeList.size()
+				- Math.ceil((double) percent / 100 * this.chromosomeList.size()));
 		if (this.selectionMethod.equals("Truncation")) {
-			while (this.chromosomeList.size() >= numberSurvive) {
+			while (this.chromosomeList.size() >= numberSurvive & this.chromosomeList.size() > this.numberElite) {
 				this.chromosomeList.remove(this.chromosomeList.size() - 1);
 			}
 		} else if (this.selectionMethod.equals("Roulette Wheel")) {
@@ -152,10 +133,20 @@ public class Population {
 	 * 
 	 * @return a repopulated list of cloned chromosomes
 	 */
-	private ArrayList<Chromosome> repopulate(double numElite) {
+	private ArrayList<Chromosome> repopulate() {
 		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
+
 		int index = 0;
-		while (repopulatedChromosomeList.size() < this.populationSize - numElite) {
+		while (repopulatedChromosomeList.size() < this.numberElite) {
+			if (index > this.chromosomeList.size() - 1) {
+				index = 0;
+			}
+			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
+			repopulatedChromosomeList.add(newChromosome);
+			index++;
+		}
+		index = 0;
+		while (repopulatedChromosomeList.size() < this.populationSize) {
 			if (index > this.chromosomeList.size() - 1) {
 				index = 0;
 			}
@@ -168,24 +159,6 @@ public class Population {
 	}
 
 	/**
-	 * ensures: counts the number of unique chromosomes in the population
-	 * 
-	 */
-	private int totalUnique() {
-		int unique = this.populationSize;
-		for (int i = 0; i < this.chromosomeList.size() - 1; i++) {
-			String current = this.chromosomeList.get(i).getBits();
-			for (int j = i + 1; j < this.chromosomeList.size(); j++) {
-				String other = this.chromosomeList.get(j).getBits();
-				if (current.equals(other)) {
-					unique -= 1;
-				}
-			}
-		}
-		return unique;
-	}
-
-	/**
 	 * ensures: the each chromosome in the population is mutated according to the
 	 * average number of expected mutations
 	 * 
@@ -193,9 +166,11 @@ public class Population {
 	 */
 	private void mutate(int averageNumMutations) {
 		Random randomMutate = new Random(this.random.nextLong());
-		for (Chromosome chromosome : this.chromosomeList) {
-			chromosome.mutate(averageNumMutations, randomMutate.nextLong());
+		;
+		for (int index = this.numberElite; index < this.populationSize; index++) {
+			this.chromosomeList.get(index).mutate(averageNumMutations, randomMutate.nextLong());
 		}
+
 	}
 
 	/**
@@ -229,5 +204,9 @@ public class Population {
 
 	public void setTruncationPercent(int truncationPercent) {
 		this.truncationPercent = truncationPercent;
+	}
+
+	public void setNumberElite(int elitismPercent) {
+		this.numberElite = (int) Math.ceil(elitismPercent / 100 * this.populationSize);
 	}
 }
