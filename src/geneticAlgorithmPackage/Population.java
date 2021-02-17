@@ -32,6 +32,7 @@ public class Population {
 	private String selectionMethod = "";
 	private Random random;
 	private int averageNumMutations;
+	private int maxFitness;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
 			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer,
@@ -69,7 +70,7 @@ public class Population {
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.populationSize);
 		this.evolutionViewer.scatterPlot.addEntry(this.chromosomeList);
 
-		if (this.chromosomeList.get(0).getFitness() >= this.evolutionViewer.maxFitness) {
+		if (this.chromosomeList.get(0).getFitness() >= this.maxFitness) {
 			return "fitness";
 		}
 
@@ -213,5 +214,9 @@ public class Population {
 
 	public void setAverageNumMutations(int averageNumMutations) {
 		this.averageNumMutations = averageNumMutations;
+	}
+
+	public void setMaxFitness(int maxFitness) {
+		this.maxFitness = maxFitness;
 	}
 }

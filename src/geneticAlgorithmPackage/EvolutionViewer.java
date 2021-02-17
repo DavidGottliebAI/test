@@ -109,7 +109,7 @@ public class EvolutionViewer {
 				if (evolutionRunning) {
 					resetButton.setVisible(true);
 
-					if (getNumLoops() > maxGenerations) {
+					if (getNumLoops() >= maxGenerations) {
 						startButton.setText("Continue");
 						flipEvolutionRunning();
 						return;
@@ -287,6 +287,7 @@ public class EvolutionViewer {
 
 	public void setMaxFitness() {
 		this.maxFitness = getTextFieldNumber(maxFitnessField);
+		this.population.setMaxFitness(this.maxFitness);
 	}
 
 	public void setElitismPercent() {
