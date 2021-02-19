@@ -3,6 +3,17 @@ package geneticAlgorithmPackage;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * 
+ * @author oblaznjc and gottlijd
+ * 
+ *         Purpose: <br>
+ *         Population specifically designed to utilize chromosomes from the paper
+ *         Exact same as Population, but with slightly different methods to call 
+ *         on slightly different chromosomes
+ *
+ */
+
 public class ReproducePopulation extends Population {
 	
 	private ArrayList<ReproduceChromosome> newChromosomeList = new ArrayList<ReproduceChromosome>();

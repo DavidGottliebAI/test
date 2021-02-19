@@ -3,6 +3,17 @@ package geneticAlgorithmPackage;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * 
+ * @author oblaznjc and gottlijd
+ * 
+ *         Purpose: <br>
+ *         Chromosome specifically designed to utilize genes from the paper
+ *         Exact same as Chromosome, but with slightly different methods to call 
+ *         on slightly different genes
+ *
+ */
+
 public class ReproduceChromosome extends Chromosome {
 	
 	ArrayList<ReproduceGene> geneList = new ArrayList<ReproduceGene>();
