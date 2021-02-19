@@ -165,6 +165,7 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
+		this.fitnessField.addItem("Reproduce");
 		this.extraFitnessField = new JTextField("10");
 
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
@@ -176,7 +177,6 @@ public class EvolutionViewer {
 		this.selectionField.addItem("Truncation");
 		this.selectionField.addItem("Roulette Wheel");
 		this.selectionField.addItem("Ranked");
-		this.selectionField.addItem("Reproduce");
 		this.selectionField.addItem("Tournament");
 		this.selectionField.addItem("Steady-State");
 		this.selectionField.addItem("SUS");
@@ -286,12 +286,12 @@ public class EvolutionViewer {
 		this.maxFitness = getTextFieldNumber(maxFitnessField);
 		this.population.setMaxFitness(this.maxFitness);
 	}
-	
+
 	public void setExtraFitness() {
 		this.extraFitness = getTextFieldNumber(extraFitnessField);
 		this.population.setExtraFitness(this.extraFitness);
 	}
-	
+
 	public void setExtraSelection() {
 		this.extraSelection = getTextFieldNumber(extraSelectionField);
 		this.population.setExtraSelection(this.extraSelection);
@@ -306,8 +306,6 @@ public class EvolutionViewer {
 		this.crossover = this.crossoverBox.isSelected();
 		this.population.setCrossover(this.crossover);
 	}
-	
-	
 
 	/**
 	 * ensures: seed can be set based on user input from text field and resets GUI
@@ -387,7 +385,7 @@ public class EvolutionViewer {
 		this.startButton.setText("Start");
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+		this.population = new ReproducePopulation(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
 		this.lineGraph.repaint();
 		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
