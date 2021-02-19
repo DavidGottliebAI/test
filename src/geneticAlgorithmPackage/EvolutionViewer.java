@@ -95,7 +95,7 @@ public class EvolutionViewer {
 		this.southAdminPanel = new JPanel();
 		this.eastAdminPanel = new JPanel();
 		this.lineGraph = new LineGraph();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+		this.population = new ReproducePopulation(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
 
 		this.frame.add(this.lineGraph, BorderLayout.CENTER);
@@ -152,11 +152,6 @@ public class EvolutionViewer {
 	 * 
 	 */
 	private void createAdminPanels() {
-		JButton loadButton = new JButton("Load");
-		loadButton.addActionListener(new loadEvolutionListener());
-
-		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(new saveEvolutionListener(this.southAdminPanel));
 
 		JLabel mutateLabel = new JLabel("Mutation Rate (N/Pop)");
 		this.mutateField = new JTextField("1");
@@ -220,9 +215,6 @@ public class EvolutionViewer {
 		this.numberGenerationsLabel = new JLabel("Number of Generations: ");
 
 		this.eastAdminPanel.add(this.numberGenerationsLabel);
-
-		this.southAdminPanel.add(saveButton);
-		this.southAdminPanel.add(loadButton);
 		this.southAdminPanel.add(seedLabel);
 		this.southAdminPanel.add(this.seedField);
 		this.southAdminPanel.add(mutateLabel);

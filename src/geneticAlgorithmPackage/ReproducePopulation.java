@@ -18,8 +18,12 @@ public class ReproducePopulation extends Population {
 		}
 	}
 	
-	private void updateFitnessScores() {
-		
+	public boolean evolutionLoop() {
+		return super.evolutionLoop();
+	}
+	
+	public void updateFitnessScores() {
+		super.updateFitnessScores();
 		for (ReproduceChromosome chromosome : this.newChromosomeList) {
 			chromosome.calculateFitness(this.fitnessFunction, this.chromosomeLength, this.evolutionViewer);
 		}

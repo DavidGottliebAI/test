@@ -97,7 +97,7 @@ public class Population {
 	 * ensures: iterates through each chromosome at the start of each evolutionary
 	 * loop to have accurate fitness before sorting
 	 */
-	private void updateFitnessScores() {
+	public void updateFitnessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.calculateFitness(this.fitnessFunction, this.chromosomeLength, this.evolutionViewer);
 		}
@@ -211,7 +211,9 @@ public class Population {
 			}
 			this.chromosomeList.clear();
 			for (int i = 0; i < this.populationSize; i++) {
-				this.chromosomeList.add(SUSList.get(i * this.extraSelection));
+				if(i * this.extraSelection < SUSList.size() - 1) {
+					this.chromosomeList.add(SUSList.get(i * this.extraSelection));
+				}
 			}
 		} else if (this.selectionMethod.equals("Boltzmann")) {
 			Random random = new Random();

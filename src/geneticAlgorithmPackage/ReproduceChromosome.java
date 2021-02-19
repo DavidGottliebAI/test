@@ -21,14 +21,15 @@ public class ReproduceChromosome extends Chromosome {
 	
 	
 	public void calculateFitness(String fitnessFunction, int populationSize, EvolutionViewer evolutionViewer) {
-		super.calculateFitness(fitnessFunction, populationSize, evolutionViewer);
-		System.out.println("yep");
 		if(fitnessFunction.equals("Reproduce")) {
+			System.out.println("yo");
 			ArrayList<ReproduceGene> original = this.geneList;
 			// if there exists a 0 originally, highest fitness will be 1
+			System.out.println(this.fitness);
 			for (int i = 0; i < original.size(); i++) {
 				if(original.get(i).getBit() == 0) {
 					this.fitness = 1;
+					System.out.println(this.fitness);
 					return;
 				}
 			}
@@ -46,9 +47,12 @@ public class ReproduceChromosome extends Chromosome {
 							zeros += 1;
 						}
 					}
+					System.out.println(this.fitness);
+					return;
 				}
 			}
 		}
+		super.calculateFitness(fitnessFunction, populationSize, evolutionViewer);
 	}
 
 	private ArrayList<ReproduceGene> mutate2s(ArrayList<ReproduceGene> geneList) {
