@@ -24,7 +24,8 @@ public class ReproducePopulation extends Population {
 		super(evolutionViewer, seed, chromosomeLength, populationSize, editableViewer, bestChromosomeViewer, populationViewer,
 				fitnessViewer);
 		for (int i = 0; i < this.populationSize; i++) {
-			ReproduceChromosome chromosome = new ReproduceChromosome(random.nextLong(), this.chromosomeLength, this.editableViewer);
+			ReproduceChromosome chromosome = new ReproduceChromosome(random.nextLong(), this.chromosomeLength, this.editableViewer,
+					this.evolutionViewer);
 			this.newChromosomeList.add(chromosome);
 		}
 	}

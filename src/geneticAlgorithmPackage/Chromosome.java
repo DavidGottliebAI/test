@@ -37,7 +37,6 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.geneList.add(gene);
 		}
 	}
-	
 
 	/**
 	 * ensures: a specific chromosome can be created based on user input of a seed
@@ -48,6 +47,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * @param chromosomeLength the user defined number of genes in this chromosome
 	 * @param editableViewer   the viewer containing the target chromosome for
 	 *                         target fitness comparison
+	 * @param evolutionViewer  used to acces population level methods
 	 */
 	public Chromosome(long seed, int chromosomeLength, EditableViewer editableViewer) { // maybe create new chromosome
 																						// class
@@ -135,12 +135,22 @@ public class Chromosome implements Comparable<Chromosome> {
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
+		} else if (fitnessFunction.equals("Novelty")) {
+			this.fitness = evolutionViewer.getPopulationSize();
+			System.out.println(this.fitness);
+			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
+				if(this.getGeneString().equals(evolutionViewer.getPopulation().getChromosomeList().get(i).getGeneString())) {
+					this.fitness--;
+				}
+			}
+			System.out.println(this.fitness);
+			this.fitness = this.fitness / (evolutionViewer.getPopulationSize() - 1) * 100;
+			System.out.println(this.fitness);
 		} else {
 			this.fitness = populationSize;
 		}
 		normalizeFitness();
 	}
-
 
 	/**
 	 * ensures: sets the fitness proportional to this chromosome's length on a 0 to

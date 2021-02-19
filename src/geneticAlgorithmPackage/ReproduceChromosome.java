@@ -21,7 +21,8 @@ public class ReproduceChromosome extends Chromosome {
 	private int zeros = 0;
 	private int twos = 0;
 
-	public ReproduceChromosome(long seed, int chromosomeLength, EditableViewer editableViewer) {
+	public ReproduceChromosome(long seed, int chromosomeLength, EditableViewer editableViewer,
+			EvolutionViewer evolutionViewer) {
 		super(seed, chromosomeLength, editableViewer);
 		this.chromosomeLength = 20;
 		for (int i = 0; i < this.chromosomeLength; i++) {

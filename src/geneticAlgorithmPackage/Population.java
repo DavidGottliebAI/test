@@ -320,4 +320,5 @@ public class Population {
 	public void setCrossover(boolean crossover) {
 		this.crossover = crossover;
 	}
+	
 }

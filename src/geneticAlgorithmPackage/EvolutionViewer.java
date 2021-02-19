@@ -95,7 +95,7 @@ public class EvolutionViewer {
 		this.southAdminPanel = new JPanel();
 		this.eastAdminPanel = new JPanel();
 		this.lineGraph = new LineGraph();
-		this.population = new ReproducePopulation(this, this.seed, this.chromosomeLength, this.populationSize,
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
 
 		this.frame.add(this.lineGraph, BorderLayout.CENTER);
@@ -166,6 +166,7 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
 		this.fitnessField.addItem("Reproduce");
+		this.fitnessField.addItem("Novelty");
 		this.extraFitnessField = new JTextField("10");
 
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
@@ -306,6 +307,10 @@ public class EvolutionViewer {
 		this.crossover = this.crossoverBox.isSelected();
 		this.population.setCrossover(this.crossover);
 	}
+	
+	public Population getPopulation() {
+		return this.population;
+	}
 
 	/**
 	 * ensures: seed can be set based on user input from text field and resets GUI
@@ -358,6 +363,10 @@ public class EvolutionViewer {
 	public int getNumLoops() {
 		return numLoops;
 	}
+	
+	public int getPopulationSize() {
+		return this.populationSize;
+	}
 
 	public void setEvolutionRunning(boolean b) {
 		this.evolutionRunning = b;
@@ -385,7 +394,7 @@ public class EvolutionViewer {
 		this.startButton.setText("Start");
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		this.population = new ReproducePopulation(this, this.seed, this.chromosomeLength, this.populationSize,
+		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
 				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
 		this.lineGraph.repaint();
 		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
@@ -400,4 +409,6 @@ public class EvolutionViewer {
 		this.startButton.setVisible(false);
 		return;
 	}
+
+	
 }
