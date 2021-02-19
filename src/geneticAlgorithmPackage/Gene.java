@@ -12,26 +12,13 @@ public class Gene {
 	public Gene() {
 		Random random = new Random();
 		this.bit = random.nextInt(2);
-		updateColor();
 	}
-	
-	
 
 	/**
 	 * ensures: constructs Gene and instantiates with a passed in bit
 	 */
 	public Gene(int bit) {
 		this.bit = bit;
-		updateColor();
-	}
-
-	/**
-	 * ensures: flips bit color based on bit color
-	 */
-	public void updateColor() {
-		if (this.getBit() == 0) {
-		} else {
-		}
 	}
 
 	/**
@@ -43,7 +30,6 @@ public class Gene {
 		} else {
 			this.bit = 0;
 		}
-		updateColor();
 	}
 
 	public int getBit() {
