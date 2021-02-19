@@ -143,6 +143,8 @@ public class Chromosome implements Comparable<Chromosome> {
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
+		} else {
+			this.fitness = populationSize;
 		}
 		normalizeFitness();
 	}

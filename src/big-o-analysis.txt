@@ -27,4 +27,5 @@ turn an O(N^2) into O(2N)=O(N).
 
 This only speeds up the program marginally, since (despite a jump from O(N^2) to O(N)) where N is the size of the population, 
 there are still two for loops running, they are just not nested. One reason for this is the fact that a population of 100 with
-bit 100 genes each will be looping over a 10,000 long string each time. Again, this makes some impact, but it is barely noticeable
+bit 100 genes each will be looping over a 10,000 long string each time. Again, this makes some impact, but it is barely noticeable.
+Quantitatively there is about 1.5 second difference between the two

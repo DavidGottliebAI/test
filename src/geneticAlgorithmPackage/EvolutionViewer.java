@@ -43,6 +43,8 @@ public class EvolutionViewer {
 	private JTextField generationsField;
 	private JTextField maxFitnessField;
 	private JTextField elitismField;
+	private JTextField extraSelectionField;
+	private JTextField extraFitnessField;
 	private JButton resetButton;
 	private JButton startButton;
 	private JTextField seedField;
@@ -63,6 +65,8 @@ public class EvolutionViewer {
 	private int maxGenerations = 100;
 	private int elitismPercent = 1;
 	private int averageNumMutations = 1;
+	private int extraSelection = 50;
+	private int extraFitness = 50;
 	private int numLoops = 0;
 	private int seed = 0;
 	private int chromosomeLength = 100;
@@ -166,6 +170,7 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
+		this.extraFitnessField = new JTextField("10");
 
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
 		this.maxFitnessField = new JTextField("100");
@@ -175,6 +180,12 @@ public class EvolutionViewer {
 		this.selectionField = new JComboBox<String>();
 		this.selectionField.addItem("Truncation");
 		this.selectionField.addItem("Roulette Wheel");
+		this.selectionField.addItem("Ranked");
+		this.selectionField.addItem("Tournament");
+		this.selectionField.addItem("Steady-State");
+		this.selectionField.addItem("SUS");
+		this.selectionField.addItem("Boltzmann");
+		this.extraSelectionField = new JTextField("50");
 
 		JLabel truncationLabel = new JLabel("Truncate %");
 		this.truncationField = new JTextField("50");
@@ -218,10 +229,12 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(this.mutateField);
 		this.southAdminPanel.add(fitnessLabel);
 		this.southAdminPanel.add(this.fitnessField);
+		this.southAdminPanel.add(this.extraFitnessField);
 		this.southAdminPanel.add(maxFitnessLabel);
 		this.southAdminPanel.add(this.maxFitnessField);
 		this.southAdminPanel.add(selectionLabel);
 		this.southAdminPanel.add(this.selectionField);
+		this.southAdminPanel.add(this.extraSelectionField);
 		this.southAdminPanel.add(truncationLabel);
 		this.southAdminPanel.add(this.truncationField);
 		this.southAdminPanel.add(crossoverLabel);
@@ -291,6 +304,16 @@ public class EvolutionViewer {
 		this.maxFitness = getTextFieldNumber(maxFitnessField);
 		this.population.setMaxFitness(this.maxFitness);
 	}
+	
+	public void setExtraFitness() {
+		this.extraFitness = getTextFieldNumber(extraFitnessField);
+		this.population.setExtraFitness(this.extraFitness);
+	}
+	
+	public void setExtraSelection() {
+		this.extraSelection = getTextFieldNumber(extraSelectionField);
+		this.population.setExtraSelection(this.extraSelection);
+	}
 
 	public void setElitismPercent() {
 		this.elitismPercent = getTextFieldNumber(elitismField);
@@ -301,6 +324,8 @@ public class EvolutionViewer {
 //		startButton.setText("Reset");
 //		flipEvolutionRunning();
 	}
+	
+	
 
 	/**
 	 * ensures: seed can be set based on user input from text field and resets GUI
@@ -309,6 +334,7 @@ public class EvolutionViewer {
 	public void setSeed() {
 		int oldSeed = this.seed;
 		this.seed = getTextFieldNumber(seedField);
+		this.population.setSeed(this.seed);
 		if (this.seed != oldSeed) {
 			this.reset();
 		}

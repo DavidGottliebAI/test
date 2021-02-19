@@ -34,6 +34,9 @@ public class Population {
 	private Random random;
 	private int averageNumMutations;
 	private int maxFitness;
+	private int extraFitness;
+	private int extraSelection;
+	private int seed;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
 			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer, PopulationViewer populationViewer,
@@ -64,7 +67,7 @@ public class Population {
 	 */
 	public String evolutionLoop() {
 
-		updateFitessScores();
+		updateFitnessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
@@ -95,7 +98,7 @@ public class Population {
 	 * ensures: iterates through each chromosome at the start of each evolutionary
 	 * loop to have accurate fitness before sorting
 	 */
-	private void updateFitessScores() {
+	private void updateFitnessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.calculateFitness(this.fitnessFunction, this.chromosomeLength, this.evolutionViewer);
 		}
@@ -158,6 +161,82 @@ public class Population {
 			for (int i = 0; i < this.populationSize; i++) {
 				this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
 			}
+		} else if (this.selectionMethod.equals("Ranked")) {
+			ArrayList<Chromosome> rankedList = new ArrayList<Chromosome>();
+			for (int i = 0; i < this.chromosomeList.size(); i++) {
+				Chromosome current = this.chromosomeList.get(i);
+				current.calculateFitness("", this.chromosomeList.size() - i, this.evolutionViewer);
+				for (int j = 0; j < current.getFitness(); j++) {
+					rankedList.add(current);
+				}
+			}
+			Random random = new Random();
+			this.chromosomeList.clear();
+			for (int i = 0; i < this.populationSize; i++) {
+				this.chromosomeList.add(rankedList.get(random.nextInt(rankedList.size() - 1)));
+			}
+		} else if (this.selectionMethod.equals("Tournament")) {
+			Random random = new Random();
+			ArrayList<Chromosome> tempChromosome = new ArrayList<Chromosome>();
+			ArrayList<Chromosome> newChromosomes = new ArrayList<Chromosome>();
+			for (int i = 0; i < this.chromosomeList.size(); i++) {
+				tempChromosome.clear();
+				for (int j = 0; j < this.extraSelection; j++) {
+					tempChromosome.add(this.chromosomeList.get(random.nextInt(this.chromosomeList.size() - 1)));
+				}
+				Collections.sort(tempChromosome);
+				newChromosomes.add(tempChromosome.get(0));
+			}
+			this.chromosomeList.clear();
+			this.chromosomeList = newChromosomes;
+		} else if (this.selectionMethod.equals("Steady-State")) {
+			ArrayList<Chromosome> bestParents = new ArrayList<Chromosome>();
+			for (int i = 0; i < this.extraSelection; i++) {
+				bestParents.add(this.chromosomeList.get(i));
+			}
+			for (int i = 0; i < this.extraSelection; i++) {
+				this.chromosomeList.remove(this.chromosomeList.size() - 1);
+			}
+			for (int i = 0; i < bestParents.size(); i++) {
+				bestParents.get(i).mutate(i, this.seed);
+			}
+			for (int i = 0; i < this.extraSelection; i++) {
+				this.chromosomeList.add(bestParents.get(i));
+			}
+		} else if (this.selectionMethod.equals("SUS")) {
+			ArrayList<Chromosome> SUSList = new ArrayList<Chromosome>();
+			for (Chromosome chromosome : this.chromosomeList) {
+				for (int i = 0; i < chromosome.getFitness(); i++) {
+					SUSList.add(chromosome);
+				}
+			}
+			this.chromosomeList.clear();
+			for (int i = 0; i < this.populationSize; i++) {
+				this.chromosomeList.add(SUSList.get(i * this.extraSelection));
+			}
+		} else if (this.selectionMethod.equals("Boltzmann")) {
+			Random random = new Random();
+			ArrayList<Chromosome> tempChromosome = new ArrayList<Chromosome>();
+			ArrayList<Chromosome> newChromosomes = new ArrayList<Chromosome>();
+			int alpha = this.extraSelection;
+			double initialTempurature = 50;
+			for (int i = 0; i < this.chromosomeList.size(); i++) {
+				double k = (1 + 100*this.evolutionViewer.getNumLoops()/this.evolutionViewer.getMaxGenerations());
+				double tempurature = initialTempurature * Math.pow(1-alpha, k);
+				double pressure = Math.exp(
+						-1 * (this.chromosomeList.get(0).getFitness() - 
+								this.evolutionViewer.lineGraph.getFitnesses()[1]) / tempurature);
+				System.out.println(Math.ceil(100 * pressure));
+				tempChromosome.clear();
+				for (int j = 0; j < (int) Math.ceil(100 * pressure); j++) {
+					tempChromosome.add(this.chromosomeList.get(random.nextInt(this.chromosomeList.size() - 1)));
+				}
+				Collections.sort(tempChromosome);
+				newChromosomes.add(tempChromosome.get(0));
+				initialTempurature = tempurature;
+			}
+			this.chromosomeList.clear();
+			this.chromosomeList = newChromosomes;
 		}
 	}
 
@@ -220,5 +299,18 @@ public class Population {
 
 	public void setMaxFitness(int maxFitness) {
 		this.maxFitness = maxFitness;
+	}
+
+	public void setExtraFitness(int extraFitness) {
+		this.extraFitness = extraFitness;
+
+	}
+
+	public void setExtraSelection(int extraSelection) {
+		this.extraSelection = extraSelection;
+	}
+
+	public void setSeed(int seed) {
+		this.seed = seed;
 	}
 }
