@@ -20,9 +20,9 @@ public class Chromosome implements Comparable<Chromosome> {
 	ArrayList<Gene> geneList = new ArrayList<Gene>();
 	public String geneString = "";
 	private EditableViewer editableViewer;
-	private int fitness;
-	private int chromosomeLength;
-	private long seed;
+	protected int fitness;
+	protected int chromosomeLength;
+	protected long seed;
 	protected Random random;
 
 	/**
@@ -37,6 +37,7 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.geneList.add(gene);
 		}
 	}
+	
 
 	/**
 	 * ensures: a specific chromosome can be created based on user input of a seed
@@ -134,9 +135,12 @@ public class Chromosome implements Comparable<Chromosome> {
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
+		} else {
+			this.fitness = populationSize;
 		}
 		normalizeFitness();
 	}
+
 
 	/**
 	 * ensures: sets the fitness proportional to this chromosome's length on a 0 to

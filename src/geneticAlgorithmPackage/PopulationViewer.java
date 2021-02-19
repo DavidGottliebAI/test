@@ -66,7 +66,7 @@ public class PopulationViewer {
 	 * @return bestChromosome
 	 */
 
-	public void updateChromsomeGrid(ArrayList<Chromosome> chromosomeList) {
+	public void updateChromosomeGrid(ArrayList<Chromosome> chromosomeList) {
 		this.chromosomeList = chromosomeList;
 		for (int i = 0; i < this.chromosomeList.size(); i++) {
 			JPanel chromosomePanel = (JPanel) this.chromosomeGrid.getComponent(i);

@@ -29,6 +29,8 @@ public class startListener implements ActionListener {
 		this.evolutionViewer.setChromosomeLength();
 		this.evolutionViewer.setFitnessFunction();
 		this.evolutionViewer.setSelectionMethod();
+		this.evolutionViewer.setExtraFitness();
+		this.evolutionViewer.setExtraSelection();
 		this.evolutionViewer.setTruncationPercent();
 		this.evolutionViewer.setCrossover();
 
