@@ -211,7 +211,7 @@ public class Population {
 			}
 			this.chromosomeList.clear();
 			for (int i = 0; i < this.populationSize; i++) {
-				if(i * this.extraSelection < SUSList.size() - 1) {
+				if (i * this.extraSelection < SUSList.size() - 1) {
 					this.chromosomeList.add(SUSList.get(i * this.extraSelection));
 				}
 			}
@@ -222,11 +222,11 @@ public class Population {
 			int alpha = this.extraSelection;
 			double initialTempurature = 50;
 			for (int i = 0; i < this.chromosomeList.size(); i++) {
-				double k = (1 + 100*this.evolutionViewer.getNumLoops()/this.evolutionViewer.getMaxGenerations());
-				double tempurature = initialTempurature * Math.pow(1-alpha, k);
-				double pressure = Math.exp(
-						-1 * (this.chromosomeList.get(0).getFitness() - 
-								this.evolutionViewer.lineGraph.getFitnesses()[1]) / tempurature);
+				double k = (1 + 100 * this.evolutionViewer.getNumLoops() / this.evolutionViewer.getMaxGenerations());
+				double tempurature = initialTempurature * Math.pow(1 - alpha, k);
+				double pressure = Math.exp(-1
+						* (this.chromosomeList.get(0).getFitness() - this.evolutionViewer.lineGraph.getFitnesses()[1])
+						/ tempurature);
 				System.out.println(Math.ceil(100 * pressure));
 				tempChromosome.clear();
 				for (int j = 0; j < (int) Math.ceil(100 * pressure); j++) {
@@ -316,7 +316,7 @@ public class Population {
 	public void setSeed(int seed) {
 		this.seed = seed;
 	}
-	
+
 	public void setCrossover(boolean crossover) {
 		this.crossover = crossover;
 	}

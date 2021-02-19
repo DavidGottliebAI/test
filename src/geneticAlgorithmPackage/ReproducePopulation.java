@@ -29,10 +29,6 @@ public class ReproducePopulation extends Population {
 		}
 	}
 	
-	public boolean evolutionLoop() {
-		return super.evolutionLoop();
-	}
-	
 	public void updateFitnessScores() {
 		super.updateFitnessScores();
 		for (ReproduceChromosome chromosome : this.newChromosomeList) {
