@@ -45,10 +45,8 @@ public class PopulationViewer {
 	 */
 	public void reset(int populationSize, int chromosomeLength) {
 		this.chromosomeGrid.removeAll();
-
 		int populationDimension = (int) Math.ceil(Math.sqrt(populationSize));
 		int chromosomeDimension = (int) Math.ceil(Math.sqrt(chromosomeLength));
-
 		this.chromosomeGrid.setLayout(new GridLayout(populationDimension, populationDimension));
 		for (int i = 0; i < populationSize; i++) {
 			JPanel panel = new JPanel();

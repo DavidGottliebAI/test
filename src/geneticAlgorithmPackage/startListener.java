@@ -25,12 +25,12 @@ public class startListener implements ActionListener {
 		this.evolutionViewer.setElitismPercent();
 		this.evolutionViewer.setAverageNumMutations();
 		this.evolutionViewer.setSeed();
-		this.evolutionViewer.setChromosomeLength();
 		this.evolutionViewer.setPopulationSize();
+		this.evolutionViewer.setChromosomeLength();
 		this.evolutionViewer.setFitnessFunction();
 		this.evolutionViewer.setSelectionMethod();
 		this.evolutionViewer.setTruncationPercent();
-
+		this.evolutionViewer.setCrossover();
 
 		// changes the name of the start button and decides what step to take
 		if (!this.evolutionViewer.evolutionRunning) {
@@ -43,10 +43,10 @@ public class startListener implements ActionListener {
 				this.startButton.setText("Start");
 				return;
 			} else if (this.startButton.getText().equals("Continue")) {
-				if (this.evolutionViewer.getNumLoops() > this.evolutionViewer.getMaxGenerations()) {
+				if (this.evolutionViewer.getNumLoops() >= this.evolutionViewer.getMaxGenerations()) {
 					this.evolutionViewer.frame.setTitle(
 							this.evolutionViewer.title + ": Reset or choose number of Generations greater than "
-									+ (this.evolutionViewer.getNumLoops() - 1));
+									+ (this.evolutionViewer.getNumLoops()));
 					return;
 				}
 				this.startButton.setText("Pause");

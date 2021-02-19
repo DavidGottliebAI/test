@@ -34,6 +34,7 @@ public class Population {
 	private Random random;
 	private int averageNumMutations;
 	private int maxFitness;
+	private boolean crossover;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
 			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer, PopulationViewer populationViewer,
@@ -62,7 +63,7 @@ public class Population {
 	 * @return true if the evolution produced a chromosome with a fitness >= 100,
 	 *         else false
 	 */
-	public String evolutionLoop() {
+	public boolean evolutionLoop() {
 
 		updateFitessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
@@ -73,7 +74,7 @@ public class Population {
 		this.fitnessViewer.scatterGraph.updateChromosomeList(this.chromosomeList);
 
 		if (this.chromosomeList.get(0).getFitness() >= this.maxFitness) {
-			return "fitness";
+			return true;
 		}
 
 //		System.out.println();
@@ -84,11 +85,9 @@ public class Population {
 
 		selection(this.truncationPercent);
 		this.chromosomeList = repopulate();
-		if (this.evolutionViewer.crossover) {
-			crossover();
-		}
+		crossover();
 		mutate();
-		return "";
+		return false;
 	}
 
 	/**
@@ -162,10 +161,12 @@ public class Population {
 	}
 
 	private void crossover() {
-		Random randomCrossover = new Random(this.random.nextLong());
-//		System.out.println("Run Crossover!");
-		for (int index = this.numberElite; index < this.populationSize - 1; index += 2) {
-			this.chromosomeList.get(index).crossover(this.chromosomeList.get(index + 1), randomCrossover.nextLong());
+		if (this.crossover) {
+			Random randomCrossover = new Random(this.random.nextLong());
+			for (int index = this.numberElite; index < this.populationSize - 1; index += 2) {
+				this.chromosomeList.get(index).crossover(this.chromosomeList.get(index + 1),
+						randomCrossover.nextLong());
+			}
 		}
 	}
 
@@ -220,5 +221,9 @@ public class Population {
 
 	public void setMaxFitness(int maxFitness) {
 		this.maxFitness = maxFitness;
+	}
+
+	public void setCrossover(boolean crossover) {
+		this.crossover = crossover;
 	}
 }

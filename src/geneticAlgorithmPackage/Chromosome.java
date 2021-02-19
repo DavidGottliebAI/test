@@ -25,8 +25,6 @@ public class Chromosome implements Comparable<Chromosome> {
 	private long seed;
 	protected Random random;
 
-	// private String fitnessFunction = "Fitness1";
-
 	/**
 	 * ensures: a chromosome a is constructed completely randomly and basically for
 	 * the editable chromosome viewer
@@ -117,13 +115,7 @@ public class Chromosome implements Comparable<Chromosome> {
 			for (Gene gene : this.geneList) {
 				this.fitness += gene.getBit();
 			}
-			System.out.println("Before calc: " + this.fitness);
-			System.out.println("Pop size: " + populationSize);
-			// System.out.println("Pop size : " + populationSize);
-
 			this.fitness = Math.abs(this.fitness - populationSize / 2) * 2;
-			System.out.println("After calc: " + this.fitness);
-
 		} else if (fitnessFunction.equals("One for All!")) {
 			this.fitness = 0;
 			for (Gene gene : this.geneList) {
@@ -139,7 +131,6 @@ public class Chromosome implements Comparable<Chromosome> {
 				}
 			} catch (NullPointerException e) {
 				// re-title EvolutionViewer
-
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
@@ -198,8 +189,8 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	@Override
-	public int compareTo(Chromosome other) {
-		return other.fitness - this.fitness;
+	public int compareTo(Chromosome otherChromosome) {
+		return otherChromosome.fitness - this.fitness;
 	}
 
 	/**
@@ -238,28 +229,20 @@ public class Chromosome implements Comparable<Chromosome> {
 		return copiedChromosome;
 	}
 
-	public void crossover(Chromosome chromosome, long seed) {
+	public void crossover(Chromosome otherChromosome, long seed) {
 		Random newRandom = new Random(seed);
 		int crossoverIndex = newRandom.nextInt(chromosomeLength);
-
-//		System.out.println("Before: ");
-//		System.out.println("This chromosome: " + this.getGeneString());
-//		System.out.println("Other chromosome: " + chromosome.getGeneString());
-
-		chromosome.getGeneString();
+		otherChromosome.getGeneString();
 		if (newRandom.nextBoolean()) {
 			for (int index = 0; index < crossoverIndex; index++) {
-				chromosome.geneList.set(index, this.geneList.get(index));
-				this.geneList.set(index, new Gene(chromosome.geneString.charAt(index) - '0'));
+				otherChromosome.geneList.set(index, this.geneList.get(index));
+				this.geneList.set(index, new Gene(otherChromosome.geneString.charAt(index) - '0'));
 			}
 		} else {
 			for (int index = crossoverIndex; index < this.chromosomeLength; index++) {
-				chromosome.geneList.set(index, this.geneList.get(index));
-				this.geneList.set(index, new Gene(chromosome.geneString.charAt(index) - '0'));
+				otherChromosome.geneList.set(index, this.geneList.get(index));
+				this.geneList.set(index, new Gene(otherChromosome.geneString.charAt(index) - '0'));
 			}
 		}
-//		System.out.println("After (crossover at " + crossoverIndex + "): ");
-//		System.out.println("Chromosome 1: " + this.getGeneString());
-//		System.out.println("Chromosome 2: " + chromosome.getGeneString());
 	}
 }

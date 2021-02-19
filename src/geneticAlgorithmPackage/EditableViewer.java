@@ -22,7 +22,7 @@ public class EditableViewer {
 	public JFrame frame;
 	private JPanel buttonGrid;
 	public final String title = "Editable Chomosome Viewer";
-	private Chromosome chromosome;
+	private Chromosome targetChromosome;
 	private JTextField mutationRate;
 	private JPanel adminGrid;
 
@@ -30,7 +30,7 @@ public class EditableViewer {
 	 * ensures: creates a specific JPanel and instantiates chromosome
 	 */
 	public EditableViewer() {
-		this.chromosome = null;
+		this.targetChromosome = null;
 		this.frame = new JFrame();
 		this.frame.setTitle(title);
 		this.buttonGrid = new JPanel();
@@ -74,7 +74,7 @@ public class EditableViewer {
 	public void createButtonGrid() {
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
-		this.chromosome = new Chromosome(this);
+		this.targetChromosome = new Chromosome(this);
 		for (EditableGene gene : getChromosome().editableGeneList) {
 			gene.setSize(30, 30);
 			this.buttonGrid.add(gene);
@@ -92,7 +92,7 @@ public class EditableViewer {
 	 *                   requires: chromosome
 	 */
 	public void createButtonGrid(Chromosome chromosome) {
-		this.chromosome = chromosome;
+		this.targetChromosome = chromosome;
 		this.buttonGrid.removeAll();
 		this.buttonGrid.setLayout(new GridLayout(10, 10));
 		for (EditableGene gene : this.getChromosome().editableGeneList) {
@@ -110,7 +110,7 @@ public class EditableViewer {
 	 * @return chromosome
 	 */
 	public Chromosome getChromosome() {
-		return chromosome;
+		return targetChromosome;
 	}
 
 	public JTextField getMutationRate() {
@@ -136,7 +136,8 @@ public class EditableViewer {
 				this.frame.setTitle("Your Power Levels Are Too High!");
 				return 0;
 			}
-			this.frame.setTitle("Enter Mutation Rate between 0 and " + this.getChromosome().getEditableGeneList().size());
+			this.frame
+					.setTitle("Enter Mutation Rate between 0 and " + this.getChromosome().getEditableGeneList().size());
 			return 0;
 		}
 	}

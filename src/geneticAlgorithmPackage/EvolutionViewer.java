@@ -67,9 +67,10 @@ public class EvolutionViewer {
 	private int seed = 0;
 	private int chromosomeLength = 100;
 	private int populationSize = 100;
+	private int truncationPercent = 50;
 	private String fitnessFunction = "One for All!";
 	private String selectionMethod = "Truncation";
-	private int truncationPercent = 50;
+	private JCheckBox crossoverBox;
 
 	/**
 	 * ensures: Evolution Viewer is constructed and instantiates editable viewer for
@@ -109,23 +110,22 @@ public class EvolutionViewer {
 			public void actionPerformed(ActionEvent arg0) {
 				if (evolutionRunning) {
 					resetButton.setVisible(true);
-
-					if (getNumLoops() >= maxGenerations) {
-						startButton.setText("Continue");
-						flipEvolutionRunning();
-						return;
-					} else if (getNumLoops() >= GENERATION_LIMIT) {
-						frame.setTitle(title + ": Restart! Number of generations exceeded 400!");
+					if (getNumLoops() >= GENERATION_LIMIT) {
+						frame.setTitle(title + ": Restart! Number of generations exceeded " + GENERATION_LIMIT);
 						resetButton.setVisible(false);
 						startButton.setText("Reset");
-						flipEvolutionRunning();
+						setEvolutionRunning(false);
+						return;
+					} else if (getNumLoops() >= maxGenerations) {
+						startButton.setText("Continue");
+						setEvolutionRunning(false);
 						return;
 					}
-					if (population.evolutionLoop().equals("fitness")) {
+					if (population.evolutionLoop()) {
 						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
 						resetButton.setVisible(false);
 						startButton.setText("Reset");
-						flipEvolutionRunning();
+						setEvolutionRunning(false);
 					}
 					numberGenerationsLabel.setText("Number of Generations: " + getNumLoops());
 					frame.repaint();
@@ -181,8 +181,7 @@ public class EvolutionViewer {
 		this.truncationField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel crossoverLabel = new JLabel("Crossover?");
-		JCheckBox crossoverBox = new JCheckBox();
-		crossoverBox.addItemListener(new crossoverListener(this));
+		this.crossoverBox = new JCheckBox();
 
 		JLabel populationSizeLabel = new JLabel("Population Size");
 		this.populationSizeField = new JTextField("100");
@@ -243,17 +242,6 @@ public class EvolutionViewer {
 	}
 
 	/**
-	 * ensures: the state of evolution is flipped to opposite of it's current state
-	 */
-	public void flipEvolutionRunning() {
-		if (evolutionRunning) {
-			evolutionRunning = false;
-		} else {
-			evolutionRunning = true;
-		}
-	}
-
-	/**
 	 * ensures: a general solution for extracting information from JTextFields in
 	 * GUI and handling exceptions
 	 * 
@@ -269,6 +257,7 @@ public class EvolutionViewer {
 			}
 			return textFieldNumber;
 		} catch (NumberFormatException e) {
+			this.killAndReset();
 			this.frame.setTitle("Enter a number larger than 0 into the text field!");
 			return 0;
 		}
@@ -295,11 +284,11 @@ public class EvolutionViewer {
 	public void setElitismPercent() {
 		this.elitismPercent = getTextFieldNumber(elitismField);
 		this.population.setNumberElite(this.elitismPercent);
-//	} else if (population.evolutionLoop().equals("elitism")) {
-//		frame.setTitle(title + ": Your elitism is too high!");
-//		resetButton.setVisible(false);
-//		startButton.setText("Reset");
-//		flipEvolutionRunning();
+	}
+
+	public void setCrossover() {
+		this.crossover = this.crossoverBox.isSelected();
+		this.population.setCrossover(this.crossover);
 	}
 
 	/**
@@ -307,11 +296,7 @@ public class EvolutionViewer {
 	 * if a change is made when start is clicked
 	 */
 	public void setSeed() {
-		int oldSeed = this.seed;
 		this.seed = getTextFieldNumber(seedField);
-		if (this.seed != oldSeed) {
-			this.reset();
-		}
 	}
 
 	/**
@@ -319,11 +304,7 @@ public class EvolutionViewer {
 	 * resets GUI if a change is made when start is clicked
 	 */
 	public void setChromosomeLength() {
-		int oldChromosomeLength = this.chromosomeLength;
 		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
-		if (this.chromosomeLength != oldChromosomeLength) {
-			this.reset();
-		}
 	}
 
 	/**
@@ -331,16 +312,17 @@ public class EvolutionViewer {
 	 * resets GUI if a change is made when start is clicked
 	 */
 	public void setPopulationSize() {
-		int oldPopulationSize = this.populationSize;
 		this.populationSize = getTextFieldNumber(this.populationSizeField);
-		if (this.populationSize != oldPopulationSize) {
-			this.reset();
-		}
 	}
 
 	public void setFitnessFunction() {
 		this.fitnessFunction = this.fitnessField.getSelectedItem().toString();
 		this.population.setFitnessFunction(this.fitnessFunction);
+		if (this.fitnessFunction.equals("Target")) {
+			if (this.chromosomeLength != 100) {
+				this.chromosomeLengthField.setText("100");
+			}
+		}
 	}
 
 	public void setSelectionMethod() {
@@ -366,8 +348,21 @@ public class EvolutionViewer {
 	 * a change in graphics
 	 */
 	public void reset() {
+		try {
+			this.setTruncationPercent();
+			this.setSeed();
+			this.setPopulationSize();
+			this.setMaxGenerations();
+			this.setAverageNumMutations();
+			this.setMaxFitness();
+			this.setElitismPercent();
+		} catch (NumberFormatException e) {
+			this.killAndReset();
+		} catch (IllegalArgumentException e) {
+			this.killAndReset();
+		}
+		this.setEvolutionRunning(false);
 		this.startButton.setText("Start");
-		this.evolutionRunning = false;
 		this.numLoops = 1;
 		this.lineGraph.reset();
 		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
@@ -376,6 +371,13 @@ public class EvolutionViewer {
 		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
 		this.bestChromosomeViewer.reset(this.chromosomeLength);
 		this.fitnessViewer.scatterGraph.reset(this.populationSize, this.chromosomeLength);
+		this.startButton.setVisible(true);
+		return;
 	}
 
+	public void killAndReset() {
+		this.setEvolutionRunning(false);
+		this.startButton.setVisible(false);
+		return;
+	}
 }
