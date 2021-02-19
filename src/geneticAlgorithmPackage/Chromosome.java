@@ -139,17 +139,24 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.fitness = evolutionViewer.getPopulationSize();
 			System.out.println(this.fitness);
 			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
-				if(this.getGeneString().equals(evolutionViewer.getPopulation().getChromosomeList().get(i).getGeneString())) {
+				if (this.getGeneString()
+						.equals(evolutionViewer.getPopulation().getChromosomeList().get(i).getGeneString())) {
 					this.fitness--;
 				}
 			}
 			System.out.println(this.fitness);
 			this.fitness = this.fitness / (evolutionViewer.getPopulationSize() - 1) * 100;
 			System.out.println(this.fitness);
-		} else {
-			this.fitness = populationSize;
+		} else if (fitnessFunction.equals("Reproduce")) {
+			learningLoop();
+			this.fitness = 50;
 		}
 		normalizeFitness();
+	}
+
+	private void learningLoop() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**

@@ -9,32 +9,32 @@ import java.util.Random;
  * 
  *         Purpose: <br>
  *         Chromosome specifically designed to utilize genes from the paper
- *         Exact same as Chromosome, but with slightly different methods to call 
+ *         Exact same as Chromosome, but with slightly different methods to call
  *         on slightly different genes
  *
  */
 
-public class ReproduceChromosome extends Chromosome {
-
-	ArrayList<ReproduceGene> geneList = new ArrayList<ReproduceGene>();
+public class BaldwinChromosome extends Chromosome {
+	ArrayList<BaldwinGene> geneList = new ArrayList<BaldwinGene>();
 	private int ones = 0;
 	private int zeros = 0;
 	private int twos = 0;
 
-	public ReproduceChromosome(long seed, int chromosomeLength, EditableViewer editableViewer,
-			EvolutionViewer evolutionViewer) {
+	public BaldwinChromosome(long seed, int chromosomeLength, EditableViewer editableViewer) {
 		super(seed, chromosomeLength, editableViewer);
 		this.chromosomeLength = 20;
+		this.geneList.clear();
+
 		for (int i = 0; i < this.chromosomeLength; i++) {
-			ReproduceGene gene = new ReproduceGene(); // allow to be seeded or not
+			BaldwinGene gene = new BaldwinGene(this.random.nextInt(4)); // allow to be seeded or not
 			this.geneList.add(gene);
 		}
 	}
 
 	public void calculateFitness(String fitnessFunction, int populationSize, EvolutionViewer evolutionViewer) {
-		if (fitnessFunction.equals("Reproduce")) {
+		if (fitnessFunction.equals("Baldwin")) {
 			System.out.println("yo");
-			ArrayList<ReproduceGene> original = this.geneList;
+			ArrayList<BaldwinGene> original = this.geneList;
 			// if there exists a 0 originally, highest fitness will be 1
 			for (int i = 0; i < original.size(); i++) {
 				if (original.get(i).getBit() == 0) {
@@ -43,7 +43,7 @@ public class ReproduceChromosome extends Chromosome {
 				}
 			}
 			for (int day = 1000; day >= 1; day--) {
-				ArrayList<ReproduceGene> newList = this.mutate2s(original);
+				ArrayList<BaldwinGene> newList = this.mutate2s(original);
 				for (int i = 0; i < newList.size(); i++) {
 					if (newList.get(i).getBit() == 0) {
 						break;
@@ -52,9 +52,9 @@ public class ReproduceChromosome extends Chromosome {
 					System.out.println(this.fitness);
 					for (int j = 0; j < newList.size(); j++) {
 						if (newList.get(j).getBit() == 1) {
-							ones += 1;
+							this.ones += 1;
 						} else {
-							zeros += 1;
+							this.zeros += 1;
 						}
 					}
 					System.out.println(this.fitness);
@@ -65,7 +65,7 @@ public class ReproduceChromosome extends Chromosome {
 		super.calculateFitness(fitnessFunction, populationSize, evolutionViewer);
 	}
 
-	private ArrayList<ReproduceGene> mutate2s(ArrayList<ReproduceGene> geneList) {
+	private ArrayList<BaldwinGene> mutate2s(ArrayList<BaldwinGene> geneList) {
 		Random random = new Random();
 		for (int i = 0; i < geneList.size(); i++) {
 			if (geneList.get(i).getBit() == 2) {

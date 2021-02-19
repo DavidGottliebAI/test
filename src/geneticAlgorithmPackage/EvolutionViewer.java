@@ -165,7 +165,7 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
-		this.fitnessField.addItem("Reproduce");
+		this.fitnessField.addItem("Baldwin");
 		this.fitnessField.addItem("Novelty");
 		this.extraFitnessField = new JTextField("10");
 
@@ -307,7 +307,7 @@ public class EvolutionViewer {
 		this.crossover = this.crossoverBox.isSelected();
 		this.population.setCrossover(this.crossover);
 	}
-	
+
 	public Population getPopulation() {
 		return this.population;
 	}
@@ -363,7 +363,7 @@ public class EvolutionViewer {
 	public int getNumLoops() {
 		return numLoops;
 	}
-	
+
 	public int getPopulationSize() {
 		return this.populationSize;
 	}
@@ -394,8 +394,13 @@ public class EvolutionViewer {
 		this.startButton.setText("Start");
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
+		if (this.selectionMethod.equals("Baldwin")) {
+			this.population = new BaldwinPopulation(this, this.seed, this.chromosomeLength, this.populationSize,
+					this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
+		} else {
+			this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+					this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
+		}
 		this.lineGraph.repaint();
 		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
 		this.bestChromosomeViewer.reset(this.chromosomeLength);
@@ -410,5 +415,4 @@ public class EvolutionViewer {
 		return;
 	}
 
-	
 }
