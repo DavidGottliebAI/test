@@ -2,9 +2,9 @@ package geneticAlgorithmPackage;
 
 import java.util.Random;
 
-public class Gene { // may need refactoring
+public class Gene {
 
-	private int bit;
+	protected int bit;
 
 	/**
 	 * ensures: constructs Gene and instantiates with a random bit
@@ -14,6 +14,8 @@ public class Gene { // may need refactoring
 		this.bit = random.nextInt(2);
 		updateColor();
 	}
+	
+	
 
 	/**
 	 * ensures: constructs Gene and instantiates with a passed in bit
@@ -51,9 +53,4 @@ public class Gene { // may need refactoring
 	public void setBit(int bit) {
 		this.bit = bit;
 	}
-
-//	private void draw(Graphics2D g2) {
-//		g2.setColor(this.color);
-//		g2.fillRect(0, 0, 5, 5);
-//	}
 }

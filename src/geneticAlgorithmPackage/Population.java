@@ -19,24 +19,25 @@ import java.util.Random;
 public class Population {
 
 	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
-	private EvolutionViewer evolutionViewer;
+	protected EvolutionViewer evolutionViewer;
 	private PopulationViewer populationViewer;
 	private BestChromosomeViewer bestChromosomeViewer;
-	private EditableViewer editableViewer;
+	protected EditableViewer editableViewer;
 	private FitnessViewer fitnessViewer;
 
-	private int chromosomeLength;
-	private int populationSize;
+	protected int chromosomeLength;
+	protected int populationSize;
 	private int truncationPercent;
 	private int numberElite;
-	private String fitnessFunction = "";
+	protected String fitnessFunction = "";
 	private String selectionMethod = "";
-	private Random random;
+	protected Random random;
 	private int averageNumMutations;
 	private int maxFitness;
 	private int extraFitness;
 	private int extraSelection;
 	private int seed;
+	private boolean crossover;
 
 	public Population(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
 			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer, PopulationViewer populationViewer,
@@ -65,18 +66,18 @@ public class Population {
 	 * @return true if the evolution produced a chromosome with a fitness >= 100,
 	 *         else false
 	 */
-	public String evolutionLoop() {
+	public boolean evolutionLoop() {
 
 		updateFitnessScores();
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
 		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
-		this.populationViewer.updateChromsomeGrid(this.chromosomeList);
+		this.populationViewer.updateChromosomeGrid(this.chromosomeList);
 		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.populationSize);
 		this.fitnessViewer.scatterGraph.updateChromosomeList(this.chromosomeList);
 
 		if (this.chromosomeList.get(0).getFitness() >= this.maxFitness) {
-			return "fitness";
+			return true;
 		}
 
 //		System.out.println();
@@ -87,11 +88,9 @@ public class Population {
 
 		selection(this.truncationPercent);
 		this.chromosomeList = repopulate();
-		if (this.evolutionViewer.crossover) {
-			crossover();
-		}
+		crossover();
 		mutate();
-		return "";
+		return false;
 	}
 
 	/**
@@ -241,10 +240,12 @@ public class Population {
 	}
 
 	private void crossover() {
-		Random randomCrossover = new Random(this.random.nextLong());
-//		System.out.println("Run Crossover!");
-		for (int index = this.numberElite; index < this.populationSize - 1; index += 2) {
-			this.chromosomeList.get(index).crossover(this.chromosomeList.get(index + 1), randomCrossover.nextLong());
+		if (this.crossover) {
+			Random randomCrossover = new Random(this.random.nextLong());
+			for (int index = this.numberElite; index < this.populationSize - 1; index += 2) {
+				this.chromosomeList.get(index).crossover(this.chromosomeList.get(index + 1),
+						randomCrossover.nextLong());
+			}
 		}
 	}
 
@@ -312,5 +313,9 @@ public class Population {
 
 	public void setSeed(int seed) {
 		this.seed = seed;
+	}
+	
+	public void setCrossover(boolean crossover) {
+		this.crossover = crossover;
 	}
 }
