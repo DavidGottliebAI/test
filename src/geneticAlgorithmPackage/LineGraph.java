@@ -214,41 +214,41 @@ public class LineGraph extends JComponent {
 
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList, int populationSize) {
 		int sum = 0;
-//		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
-//			int zeros = 0;
-//			int ones = 0;
-//			for (int j = 0; j < chromosomeList.size(); j++) {
-//				Chromosome current = chromosomeList.get(j);
-//				if (current.getGeneString().charAt(i) == '0') {
-//					zeros += 1;
-//				} else {
-//					ones += 1;
-//				}
-//			}
-//			sum += ones * zeros;
+		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
+			int zeros = 0;
+			int ones = 0;
+			for (int j = 0; j < chromosomeList.size(); j++) {
+				Chromosome current = chromosomeList.get(j);
+				if (current.getGeneString().charAt(i) == '0') {
+					zeros += 1;
+				} else {
+					ones += 1;
+				}
+			}
+			sum += ones * zeros;
+		}
+//		 alternate hamming method
+//		String chromosomeStrings = "";
+//		for (int j = 0; j < chromosomeList.size(); j++) {
+//			String current = chromosomeList.get(j).getGeneString();
+//			chromosomeStrings += current;
 //		}
-		// alternate hamming method
-		String chromosomeStrings = "";
-		for (int j = 0; j < chromosomeList.size(); j++) {
-			String current = chromosomeList.get(j).getGeneString();
-			chromosomeStrings += current;
-		}
-		int zeros = 0;
-		int ones = 0;
-		for (int i = 0; i < chromosomeList.get(0).getGeneLength() * populationSize; i++) {
-
-			if (i % chromosomeList.get(0).getGeneLength() == 0) {
-				sum += zeros * ones;
-				zeros = 0;
-				ones = 0;
-			}
-
-			if (chromosomeStrings.charAt(i) == '0') {
-				zeros += 1;
-			} else {
-				ones += 1;
-			}
-		}
+//		int zeros = 0;
+//		int ones = 0;
+//		for (int i = 0; i < chromosomeList.get(0).getGeneLength() * populationSize; i++) {
+//
+//			if (i % chromosomeList.get(0).getGeneLength() == 0) {
+//				sum += zeros * ones;
+//				zeros = 0;
+//				ones = 0;
+//			}
+//
+//			if (chromosomeStrings.charAt(i) == '0') {
+//				zeros += 1;
+//			} else {
+//				ones += 1;
+//			}
+//		}
 		int pairs = chromosomeList.size() * (chromosomeList.size() - 1) / 2;
 		return sum / pairs;
 	}

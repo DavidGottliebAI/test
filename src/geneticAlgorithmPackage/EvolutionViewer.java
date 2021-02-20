@@ -168,7 +168,7 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
 		this.fitnessField.addItem("Baldwin");
-		this.fitnessField.addItem("Novelty");
+		// this.fitnessField.addItem("Novelty");
 		this.extraFitnessField = new JTextField("10");
 
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
@@ -224,7 +224,7 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(this.mutateField);
 		this.southAdminPanel.add(fitnessLabel);
 		this.southAdminPanel.add(this.fitnessField);
-		this.southAdminPanel.add(this.extraFitnessField);
+		// this.southAdminPanel.add(this.extraFitnessField);
 		this.southAdminPanel.add(maxFitnessLabel);
 		this.southAdminPanel.add(this.maxFitnessField);
 		this.southAdminPanel.add(selectionLabel);
