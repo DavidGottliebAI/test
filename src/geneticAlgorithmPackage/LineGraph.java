@@ -23,6 +23,7 @@ public class LineGraph extends JComponent {
 	private ArrayList<Double> zerosLog = new ArrayList<Double>();
 	private ArrayList<Double> onesLog = new ArrayList<Double>();
 	private ArrayList<Double> twosLog = new ArrayList<Double>();
+	private boolean baldwin = false;
 
 	/**
 	 * ensures: Constructs a line graph component and sets the preferred size
@@ -129,6 +130,9 @@ public class LineGraph extends JComponent {
 		int previousYWorst = 0;
 		int previousYAverage = 0;
 		int previousYAverageHamming = 0;
+		int previousZero = 0;
+		int previousOne = 0;
+		int previousTwo = 0;
 
 		// graphs each line and live updates for each
 
@@ -158,6 +162,20 @@ public class LineGraph extends JComponent {
 			g2.drawString("" + this.getFitnesses()[3], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 135);
 			g2.setColor(Color.BLACK);
 			g2.drawString("" + this.getFitnesses()[4], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 65);
+
+			if (this.baldwin) {
+				g2.setColor(Color.BLACK);
+				g2.drawLine(x * 3, previousZero, x * 3 + 3, (int) (-this.zerosLog.get(x) * plotRatio));
+				previousZero = (int) -this.zerosLog.get(x) * plotRatio;
+
+				g2.setColor(Color.GRAY);
+				g2.drawLine(x * 3, previousOne, x * 3 + 3, (int) (-this.onesLog.get(x) * plotRatio));
+				previousOne = (int) -this.onesLog.get(x) * plotRatio;
+
+				g2.setColor(Color.DARK_GRAY);
+				g2.drawLine(x * 3, previousTwo, x * 3 + 3, (int) (-this.twosLog.get(x) * plotRatio));
+				previousTwo = (int) -this.twosLog.get(x) * plotRatio;
+			}
 		}
 	}
 
@@ -180,6 +198,10 @@ public class LineGraph extends JComponent {
 		this.averageFitnessLog.clear();
 		this.worstFitnessLog.clear();
 		this.averageHammingLog.clear();
+		this.zerosLog.clear();
+		this.onesLog.clear();
+		this.twosLog.clear();
+
 	}
 
 	/**
@@ -255,6 +277,7 @@ public class LineGraph extends JComponent {
 
 	public void addBaldwinEntry(ArrayList<BaldwinChromosome> baldwinChromosomeList, int populationSize, int zeros,
 			int ones, int twos) {
+		this.baldwin = true;
 		this.bestFitnessLog.add(baldwinChromosomeList.get(0).getFitness());
 		this.worstFitnessLog.add(baldwinChromosomeList.get(baldwinChromosomeList.size() - 1).getFitness());
 		int sum = 0;
@@ -264,13 +287,9 @@ public class LineGraph extends JComponent {
 		this.averageFitnessLog.add((double) (sum / baldwinChromosomeList.size()));
 		this.averageHammingLog.add((double) 0);
 		this.uniqueLog.add(0);
-//		System.out.println("Zeros: " + zeros);
-//		System.out.println("Ones: " + ones);
-//		System.out.println("Twos: " + twos);
-		sum = zeros + ones + twos;
-		this.zerosLog.add((double) (zeros / sum));
-		this.onesLog.add((double) (zeros / sum));
-		this.twosLog.add((double) (zeros / sum));
+		this.zerosLog.add((double) (zeros / 20));
+		this.onesLog.add((double) (ones / 20));
+		this.twosLog.add((double) (twos / 20));
 
 	}
 }
