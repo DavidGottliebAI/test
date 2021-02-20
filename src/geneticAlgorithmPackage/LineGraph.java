@@ -137,6 +137,8 @@ public class LineGraph extends JComponent {
 		// graphs each line and live updates for each
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
+			g2.setStroke(new BasicStroke(3));
+
 			g2.setColor(Color.GREEN);
 			g2.drawLine(x * 3, previousYBest, x * 3 + 3, -this.bestFitnessLog.get(x) * plotRatio);
 			previousYBest = -this.bestFitnessLog.get(x) * plotRatio;
@@ -165,14 +167,17 @@ public class LineGraph extends JComponent {
 
 			if (this.baldwin) {
 				g2.setColor(Color.BLACK);
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1}, 0));
 				g2.drawLine(x * 3, previousZero, x * 3 + 3, (int) (-this.zerosLog.get(x) * plotRatio));
 				previousZero = (int) -this.zerosLog.get(x) * plotRatio;
 
 				g2.setColor(Color.GRAY);
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0));
 				g2.drawLine(x * 3, previousOne, x * 3 + 3, (int) (-this.onesLog.get(x) * plotRatio));
 				previousOne = (int) -this.onesLog.get(x) * plotRatio;
 
 				g2.setColor(Color.DARK_GRAY);
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3}, 0));
 				g2.drawLine(x * 3, previousTwo, x * 3 + 3, (int) (-this.twosLog.get(x) * plotRatio));
 				previousTwo = (int) -this.twosLog.get(x) * plotRatio;
 			}
