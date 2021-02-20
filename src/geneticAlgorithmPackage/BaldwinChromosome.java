@@ -40,12 +40,14 @@ public class BaldwinChromosome extends Chromosome {
 			mutateTwoGenes();
 			if (allOnes()) {
 				this.learningScore = 1 + (19 * day) / 1000;
+				resetTwoGenes();
 				return;
 			}
 			this.resetTwoGenes();
 			day--;
 		}
 		this.learningScore = 1;
+		resetTwoGenes();
 	}
 
 	private void resetTwoGenes() {
