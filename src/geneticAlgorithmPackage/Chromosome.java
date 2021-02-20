@@ -203,6 +203,10 @@ public class Chromosome implements Comparable<Chromosome> {
 		return geneList.size();
 	}
 
+	public int getBitAt(int index) {
+		return this.geneList.get(index).getBit();
+	}
+
 	@Override
 	public int compareTo(Chromosome otherChromosome) {
 		return otherChromosome.fitness - this.fitness;

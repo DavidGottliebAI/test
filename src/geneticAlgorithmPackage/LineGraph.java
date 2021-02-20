@@ -213,44 +213,16 @@ public class LineGraph extends JComponent {
 	 */
 
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList, int populationSize) {
-		int sum = 0;
-		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
-			int zeros = 0;
-			int ones = 0;
-			for (int j = 0; j < chromosomeList.size(); j++) {
-				Chromosome current = chromosomeList.get(j);
-				if (current.getGeneString().charAt(i) == '0') {
-					zeros += 1;
-				} else {
-					ones += 1;
-				}
+		double columnHamming = 0;
+		int chromosomeLength = chromosomeList.get(0).getGeneLength();
+		for (int gene = 0; gene < chromosomeLength; gene++) {
+			int columnSum = 0;
+			for (int chromosome = 0; chromosome < populationSize; chromosome++) {
+				columnSum += chromosomeList.get(chromosome).getBitAt(gene);
 			}
-			sum += ones * zeros;
+			columnHamming += columnSum * (populationSize - columnSum) / populationSize;
 		}
-//		 alternate hamming method
-//		String chromosomeStrings = "";
-//		for (int j = 0; j < chromosomeList.size(); j++) {
-//			String current = chromosomeList.get(j).getGeneString();
-//			chromosomeStrings += current;
-//		}
-//		int zeros = 0;
-//		int ones = 0;
-//		for (int i = 0; i < chromosomeList.get(0).getGeneLength() * populationSize; i++) {
-//
-//			if (i % chromosomeList.get(0).getGeneLength() == 0) {
-//				sum += zeros * ones;
-//				zeros = 0;
-//				ones = 0;
-//			}
-//
-//			if (chromosomeStrings.charAt(i) == '0') {
-//				zeros += 1;
-//			} else {
-//				ones += 1;
-//			}
-//		}
-		int pairs = chromosomeList.size() * (chromosomeList.size() - 1) / 2;
-		return sum / pairs;
+		return columnHamming / chromosomeLength;
 	}
 
 	/**
