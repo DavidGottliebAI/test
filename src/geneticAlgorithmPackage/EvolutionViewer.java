@@ -125,8 +125,8 @@ public class EvolutionViewer {
 						setEvolutionRunning(false);
 						return;
 					}
-					System.out.println("Fitness During Evolution Loop: " + fitnessFunction);
-					System.out.println("Type of population: " + population);
+//					System.out.println("Fitness During Evolution Loop: " + fitnessFunction);
+//					System.out.println("Type of population: " + population);
 					if (population.evolutionLoop()) {
 						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
 						resetButton.setVisible(false);
@@ -396,7 +396,7 @@ public class EvolutionViewer {
 		this.startButton.setText("Start");
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		System.out.println("Fitness during reset: " + this.fitnessFunction);
+//		System.out.println("Fitness during reset: " + this.fitnessFunction);
 		if (this.fitnessFunction.equals("Baldwin")) {
 			this.population = new BaldwinPopulation(this, this.seed, this.chromosomeLength, this.populationSize,
 					this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);

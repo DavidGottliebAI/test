@@ -20,6 +20,9 @@ public class LineGraph extends JComponent {
 	private ArrayList<Double> averageFitnessLog = new ArrayList<Double>();
 	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 	private ArrayList<Integer> uniqueLog = new ArrayList<Integer>();
+	private ArrayList<Double> zerosLog = new ArrayList<Double>();
+	private ArrayList<Double> onesLog = new ArrayList<Double>();
+	private ArrayList<Double> twosLog = new ArrayList<Double>();
 
 	/**
 	 * ensures: Constructs a line graph component and sets the preferred size
@@ -181,9 +184,10 @@ public class LineGraph extends JComponent {
 
 	/**
 	 * ensures: calculates hamming distance between population of chromosomes
-	 * @param populationSize 
 	 * 
-	 * @param current chromosome list
+	 * @param populationSize
+	 * 
+	 * @param current        chromosome list
 	 */
 
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList, int populationSize) {
@@ -210,13 +214,13 @@ public class LineGraph extends JComponent {
 		int zeros = 0;
 		int ones = 0;
 		for (int i = 0; i < chromosomeList.get(0).getGeneLength() * populationSize; i++) {
-			
-			if(i % chromosomeList.get(0).getGeneLength() == 0) {
+
+			if (i % chromosomeList.get(0).getGeneLength() == 0) {
 				sum += zeros * ones;
 				zeros = 0;
 				ones = 0;
 			}
-		
+
 			if (chromosomeStrings.charAt(i) == '0') {
 				zeros += 1;
 			} else {
@@ -247,5 +251,26 @@ public class LineGraph extends JComponent {
 			}
 		}
 		return unique;
+	}
+
+	public void addBaldwinEntry(ArrayList<BaldwinChromosome> baldwinChromosomeList, int populationSize, int zeros,
+			int ones, int twos) {
+		this.bestFitnessLog.add(baldwinChromosomeList.get(0).getFitness());
+		this.worstFitnessLog.add(baldwinChromosomeList.get(baldwinChromosomeList.size() - 1).getFitness());
+		int sum = 0;
+		for (Chromosome chromosome : baldwinChromosomeList) {
+			sum += chromosome.getFitness();
+		}
+		this.averageFitnessLog.add((double) (sum / baldwinChromosomeList.size()));
+		this.averageHammingLog.add((double) 0);
+		this.uniqueLog.add(0);
+//		System.out.println("Zeros: " + zeros);
+//		System.out.println("Ones: " + ones);
+//		System.out.println("Twos: " + twos);
+		sum = zeros + ones + twos;
+		this.zerosLog.add((double) (zeros / sum));
+		this.onesLog.add((double) (zeros / sum));
+		this.twosLog.add((double) (zeros / sum));
+
 	}
 }

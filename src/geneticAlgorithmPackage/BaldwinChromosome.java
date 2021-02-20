@@ -46,7 +46,6 @@ public class BaldwinChromosome extends Chromosome {
 			day--;
 		}
 		this.learningScore = 1;
-		System.out.println(this.learningScore);
 	}
 
 	private void resetTwoGenes() {
@@ -98,5 +97,15 @@ public class BaldwinChromosome extends Chromosome {
 
 	public double getLearningScore() {
 		return this.learningScore;
+	}
+
+	public int getNumberOf(int number) {
+		int count = 0;
+		for (BaldwinGene gene : this.geneList) {
+			if (gene.getBit() == number) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

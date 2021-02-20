@@ -18,40 +18,49 @@ import java.util.Random;
 public class BaldwinPopulation extends Population {
 
 	ArrayList<BaldwinChromosome> baldwinChromosomeList = new ArrayList<BaldwinChromosome>();
+	private int zeros;
+	private int twos;
+	private int ones;
 
 	public BaldwinPopulation(EvolutionViewer evolutionViewer, long seed, int chromosomeLength, int populationSize,
 			EditableViewer editableViewer, BestChromosomeViewer bestChromosomeViewer, PopulationViewer populationViewer,
 			FitnessViewer fitnessViewer) {
 		super(evolutionViewer, seed, chromosomeLength, populationSize, editableViewer, bestChromosomeViewer,
 				populationViewer, fitnessViewer);
-		System.out.println("Generating Baldwin population!");
 		for (int i = 0; i < this.populationSize; i++) {
 			BaldwinChromosome chromosome = new BaldwinChromosome(random.nextLong(), this.chromosomeLength,
 					this.editableViewer);
 			this.baldwinChromosomeList.add(chromosome);
 		}
-		System.out.println(" First chromosome in baldwin List: " + this.baldwinChromosomeList.get(0));
 	}
 
 	public boolean evolutionLoop() {
+		this.zeros = 0;
+		this.ones = 0;
+		this.twos = 0;
 
 		for (BaldwinChromosome chromosome : this.baldwinChromosomeList) {
 			chromosome.runLearningLoop();
 			chromosome.calculateFitness();
+			this.zeros += chromosome.getNumberOf(0);
+			this.ones += chromosome.getNumberOf(1);
+			this.twos += chromosome.getNumberOf(2);
+
 		}
 
 		Collections.sort(this.baldwinChromosomeList); // Sorts the list based on fitness
 
-		System.out.println();
-		System.out.println("After sort:");
-		for (Chromosome chromosome : this.baldwinChromosomeList) {
-			System.out.print(chromosome.getFitness() + ", ");
-		}
+//		System.out.println();
+//		System.out.println("After sort:");
+//		for (Chromosome chromosome : this.baldwinChromosomeList) {
+//			System.out.print(chromosome.getFitness() + ", ");
+//		}
 
 		this.bestChromosomeViewer.updateGeneGrid(this.baldwinChromosomeList.get(0));
-		this.populationViewer.updateChromosomeGrid(this.chromosomeList);
-		this.evolutionViewer.lineGraph.addEntry(this.chromosomeList, this.populationSize);
-		this.fitnessViewer.scatterGraph.updateChromosomeList(this.chromosomeList);
+		// this.populationViewer.updateChromosomeGrid(this.baldwinChromosomeList);
+		this.evolutionViewer.lineGraph.addBaldwinEntry(this.baldwinChromosomeList, this.populationSize, this.zeros,
+				this.ones, this.twos);
+		// this.fitnessViewer.scatterGraph.updateChromosomeList(this.baldwinChromosomeList);
 
 		if (this.chromosomeList.get(0).getFitness() >= this.maxFitness) {
 			return true;
