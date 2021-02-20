@@ -16,11 +16,10 @@ import java.util.Random;
 
 public class BaldwinChromosome extends Chromosome {
 	ArrayList<BaldwinGene> geneList = new ArrayList<BaldwinGene>();
-	private int ones = 0;
-	private int zeros = 0;
-	private int twos = 0;
+	private double learningScore;
 
 	public BaldwinChromosome(long seed, int chromosomeLength, EditableViewer editableViewer) {
+
 		super(seed, chromosomeLength, editableViewer);
 		this.chromosomeLength = 20;
 		this.geneList.clear();
@@ -31,51 +30,73 @@ public class BaldwinChromosome extends Chromosome {
 		}
 	}
 
-	public void calculateFitness(String fitnessFunction, int populationSize, EvolutionViewer evolutionViewer) {
-		if (fitnessFunction.equals("Baldwin")) {
-			System.out.println("yo");
-			ArrayList<BaldwinGene> original = this.geneList;
-			// if there exists a 0 originally, highest fitness will be 1
-			for (int i = 0; i < original.size(); i++) {
-				if (original.get(i).getBit() == 0) {
-					this.fitness = 1;
-					return;
-				}
-			}
-			for (int day = 1000; day >= 1; day--) {
-				ArrayList<BaldwinGene> newList = this.mutate2s(original);
-				for (int i = 0; i < newList.size(); i++) {
-					if (newList.get(i).getBit() == 0) {
-						break;
-					}
-					this.fitness = 1 + 19 * day / 1000;
-					System.out.println(this.fitness);
-					for (int j = 0; j < newList.size(); j++) {
-						if (newList.get(j).getBit() == 1) {
-							this.ones += 1;
-						} else {
-							this.zeros += 1;
-						}
-					}
-					System.out.println(this.fitness);
-					return;
-				}
-			}
+	public void runLearningLoop() {
+		if (this.containsZero()) {
+			this.learningScore = 1;
+			return;
 		}
-		super.calculateFitness(fitnessFunction, populationSize, evolutionViewer);
+		int day = 1000;
+		while (day > 0) {
+			mutateTwoGenes();
+			if (allOnes()) {
+				this.learningScore = 1 + (19 * day) / 1000;
+				return;
+			}
+			this.resetTwoGenes();
+			day--;
+		}
+		this.learningScore = 1;
+		System.out.println(this.learningScore);
 	}
 
-	private ArrayList<BaldwinGene> mutate2s(ArrayList<BaldwinGene> geneList) {
-		Random random = new Random();
-		for (int i = 0; i < geneList.size(); i++) {
-			if (geneList.get(i).getBit() == 2) {
-				if (random.nextInt(2) == 0) {
-					geneList.get(i).setBit(1);
-				} else {
-					geneList.get(i).setBit(0);
-				}
+	private void resetTwoGenes() {
+		for (BaldwinGene gene : this.geneList) {
+			if (gene.isTwoGene()) {
+				gene.setBit(2);
 			}
 		}
-		return geneList;
+		return;
+	}
+
+	private boolean containsZero() {
+		for (BaldwinGene gene : this.geneList) {
+			if (gene.getBit() == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean allOnes() {
+		for (BaldwinGene gene : this.geneList) {
+			if (!(gene.getBit() == 1)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void mutateTwoGenes() {
+		Random random = new Random();
+		for (BaldwinGene gene : this.geneList) {
+			if (gene.getBit() == 2) {
+				gene.setBit(random.nextInt(2));
+			}
+		}
+		return;
+	}
+
+	public void calculateFitness() {
+		this.fitness = 0;
+		for (BaldwinGene gene : this.geneList) {
+			if (gene.getBit() == 1) {
+				this.fitness += 1;
+			}
+		}
+		normalizeFitness();
+	}
+
+	public double getLearningScore() {
+		return this.learningScore;
 	}
 }

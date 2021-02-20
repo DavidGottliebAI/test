@@ -147,16 +147,10 @@ public class Chromosome implements Comparable<Chromosome> {
 			System.out.println(this.fitness);
 			this.fitness = this.fitness / (evolutionViewer.getPopulationSize() - 1) * 100;
 			System.out.println(this.fitness);
-		} else if (fitnessFunction.equals("Reproduce")) {
-			learningLoop();
+		} else {
 			this.fitness = 50;
 		}
 		normalizeFitness();
-	}
-
-	private void learningLoop() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**

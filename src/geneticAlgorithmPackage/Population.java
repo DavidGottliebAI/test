@@ -18,22 +18,22 @@ import java.util.Random;
 
 public class Population {
 
-	private ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
+	protected ArrayList<Chromosome> chromosomeList = new ArrayList<Chromosome>();
 	protected EvolutionViewer evolutionViewer;
-	private PopulationViewer populationViewer;
-	private BestChromosomeViewer bestChromosomeViewer;
+	protected PopulationViewer populationViewer;
+	protected BestChromosomeViewer bestChromosomeViewer;
 	protected EditableViewer editableViewer;
-	private FitnessViewer fitnessViewer;
+	protected FitnessViewer fitnessViewer;
 
 	protected int chromosomeLength;
 	protected int populationSize;
 	private int truncationPercent;
-	private int numberElite;
+	protected int numberElite;
 	protected String fitnessFunction = "";
 	private String selectionMethod = "";
 	protected Random random;
 	private int averageNumMutations;
-	private int maxFitness;
+	protected int maxFitness;
 	private int extraFitness;
 	private int extraSelection;
 	private int seed;
@@ -51,8 +51,7 @@ public class Population {
 
 		this.populationSize = populationSize;
 		this.chromosomeLength = chromosomeLength;
-		this.random = new Random();
-		this.random.setSeed(seed);
+		this.random = new Random(seed);
 		for (int i = 0; i < this.populationSize; i++) {
 			Chromosome chromosome = new Chromosome(random.nextLong(), this.chromosomeLength, this.editableViewer);
 			this.chromosomeList.add(chromosome);
@@ -86,8 +85,8 @@ public class Population {
 //			System.out.print(chromosome.getFitness() + ", ");
 //		}
 
-		selection(this.truncationPercent);
-		this.chromosomeList = repopulate();
+		select();
+		repopulate();
 		crossover();
 		mutate();
 		return false;
@@ -97,43 +96,10 @@ public class Population {
 	 * ensures: iterates through each chromosome at the start of each evolutionary
 	 * loop to have accurate fitness before sorting
 	 */
-	public void updateFitnessScores() {
+	protected void updateFitnessScores() {
 		for (Chromosome chromosome : this.chromosomeList) {
 			chromosome.calculateFitness(this.fitnessFunction, this.chromosomeLength, this.evolutionViewer);
 		}
-	}
-
-	/**
-	 * ensures: all chromosomes that are killed (truncated) or parents are replaced
-	 * by clones of the surviving parents
-	 * 
-	 * @param elitismPercent
-	 * 
-	 * @return a repopulated list of cloned chromosomes
-	 */
-	private ArrayList<Chromosome> repopulate() {
-		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
-
-		int index = 0;
-		while (repopulatedChromosomeList.size() < this.numberElite) {
-			if (index > this.chromosomeList.size() - 1) {
-				index = 0;
-			}
-			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
-			repopulatedChromosomeList.add(newChromosome);
-			index++;
-		}
-		index = 0;
-		while (repopulatedChromosomeList.size() < this.populationSize) {
-			if (index > this.chromosomeList.size() - 1) {
-				index = 0;
-			}
-			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
-			repopulatedChromosomeList.add(newChromosome);
-
-			index++;
-		}
-		return repopulatedChromosomeList;
 	}
 
 	/**
@@ -141,9 +107,10 @@ public class Population {
 	 * 
 	 * @param percent
 	 */
-	public void selection(int percent) {
+	private void select() {
 		double numberSurvive = (this.chromosomeList.size()
-				- Math.ceil((double) percent / 100 * this.chromosomeList.size()));
+				- Math.ceil((double) this.truncationPercent / 100 * this.chromosomeList.size()));
+
 		if (this.selectionMethod.equals("Truncation")) {
 			while (this.chromosomeList.size() >= numberSurvive & this.chromosomeList.size() > this.numberElite) {
 				this.chromosomeList.remove(this.chromosomeList.size() - 1);
@@ -155,25 +122,25 @@ public class Population {
 					rouletteList.add(chromosome);
 				}
 			}
-			Random random = new Random();
+			Random random = new Random(this.random.nextLong());
 			this.chromosomeList.clear();
-			for (int i = 0; i < this.populationSize; i++) {
+			while (chromosomeList.size() < this.populationSize) {
 				this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
 			}
 		} else if (this.selectionMethod.equals("Ranked")) {
 			ArrayList<Chromosome> rankedList = new ArrayList<Chromosome>();
-			for (int i = 0; i < this.chromosomeList.size(); i++) {
-				Chromosome current = this.chromosomeList.get(i);
-				current.calculateFitness("", this.chromosomeList.size() - i, this.evolutionViewer);
-				for (int j = 0; j < current.getFitness(); j++) {
-					rankedList.add(current);
+
+			for (Chromosome chromosome : this.chromosomeList) {
+				for (int i = 0; i < this.populationSize - this.chromosomeList.indexOf(chromosome); i++) {
+					rankedList.add(chromosome);
 				}
 			}
-			Random random = new Random();
+			Random random = new Random(this.random.nextLong());
 			this.chromosomeList.clear();
-			for (int i = 0; i < this.populationSize; i++) {
+			while (chromosomeList.size() < this.populationSize) {
 				this.chromosomeList.add(rankedList.get(random.nextInt(rankedList.size() - 1)));
 			}
+
 		} else if (this.selectionMethod.equals("Tournament")) {
 			Random random = new Random();
 			ArrayList<Chromosome> tempChromosome = new ArrayList<Chromosome>();
@@ -216,7 +183,7 @@ public class Population {
 				}
 			}
 		} else if (this.selectionMethod.equals("Boltzmann")) {
-			Random random = new Random();
+			Random random = new Random(this.random.nextLong());
 			ArrayList<Chromosome> tempChromosome = new ArrayList<Chromosome>();
 			ArrayList<Chromosome> newChromosomes = new ArrayList<Chromosome>();
 			int alpha = this.extraSelection;
@@ -239,6 +206,38 @@ public class Population {
 			this.chromosomeList.clear();
 			this.chromosomeList = newChromosomes;
 		}
+	}
+
+	/**
+	 * ensures: all chromosomes that are killed (truncated) or parents are replaced
+	 * by clones of the surviving parents
+	 * 
+	 * @param elitismPercent
+	 * 
+	 * @return a repopulated list of cloned chromosomes
+	 */
+	protected void repopulate() {
+		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
+		int index = 0;
+		while (repopulatedChromosomeList.size() < this.numberElite) {
+			if (index > this.chromosomeList.size() - 1) {
+				index = 0;
+			}
+			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
+			repopulatedChromosomeList.add(newChromosome);
+			index++;
+		}
+		index = 0;
+		while (repopulatedChromosomeList.size() < this.populationSize) {
+			if (index > this.chromosomeList.size() - 1) {
+				index = 0;
+			}
+			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
+			repopulatedChromosomeList.add(newChromosome);
+
+			index++;
+		}
+		this.chromosomeList = repopulatedChromosomeList;
 	}
 
 	private void crossover() {
@@ -320,5 +319,5 @@ public class Population {
 	public void setCrossover(boolean crossover) {
 		this.crossover = crossover;
 	}
-	
+
 }

@@ -12,6 +12,8 @@ package geneticAlgorithmPackage;
 
 public class BaldwinGene extends Gene {
 
+	private boolean twoGene = false;
+
 	/**
 	 * ensures: constructs Gene that reproduces bit strings used in paper
 	 * 
@@ -25,6 +27,16 @@ public class BaldwinGene extends Gene {
 			this.bit = 1;
 		} else {
 			this.bit = 2;
+			setTwoGene(true);
 		}
 	}
+
+	public boolean isTwoGene() {
+		return twoGene;
+	}
+
+	public void setTwoGene(boolean twoGene) {
+		this.twoGene = twoGene;
+	}
+
 }
