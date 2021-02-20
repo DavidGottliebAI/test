@@ -266,8 +266,8 @@ public class EvolutionViewer {
 			}
 			return textFieldNumber;
 		} catch (NumberFormatException e) {
-			this.killAndReset();
 			this.frame.setTitle("Enter a number larger than 0 into the text field!");
+			this.reset();
 			return 0;
 		}
 	}
@@ -319,11 +319,12 @@ public class EvolutionViewer {
 	 * if a change is made when start is clicked
 	 */
 	public void setSeed() {
+		int oldSeed = this.seed;
 		this.seed = getTextFieldNumber(seedField);
 		this.population.setSeed(this.seed);
-//		if (this.seed != oldSeed) {
-//			this.reset();
-//		}
+		if (this.seed != oldSeed) {
+			this.reset();
+		}
 	}
 
 	/**
@@ -331,7 +332,11 @@ public class EvolutionViewer {
 	 * resets GUI if a change is made when start is clicked
 	 */
 	public void setChromosomeLength() {
+		int oldChromosomeLength = this.chromosomeLength;
 		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
+		if (this.chromosomeLength != oldChromosomeLength) {
+			this.reset();
+		}
 	}
 
 	/**
@@ -339,7 +344,11 @@ public class EvolutionViewer {
 	 * resets GUI if a change is made when start is clicked
 	 */
 	public void setPopulationSize() {
+		int oldPopulationSize = this.populationSize;
 		this.populationSize = getTextFieldNumber(this.populationSizeField);
+		if (this.populationSize != oldPopulationSize) {
+			this.reset();
+		}
 	}
 
 	public void setFitnessFunction() {
@@ -379,24 +388,10 @@ public class EvolutionViewer {
 	 * a change in graphics
 	 */
 	public void reset() {
-		try {
-			this.setTruncationPercent();
-			this.setSeed();
-			this.setPopulationSize();
-			this.setMaxGenerations();
-			this.setAverageNumMutations();
-			this.setMaxFitness();
-			this.setElitismPercent();
-		} catch (NumberFormatException e) {
-			this.killAndReset();
-		} catch (IllegalArgumentException e) {
-			this.killAndReset();
-		}
 		this.setEvolutionRunning(false);
-		this.startButton.setText("Start");
+		this.startButton.setText("Ready");
 		this.numLoops = 1;
 		this.lineGraph.reset();
-//		System.out.println("Fitness during reset: " + this.fitnessFunction);
 		if (this.fitnessFunction.equals("Baldwin")) {
 			this.population = new BaldwinPopulation(this, this.seed, this.chromosomeLength, this.populationSize,
 					this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
@@ -411,11 +406,4 @@ public class EvolutionViewer {
 		this.startButton.setVisible(true);
 		return;
 	}
-
-	public void killAndReset() {
-		this.setEvolutionRunning(false);
-		this.startButton.setVisible(false);
-		return;
-	}
-
 }
