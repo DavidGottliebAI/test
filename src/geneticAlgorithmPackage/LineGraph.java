@@ -254,16 +254,16 @@ public class LineGraph extends JComponent {
 		return unique;
 	}
 
-	public void addBaldwinEntry(ArrayList<BaldwinChromosome> baldwinChromosomeList, int populationSize, int zeros,
+	public void addBaldwinEntry(ArrayList<Chromosome> chromosomeList, int populationSize, int zeros,
 			int ones, int twos) {
 		this.baldwin = true;
-		this.bestFitnessLog.add(baldwinChromosomeList.get(0).getFitness());
-		this.worstFitnessLog.add(baldwinChromosomeList.get(baldwinChromosomeList.size() - 1).getFitness());
+		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
+		this.worstFitnessLog.add(chromosomeList.get(chromosomeList.size() - 1).getFitness());
 		int sum = 0;
-		for (Chromosome chromosome : baldwinChromosomeList) {
+		for (Chromosome chromosome : chromosomeList) {
 			sum += chromosome.getFitness();
 		}
-		this.averageFitnessLog.add((double) (sum / baldwinChromosomeList.size()));
+		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
 		this.averageHammingLog.add((double) 0);
 		this.uniqueLog.add(0);
 		this.zerosLog.add((double) (zeros / 20));

@@ -17,7 +17,6 @@ import java.util.Random;
 
 public class BaldwinPopulation extends Population {
 
-	ArrayList<BaldwinChromosome> baldwinChromosomeList = new ArrayList<BaldwinChromosome>();
 	private int zeros;
 	private int twos;
 	private int ones;
@@ -27,10 +26,11 @@ public class BaldwinPopulation extends Population {
 			FitnessViewer fitnessViewer) {
 		super(evolutionViewer, seed, chromosomeLength, populationSize, editableViewer, bestChromosomeViewer,
 				populationViewer, fitnessViewer);
+		this.chromosomeList.clear();
 		for (int i = 0; i < this.populationSize; i++) {
-			BaldwinChromosome chromosome = new BaldwinChromosome(random.nextLong(), this.chromosomeLength,
+			Chromosome chromosome = new BaldwinChromosome(random.nextLong(), this.chromosomeLength,
 					this.editableViewer);
-			this.baldwinChromosomeList.add(chromosome);
+			this.chromosomeList.add(chromosome);
 		}
 	}
 
@@ -39,16 +39,17 @@ public class BaldwinPopulation extends Population {
 		this.ones = 0;
 		this.twos = 0;
 
-		for (BaldwinChromosome chromosome : this.baldwinChromosomeList) {
-			chromosome.runLearningLoop();
-			chromosome.calculateFitness();
-			this.zeros += chromosome.getNumberOf(0);
-			this.ones += chromosome.getNumberOf(1);
-			this.twos += chromosome.getNumberOf(2);
+		for (Chromosome chromosome : this.chromosomeList) {
+			BaldwinChromosome baldwinChromosome = (BaldwinChromosome) chromosome;
+			baldwinChromosome.runLearningLoop();
+			baldwinChromosome.calculateFitness();
+			this.zeros += baldwinChromosome.getNumberOf(0);
+			this.ones += baldwinChromosome.getNumberOf(1);
+			this.twos += baldwinChromosome.getNumberOf(2);
 
 		}
 
-		Collections.sort(this.baldwinChromosomeList); // Sorts the list based on fitness
+		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
 
 //		System.out.println();
 //		System.out.println("After sort:");
@@ -56,10 +57,10 @@ public class BaldwinPopulation extends Population {
 //			System.out.print(chromosome.getFitness() + ", ");
 //		}
 
-		this.bestChromosomeViewer.updateGeneGrid(this.baldwinChromosomeList.get(0));
+		this.bestChromosomeViewer.updateGeneGrid(this.chromosomeList.get(0));
 		// this.populationViewer.updateChromosomeGrid(this.baldwinChromosomeList);
-		this.evolutionViewer.lineGraph.addBaldwinEntry(this.baldwinChromosomeList, this.populationSize, this.zeros,
-				this.ones, this.twos);
+		this.evolutionViewer.lineGraph.addBaldwinEntry(this.chromosomeList, this.populationSize, this.zeros, this.ones,
+				this.twos);
 		// this.fitnessViewer.scatterGraph.updateChromosomeList(this.baldwinChromosomeList);
 
 		if (this.chromosomeList.get(0).getFitness() >= this.maxFitness) {
@@ -73,15 +74,16 @@ public class BaldwinPopulation extends Population {
 
 	private void select() {
 		ArrayList<BaldwinChromosome> rouletteList = new ArrayList<BaldwinChromosome>();
-		for (BaldwinChromosome chromosome : this.baldwinChromosomeList) {
-			for (int i = 0; i < chromosome.getLearningScore() * 100; i++) {
-				rouletteList.add(chromosome);
+		for (Chromosome chromosome : this.chromosomeList) {
+			BaldwinChromosome baldwinChromosome = (BaldwinChromosome) chromosome;
+			for (int i = 0; i < baldwinChromosome.getLearningScore() * 100; i++) {
+				rouletteList.add(baldwinChromosome);
 			}
 		}
 		Random random = new Random(this.random.nextLong());
-		this.baldwinChromosomeList.clear();
-		while (baldwinChromosomeList.size() < this.populationSize) {
-			this.baldwinChromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
+		this.chromosomeList.clear();
+		while (chromosomeList.size() < this.populationSize) {
+			this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
 		}
 	}
 
