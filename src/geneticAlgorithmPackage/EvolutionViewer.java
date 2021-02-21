@@ -352,8 +352,12 @@ public class EvolutionViewer {
 	}
 
 	public void setFitnessFunction() {
+		String oldFitnessFunction = this.fitnessFunction;
 		this.fitnessFunction = this.fitnessField.getSelectedItem().toString();
 		this.population.setFitnessFunction(this.fitnessFunction);
+		if (this.fitnessFunction != oldFitnessFunction) {
+			this.reset();
+		}
 		if (this.fitnessFunction.equals("Target")) {
 			if (this.chromosomeLength != 100) {
 				this.chromosomeLengthField.setText("100");
