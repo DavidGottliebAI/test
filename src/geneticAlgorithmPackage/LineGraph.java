@@ -167,17 +167,18 @@ public class LineGraph extends JComponent {
 
 			if (this.baldwin) {
 				g2.setColor(Color.BLACK);
-				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1}, 0));
+				g2.setStroke(
+						new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1 }, 20));
 				g2.drawLine(x * 3, previousZero, x * 3 + 3, (int) (-this.zerosLog.get(x) * plotRatio));
 				previousZero = (int) -this.zerosLog.get(x) * plotRatio;
 
 				g2.setColor(Color.GRAY);
-				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0));
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0));
 				g2.drawLine(x * 3, previousOne, x * 3 + 3, (int) (-this.onesLog.get(x) * plotRatio));
 				previousOne = (int) -this.onesLog.get(x) * plotRatio;
 
 				g2.setColor(Color.DARK_GRAY);
-				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3}, 0));
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
 				g2.drawLine(x * 3, previousTwo, x * 3 + 3, (int) (-this.twosLog.get(x) * plotRatio));
 				previousTwo = (int) -this.twosLog.get(x) * plotRatio;
 			}
@@ -218,16 +219,17 @@ public class LineGraph extends JComponent {
 	 */
 
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList, int populationSize) {
-		double columnHamming = 0;
 		int chromosomeLength = chromosomeList.get(0).getGeneLength();
+		double numberDifferences = 0;
+		double numberPairs = (populationSize * (populationSize - 1)) / 2;
 		for (int gene = 0; gene < chromosomeLength; gene++) {
 			int columnSum = 0;
 			for (int chromosome = 0; chromosome < populationSize; chromosome++) {
 				columnSum += chromosomeList.get(chromosome).getBitAt(gene);
 			}
-			columnHamming += columnSum * (populationSize - columnSum) / populationSize;
+			numberDifferences += columnSum * (populationSize - columnSum);
 		}
-		return columnHamming / chromosomeLength;
+		return Math.floor(numberDifferences / numberPairs * 100) / 100;
 	}
 
 	/**
