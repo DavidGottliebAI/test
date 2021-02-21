@@ -229,7 +229,7 @@ public class LineGraph extends JComponent {
 			}
 			numberDifferences += columnSum * (populationSize - columnSum);
 		}
-		return Math.floor(numberDifferences / numberPairs * 100) / 100;
+		return Math.floor(numberDifferences / numberPairs * 100) / 100; // sends truncated decimal
 	}
 
 	/**
