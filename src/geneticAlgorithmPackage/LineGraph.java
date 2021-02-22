@@ -251,11 +251,12 @@ public class LineGraph extends JComponent {
 				}
 			}
 		}
+		
 		return unique;
 	}
 
-	public void addBaldwinEntry(ArrayList<Chromosome> chromosomeList, int populationSize, int zeros,
-			int ones, int twos) {
+	public void addBaldwinEntry(ArrayList<Chromosome> chromosomeList, int populationSize, int zeros, int ones,
+			int twos) {
 		this.baldwin = true;
 		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
 		this.worstFitnessLog.add(chromosomeList.get(chromosomeList.size() - 1).getFitness());

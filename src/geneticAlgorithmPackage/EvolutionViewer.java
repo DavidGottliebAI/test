@@ -168,8 +168,11 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
 		this.fitnessField.addItem("Baldwin");
-		// this.fitnessField.addItem("Novelty");
+		this.fitnessField.addItem("Novelty");
+		this.fitnessField.addItem("Minimal Criteria Novelty");
+		this.fitnessField.addItem("Local Competition Novelty");
 		this.extraFitnessField = new JTextField("10");
+		this.extraFitnessField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
 		this.maxFitnessField = new JTextField("100");
@@ -185,6 +188,7 @@ public class EvolutionViewer {
 		this.selectionField.addItem("SUS");
 		this.selectionField.addItem("Boltzmann");
 		this.extraSelectionField = new JTextField("50");
+		this.extraSelectionField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel truncationLabel = new JLabel("Truncate %");
 		this.truncationField = new JTextField("50");
@@ -224,7 +228,7 @@ public class EvolutionViewer {
 		this.southAdminPanel.add(this.mutateField);
 		this.southAdminPanel.add(fitnessLabel);
 		this.southAdminPanel.add(this.fitnessField);
-		// this.southAdminPanel.add(this.extraFitnessField);
+		this.southAdminPanel.add(this.extraFitnessField);
 		this.southAdminPanel.add(maxFitnessLabel);
 		this.southAdminPanel.add(this.maxFitnessField);
 		this.southAdminPanel.add(selectionLabel);
@@ -409,5 +413,9 @@ public class EvolutionViewer {
 		this.fitnessViewer.scatterGraph.reset(this.populationSize, this.chromosomeLength);
 		this.startButton.setVisible(true);
 		return;
+	}
+
+	public int getExtraFitness() {
+		return this.extraFitness;
 	}
 }
