@@ -25,7 +25,6 @@ public class editableGeneListener implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		this.editableViewer.updateMutantTitle();
 		this.gene.changeBit();
-
 	}
 
 }

@@ -136,45 +136,67 @@ public class Chromosome implements Comparable<Chromosome> {
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		} else if (fitnessFunction.equals("Novelty")) {
-			this.fitness = evolutionViewer.getPopulationSize() * this.geneString.length();
+			this.fitness = this.getGeneLength();
+			double sum = 0;
 			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
-				String geneString = evolutionViewer.getPopulation().getChromosomeList().get(i).getGeneString();
-				this.fitness -= this.calculateHamming(geneString);
+				Chromosome current = evolutionViewer.getPopulation().getChromosomeList().get(i);
+				sum += this.calculateHamming(current);
 			}
-			this.fitness /= evolutionViewer.getPopulationSize();
-			System.out.println(this.fitness);
-			System.out.println("1");
-		} else {
-			this.fitness = populationSize;
+			this.fitness = (int) Math.ceil(sum);
+			this.normalizeFitness();
+		} else if(fitnessFunction.equals("Minimal Criteria Novelty")) {
+			this.fitness = 0;
+			double sum = 0;
+			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
+				Chromosome current = evolutionViewer.getPopulation().getChromosomeList().get(i);
+				sum += this.calculateHamming(current);
+			}
+			this.fitness = (int) Math.ceil(sum);
+			if(this.fitness < evolutionViewer.getExtraFitness()) {
+				this.fitness = 0;
+			}
+			this.normalizeFitness();
+		} else if(fitnessFunction.equals("Local Competition Novelty")) {
+			this.fitness = 0;
+			double sum = 0;
+			ArrayList<Chromosome> competition = new ArrayList<Chromosome>();
+			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
+				Chromosome current = evolutionViewer.getPopulation().getChromosomeList().get(i);
+				sum += this.calculateHamming(current);
+				if(this.calculateHamming(current) * 100 < evolutionViewer.getExtraFitness()) {
+						competition.add(current);
+				}
+			}
+			Chromosome bestChromosome = null;
+			for(int i = 0; i < competition.size() - 1; i++) {
+				if(competition.get(i).getFitness() < competition.get(i + 1).getFitness()) {
+					bestChromosome = competition.get(i + 1);
+				}
+			}
+			if(bestChromosome != null && competition.get(0).getFitness() > bestChromosome.getFitness()) {
+				bestChromosome = competition.get(0);
+			}
+			this.fitness = (int) Math.ceil(sum);
+			if(bestChromosome != null && bestChromosome.getGeneString().equals(this.getGeneString())) {
+				this.fitness += 25;
+			}
+			this.normalizeFitness();
+		}
+		else {
+			this.fitness = 50;
 		}
 		//normalizeFitness();
 	}
 
-	private int calculateHamming(String geneString) {
-		int sum = 0;
-//		for (int i = 0; i < geneString.length(); i++) {
-//			int zeros = 0;
-//			int ones = 0;
-//			if (this.getGeneString().charAt(i) == '0') {
-//				zeros += 1;
-//			} else {
-//				ones += 1;
-//			}
-//			if (getGeneString().charAt(i) == '0') {
-//				zeros += 1;
-//			} else {
-//				ones += 1;
-//			}
-//			sum += ones * zeros;
-//			System.out.println(sum);
-//		}
-//		int pairs = geneString.length();
-//		return sum / pairs;
-		for (int i = 0; i < geneString.length(); i++) {
-			if(geneString.charAt(i) != this.geneString.charAt(i)) {
+	private double calculateHamming(Chromosome current) {
+		double sum = 0;
+		String bitstring = current.getGeneString();
+		for (int i = 0; i < bitstring.length(); i++) {
+			if(bitstring.charAt(i) != this.geneString.charAt(i)) {
 				sum += 1;
 			}
 		}
+		sum /= this.geneString.length();
 		return sum;
 	}
 
@@ -226,6 +248,10 @@ public class Chromosome implements Comparable<Chromosome> {
 
 	public int getGeneLength() {
 		return geneList.size();
+	}
+
+	public int getBitAt(int index) {
+		return this.geneList.get(index).getBit();
 	}
 
 	@Override

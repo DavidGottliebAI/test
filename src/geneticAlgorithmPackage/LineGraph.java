@@ -20,6 +20,10 @@ public class LineGraph extends JComponent {
 	private ArrayList<Double> averageFitnessLog = new ArrayList<Double>();
 	private ArrayList<Double> averageHammingLog = new ArrayList<Double>();
 	private ArrayList<Integer> uniqueLog = new ArrayList<Integer>();
+	private ArrayList<Double> zerosLog = new ArrayList<Double>();
+	private ArrayList<Double> onesLog = new ArrayList<Double>();
+	private ArrayList<Double> twosLog = new ArrayList<Double>();
+	private boolean baldwin = false;
 
 	/**
 	 * ensures: Constructs a line graph component and sets the preferred size
@@ -126,10 +130,15 @@ public class LineGraph extends JComponent {
 		int previousYWorst = 0;
 		int previousYAverage = 0;
 		int previousYAverageHamming = 0;
+		int previousZero = 0;
+		int previousOne = 0;
+		int previousTwo = 0;
 
 		// graphs each line and live updates for each
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
+			g2.setStroke(new BasicStroke(3));
+
 			g2.setColor(Color.GREEN);
 			g2.drawLine(x * 3, previousYBest, x * 3 + 3, -this.bestFitnessLog.get(x) * plotRatio);
 			previousYBest = -this.bestFitnessLog.get(x) * plotRatio;
@@ -155,6 +164,24 @@ public class LineGraph extends JComponent {
 			g2.drawString("" + this.getFitnesses()[3], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 + 135);
 			g2.setColor(Color.BLACK);
 			g2.drawString("" + this.getFitnesses()[4], PLOT_WIDTH - 100 + 10, -PLOT_HEIGHT / 2 - 65);
+
+			if (this.baldwin) {
+				g2.setColor(Color.BLACK);
+				g2.setStroke(
+						new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1 }, 20));
+				g2.drawLine(x * 3, previousZero, x * 3 + 3, (int) (-this.zerosLog.get(x) * plotRatio));
+				previousZero = (int) -this.zerosLog.get(x) * plotRatio;
+
+				g2.setColor(Color.GRAY);
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0));
+				g2.drawLine(x * 3, previousOne, x * 3 + 3, (int) (-this.onesLog.get(x) * plotRatio));
+				previousOne = (int) -this.onesLog.get(x) * plotRatio;
+
+				g2.setColor(Color.DARK_GRAY);
+				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
+				g2.drawLine(x * 3, previousTwo, x * 3 + 3, (int) (-this.twosLog.get(x) * plotRatio));
+				previousTwo = (int) -this.twosLog.get(x) * plotRatio;
+			}
 		}
 	}
 
@@ -177,54 +204,32 @@ public class LineGraph extends JComponent {
 		this.averageFitnessLog.clear();
 		this.worstFitnessLog.clear();
 		this.averageHammingLog.clear();
+		this.zerosLog.clear();
+		this.onesLog.clear();
+		this.twosLog.clear();
+
 	}
 
 	/**
 	 * ensures: calculates hamming distance between population of chromosomes
-	 * @param populationSize 
 	 * 
-	 * @param current chromosome list
+	 * @param populationSize
+	 * 
+	 * @param current        chromosome list
 	 */
 
 	public double calculateAverageHammingDistance(ArrayList<Chromosome> chromosomeList, int populationSize) {
-		int sum = 0;
-//		for (int i = 0; i < chromosomeList.get(0).getGeneLength(); i++) {
-//			int zeros = 0;
-//			int ones = 0;
-//			for (int j = 0; j < chromosomeList.size(); j++) {
-//				Chromosome current = chromosomeList.get(j);
-//				if (current.getGeneString().charAt(i) == '0') {
-//					zeros += 1;
-//				} else {
-//					ones += 1;
-//				}
-//			}
-//			sum += ones * zeros;
-//		}
-		// alternate hamming method
-		String chromosomeStrings = "";
-		for (int j = 0; j < chromosomeList.size(); j++) {
-			String current = chromosomeList.get(j).getGeneString();
-			chromosomeStrings += current;
-		}
-		int zeros = 0;
-		int ones = 0;
-		for (int i = 0; i < chromosomeList.get(0).getGeneLength() * populationSize; i++) {
-			
-			if(i % chromosomeList.get(0).getGeneLength() == 0) {
-				sum += zeros * ones;
-				zeros = 0;
-				ones = 0;
+		int chromosomeLength = chromosomeList.get(0).getGeneLength();
+		double numberDifferences = 0;
+		double numberPairs = (populationSize * (populationSize - 1)) / 2;
+		for (int gene = 0; gene < chromosomeLength; gene++) {
+			int columnSum = 0;
+			for (int chromosome = 0; chromosome < populationSize; chromosome++) {
+				columnSum += chromosomeList.get(chromosome).getBitAt(gene);
 			}
-		
-			if (chromosomeStrings.charAt(i) == '0') {
-				zeros += 1;
-			} else {
-				ones += 1;
-			}
+			numberDifferences += columnSum * (populationSize - columnSum);
 		}
-		int pairs = chromosomeList.size() * (chromosomeList.size() - 1) / 2;
-		return sum / pairs;
+		return Math.floor(numberDifferences / numberPairs * 100) / 100; // sends truncated decimal
 	}
 
 	/**
@@ -246,6 +251,25 @@ public class LineGraph extends JComponent {
 				}
 			}
 		}
+		
 		return unique;
+	}
+
+	public void addBaldwinEntry(ArrayList<Chromosome> chromosomeList, int populationSize, int zeros, int ones,
+			int twos) {
+		this.baldwin = true;
+		this.bestFitnessLog.add(chromosomeList.get(0).getFitness());
+		this.worstFitnessLog.add(chromosomeList.get(chromosomeList.size() - 1).getFitness());
+		int sum = 0;
+		for (Chromosome chromosome : chromosomeList) {
+			sum += chromosome.getFitness();
+		}
+		this.averageFitnessLog.add((double) (sum / chromosomeList.size()));
+		this.averageHammingLog.add((double) 0);
+		this.uniqueLog.add(0);
+		this.zerosLog.add((double) (zeros / 20));
+		this.onesLog.add((double) (ones / 20));
+		this.twosLog.add((double) (twos / 20));
+
 	}
 }

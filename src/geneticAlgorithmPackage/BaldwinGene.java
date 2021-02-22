@@ -1,7 +1,5 @@
 package geneticAlgorithmPackage;
 
-import java.util.Random;
-
 /**
  * 
  * @author oblaznjc and gottlijd
@@ -12,21 +10,33 @@ import java.util.Random;
  *
  */
 
-public class ReproduceGene extends Gene{
+public class BaldwinGene extends Gene {
+
+	private boolean twoGene = false;
 
 	/**
 	 * ensures: constructs Gene that reproduces bit strings used in paper
+	 * 
+	 * @param bit
 	 */
-	
-	public ReproduceGene() {
-		super();
-		Random random = new Random();
-		if(random.nextInt(4) == 0) {
+
+	public BaldwinGene(int bit) {
+		if (bit == 0) {
 			this.bit = 0;
-		} else if (random.nextInt(4) == 1) {
+		} else if (bit == 1) {
 			this.bit = 1;
 		} else {
 			this.bit = 2;
+			setTwoGene(true);
 		}
 	}
+
+	public boolean isTwoGene() {
+		return twoGene;
+	}
+
+	public void setTwoGene(boolean twoGene) {
+		this.twoGene = twoGene;
+	}
+
 }

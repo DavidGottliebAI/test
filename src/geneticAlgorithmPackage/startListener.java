@@ -38,12 +38,11 @@ public class startListener implements ActionListener {
 		if (!this.evolutionViewer.evolutionRunning) {
 			if (this.startButton.getText().equals("Start")) {
 				this.startButton.setText("Pause");
-			} else if (this.startButton.getText().equals("Pause")) {
-				this.startButton.setText("Reset");
-			} else if (this.startButton.getText().equals("Reset")) {
-				this.evolutionViewer.reset();
+			} else if (this.startButton.getText().equals("Ready")) {
 				this.startButton.setText("Start");
 				return;
+			} else if (this.startButton.getText().equals("Pause")) {
+				this.startButton.setText("Reset");
 			} else if (this.startButton.getText().equals("Continue")) {
 				if (this.evolutionViewer.getNumLoops() >= this.evolutionViewer.getMaxGenerations()) {
 					this.evolutionViewer.frame.setTitle(

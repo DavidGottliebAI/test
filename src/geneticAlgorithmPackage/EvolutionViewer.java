@@ -125,6 +125,8 @@ public class EvolutionViewer {
 						setEvolutionRunning(false);
 						return;
 					}
+//					System.out.println("Fitness During Evolution Loop: " + fitnessFunction);
+//					System.out.println("Type of population: " + population);
 					if (population.evolutionLoop()) {
 						frame.setTitle(title + ": A chromosome has reached maximum fitness!");
 						resetButton.setVisible(false);
@@ -165,9 +167,12 @@ public class EvolutionViewer {
 		this.fitnessField.addItem("One for All!");
 		this.fitnessField.addItem("Absolutely!");
 		this.fitnessField.addItem("Target");
-		this.fitnessField.addItem("Reproduce");
+		this.fitnessField.addItem("Baldwin");
 		this.fitnessField.addItem("Novelty");
+		this.fitnessField.addItem("Minimal Criteria Novelty");
+		this.fitnessField.addItem("Local Competition Novelty");
 		this.extraFitnessField = new JTextField("10");
+		this.extraFitnessField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel maxFitnessLabel = new JLabel("Max Fitness");
 		this.maxFitnessField = new JTextField("100");
@@ -183,6 +188,7 @@ public class EvolutionViewer {
 		this.selectionField.addItem("SUS");
 		this.selectionField.addItem("Boltzmann");
 		this.extraSelectionField = new JTextField("50");
+		this.extraSelectionField.setPreferredSize(new Dimension(30, 20));
 
 		JLabel truncationLabel = new JLabel("Truncate %");
 		this.truncationField = new JTextField("50");
@@ -264,8 +270,8 @@ public class EvolutionViewer {
 			}
 			return textFieldNumber;
 		} catch (NumberFormatException e) {
-			this.killAndReset();
 			this.frame.setTitle("Enter a number larger than 0 into the text field!");
+			this.reset();
 			return 0;
 		}
 	}
@@ -307,7 +313,7 @@ public class EvolutionViewer {
 		this.crossover = this.crossoverBox.isSelected();
 		this.population.setCrossover(this.crossover);
 	}
-	
+
 	public Population getPopulation() {
 		return this.population;
 	}
@@ -317,11 +323,12 @@ public class EvolutionViewer {
 	 * if a change is made when start is clicked
 	 */
 	public void setSeed() {
+		int oldSeed = this.seed;
 		this.seed = getTextFieldNumber(seedField);
 		this.population.setSeed(this.seed);
-//		if (this.seed != oldSeed) {
-//			this.reset();
-//		}
+		if (this.seed != oldSeed) {
+			this.reset();
+		}
 	}
 
 	/**
@@ -329,7 +336,11 @@ public class EvolutionViewer {
 	 * resets GUI if a change is made when start is clicked
 	 */
 	public void setChromosomeLength() {
+		int oldChromosomeLength = this.chromosomeLength;
 		this.chromosomeLength = getTextFieldNumber(chromosomeLengthField);
+		if (this.chromosomeLength != oldChromosomeLength) {
+			this.reset();
+		}
 	}
 
 	/**
@@ -337,12 +348,20 @@ public class EvolutionViewer {
 	 * resets GUI if a change is made when start is clicked
 	 */
 	public void setPopulationSize() {
+		int oldPopulationSize = this.populationSize;
 		this.populationSize = getTextFieldNumber(this.populationSizeField);
+		if (this.populationSize != oldPopulationSize) {
+			this.reset();
+		}
 	}
 
 	public void setFitnessFunction() {
+		String oldFitnessFunction = this.fitnessFunction;
 		this.fitnessFunction = this.fitnessField.getSelectedItem().toString();
 		this.population.setFitnessFunction(this.fitnessFunction);
+		if (this.fitnessFunction != oldFitnessFunction) {
+			this.reset();
+		}
 		if (this.fitnessFunction.equals("Target")) {
 			if (this.chromosomeLength != 100) {
 				this.chromosomeLengthField.setText("100");
@@ -363,7 +382,7 @@ public class EvolutionViewer {
 	public int getNumLoops() {
 		return numLoops;
 	}
-	
+
 	public int getPopulationSize() {
 		return this.populationSize;
 	}
@@ -377,25 +396,17 @@ public class EvolutionViewer {
 	 * a change in graphics
 	 */
 	public void reset() {
-		try {
-			this.setTruncationPercent();
-			this.setSeed();
-			this.setPopulationSize();
-			this.setMaxGenerations();
-			this.setAverageNumMutations();
-			this.setMaxFitness();
-			this.setElitismPercent();
-		} catch (NumberFormatException e) {
-			this.killAndReset();
-		} catch (IllegalArgumentException e) {
-			this.killAndReset();
-		}
 		this.setEvolutionRunning(false);
-		this.startButton.setText("Start");
+		this.startButton.setText("Ready");
 		this.numLoops = 1;
 		this.lineGraph.reset();
-		this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
-				this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
+		if (this.fitnessFunction.equals("Baldwin")) {
+			this.population = new BaldwinPopulation(this, this.seed, this.chromosomeLength, this.populationSize,
+					this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
+		} else {
+			this.population = new Population(this, this.seed, this.chromosomeLength, this.populationSize,
+					this.editableViewer, this.bestChromosomeViewer, this.populationViewer, this.fitnessViewer);
+		}
 		this.lineGraph.repaint();
 		this.populationViewer.reset(this.populationSize, this.chromosomeLength);
 		this.bestChromosomeViewer.reset(this.chromosomeLength);
@@ -404,11 +415,7 @@ public class EvolutionViewer {
 		return;
 	}
 
-	public void killAndReset() {
-		this.setEvolutionRunning(false);
-		this.startButton.setVisible(false);
-		return;
+	public int getExtraFitness() {
+		return this.extraFitness;
 	}
-
-	
 }
