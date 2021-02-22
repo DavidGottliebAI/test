@@ -30,7 +30,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * the editable chromosome viewer
 	 */
 
-	public Chromosome() { // maybe create new chromosome class
+	public Chromosome() {
 		this.chromosomeLength = 100;
 		for (int i = 0; i < this.chromosomeLength; i++) {
 			Gene gene = new Gene(); // allow to be seeded or not
@@ -131,7 +131,6 @@ public class Chromosome implements Comparable<Chromosome> {
 					this.fitness -= Math.abs(currentEditableBit - currentPopulationBit);
 				}
 			} catch (NullPointerException e) {
-				// re-title EvolutionViewer
 				evolutionViewer.frame.setTitle(
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
