@@ -227,7 +227,6 @@ public class Population {
 				double pressure = Math.exp(-1
 						* (this.chromosomeList.get(0).getFitness() - this.evolutionViewer.lineGraph.getFitnesses()[1])
 						/ tempurature);
-				System.out.println(Math.ceil(100 * pressure));
 				tempChromosome.clear();
 				for (int j = 0; j < (int) Math.ceil(100 * pressure); j++) {
 					tempChromosome.add(this.chromosomeList.get(random.nextInt(this.chromosomeList.size() - 1)));

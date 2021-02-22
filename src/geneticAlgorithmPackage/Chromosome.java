@@ -136,20 +136,46 @@ public class Chromosome implements Comparable<Chromosome> {
 						evolutionViewer.title + ": Please create a target chromosome in Editable Chromosome Viewer!");
 			}
 		} else if (fitnessFunction.equals("Novelty")) {
-			this.fitness = evolutionViewer.getPopulationSize();
-			System.out.println(this.fitness);
+			this.fitness = evolutionViewer.getPopulationSize() * this.geneString.length();
 			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
-				if(this.getGeneString().equals(evolutionViewer.getPopulation().getChromosomeList().get(i).getGeneString())) {
-					this.fitness--;
-				}
+				String geneString = evolutionViewer.getPopulation().getChromosomeList().get(i).getGeneString();
+				this.fitness -= this.calculateHamming(geneString);
 			}
+			this.fitness /= evolutionViewer.getPopulationSize();
 			System.out.println(this.fitness);
-			this.fitness = this.fitness / (evolutionViewer.getPopulationSize() - 1) * 100;
-			System.out.println(this.fitness);
+			System.out.println("1");
 		} else {
 			this.fitness = populationSize;
 		}
-		normalizeFitness();
+		//normalizeFitness();
+	}
+
+	private int calculateHamming(String geneString) {
+		int sum = 0;
+//		for (int i = 0; i < geneString.length(); i++) {
+//			int zeros = 0;
+//			int ones = 0;
+//			if (this.getGeneString().charAt(i) == '0') {
+//				zeros += 1;
+//			} else {
+//				ones += 1;
+//			}
+//			if (getGeneString().charAt(i) == '0') {
+//				zeros += 1;
+//			} else {
+//				ones += 1;
+//			}
+//			sum += ones * zeros;
+//			System.out.println(sum);
+//		}
+//		int pairs = geneString.length();
+//		return sum / pairs;
+		for (int i = 0; i < geneString.length(); i++) {
+			if(geneString.charAt(i) != this.geneString.charAt(i)) {
+				sum += 1;
+			}
+		}
+		return sum;
 	}
 
 	/**
