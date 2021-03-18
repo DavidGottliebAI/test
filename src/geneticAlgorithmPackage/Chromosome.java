@@ -1,6 +1,7 @@
 package geneticAlgorithmPackage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -19,7 +20,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	ArrayList<EditableGene> editableGeneList = new ArrayList<EditableGene>();
 	ArrayList<Gene> geneList = new ArrayList<Gene>();
 	public String geneString = "";
-	private EditableViewer editableViewer;
+	protected EditableViewer editableViewer;
 	protected int fitness;
 	protected int chromosomeLength;
 	protected long seed;
@@ -143,7 +144,7 @@ public class Chromosome implements Comparable<Chromosome> {
 			}
 			this.fitness = (int) Math.ceil(sum);
 			this.normalizeFitness();
-		} else if(fitnessFunction.equals("Minimal Criteria Novelty")) {
+		} else if (fitnessFunction.equals("Minimal Criteria Novelty")) {
 			this.fitness = 0;
 			double sum = 0;
 			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
@@ -151,47 +152,46 @@ public class Chromosome implements Comparable<Chromosome> {
 				sum += this.calculateHamming(current);
 			}
 			this.fitness = (int) Math.ceil(sum);
-			if(this.fitness < evolutionViewer.getExtraFitness()) {
+			if (this.fitness < evolutionViewer.getExtraFitness()) {
 				this.fitness = 0;
 			}
 			this.normalizeFitness();
-		} else if(fitnessFunction.equals("Local Competition Novelty")) {
+		} else if (fitnessFunction.equals("Local Competition Novelty")) {
 			this.fitness = 0;
 			double sum = 0;
 			ArrayList<Chromosome> competition = new ArrayList<Chromosome>();
 			for (int i = 0; i < evolutionViewer.getPopulationSize(); i++) {
 				Chromosome current = evolutionViewer.getPopulation().getChromosomeList().get(i);
 				sum += this.calculateHamming(current);
-				if(this.calculateHamming(current) * 100 < evolutionViewer.getExtraFitness()) {
-						competition.add(current);
+				if (this.calculateHamming(current) * 100 < evolutionViewer.getExtraFitness()) {
+					competition.add(current);
 				}
 			}
 			Chromosome bestChromosome = null;
-			for(int i = 0; i < competition.size() - 1; i++) {
-				if(competition.get(i).getFitness() < competition.get(i + 1).getFitness()) {
+			for (int i = 0; i < competition.size() - 1; i++) {
+				if (competition.get(i).getFitness() < competition.get(i + 1).getFitness()) {
 					bestChromosome = competition.get(i + 1);
 				}
 			}
-			if(bestChromosome != null && competition.get(0).getFitness() > bestChromosome.getFitness()) {
+			if (bestChromosome != null && competition.get(0).getFitness() > bestChromosome.getFitness()) {
 				bestChromosome = competition.get(0);
 			}
 			this.fitness = (int) Math.ceil(sum);
-			if(bestChromosome != null && bestChromosome.getGeneString().equals(this.getGeneString())) {
+			if (bestChromosome != null && bestChromosome.getGeneString().equals(this.getGeneString())) {
 				this.fitness += 25;
 			}
 			this.normalizeFitness();
-		}
-		else {
+		} else {
 			this.fitness = 50;
 		}
-		//normalizeFitness();
+		// normalizeFitness();
 	}
 
 	private double calculateHamming(Chromosome current) {
 		double sum = 0;
 		String bitstring = current.getGeneString();
 		for (int i = 0; i < bitstring.length(); i++) {
-			if(bitstring.charAt(i) != this.geneString.charAt(i)) {
+			if (bitstring.charAt(i) != this.geneString.charAt(i)) {
 				sum += 1;
 			}
 		}
@@ -307,6 +307,31 @@ public class Chromosome implements Comparable<Chromosome> {
 			for (int index = crossoverIndex; index < this.chromosomeLength; index++) {
 				otherChromosome.geneList.set(index, this.geneList.get(index));
 				this.geneList.set(index, new Gene(otherChromosome.geneString.charAt(index) - '0'));
+			}
+		}
+	}
+
+	public void kBitCrossover(Chromosome otherChromosome, long seed, int kBits) {
+		if (kBits == 1) {
+			this.crossover(otherChromosome, seed);
+		} else {
+			Random newRandom = new Random(seed);
+			ArrayList<Integer> crossoverIndices = new ArrayList<Integer>();
+			for (int i = 0; i < kBits; i++) {
+				int crossoverIndex = newRandom.nextInt(chromosomeLength);
+				if (crossoverIndices.contains(crossoverIndex)) {
+					i--;
+				} else {
+					crossoverIndices.add(crossoverIndex);
+				}
+			}
+			Collections.sort(crossoverIndices);
+			otherChromosome.getGeneString();
+			for (int i = 0; i < crossoverIndices.size(); i += 2) {
+				for (int index = crossoverIndices.get(i); index < crossoverIndices.get(i + 1); index++) {
+					otherChromosome.geneList.set(index, this.geneList.get(index));
+					this.geneList.set(index, new Gene(otherChromosome.geneString.charAt(index) - '0'));
+				}
 			}
 		}
 	}

@@ -42,15 +42,20 @@ public class BaldwinPopulation extends Population {
 		for (Chromosome chromosome : this.chromosomeList) {
 			BaldwinChromosome baldwinChromosome = (BaldwinChromosome) chromosome;
 			baldwinChromosome.runLearningLoop();
-			baldwinChromosome.calculateFitness();
+//			baldwinChromosome.calculateFitness();
 			this.zeros += baldwinChromosome.getNumberOf(0);
 			this.ones += baldwinChromosome.getNumberOf(1);
 			this.twos += baldwinChromosome.getNumberOf(2);
 
 		}
-
+		this.zeros /= 10;
+		this.ones /= 10;
+		this.twos /= 10;
+		
 		Collections.sort(this.chromosomeList); // Sorts the list based on fitness
-
+		System.out.println(this.chromosomeList.get(0).fitness);
+		System.out.println(this.chromosomeList.get(0).getGeneString());
+		
 //		System.out.println();
 //		System.out.println("After sort:");
 //		for (Chromosome chromosome : this.baldwinChromosomeList) {
@@ -68,22 +73,28 @@ public class BaldwinPopulation extends Population {
 		}
 
 		select();
+		repopulate();
 		crossover();
 		return false;
 	}
 
 	private void select() {
-		ArrayList<BaldwinChromosome> rouletteList = new ArrayList<BaldwinChromosome>();
-		for (Chromosome chromosome : this.chromosomeList) {
-			BaldwinChromosome baldwinChromosome = (BaldwinChromosome) chromosome;
-			for (int i = 0; i < baldwinChromosome.getLearningScore() * 100; i++) {
-				rouletteList.add(baldwinChromosome);
-			}
-		}
-		Random random = new Random(this.random.nextLong());
-		this.chromosomeList.clear();
-		while (chromosomeList.size() < this.populationSize) {
-			this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
+//		ArrayList<BaldwinChromosome> rouletteList = new ArrayList<BaldwinChromosome>();
+//		for (Chromosome chromosome : this.chromosomeList) {
+//			BaldwinChromosome baldwinChromosome = (BaldwinChromosome) chromosome;
+//			for (int i = 0; i < baldwinChromosome.getLearningScore() * 100; i++) {
+//				rouletteList.add(baldwinChromosome);
+//			}
+//		}
+//		Random random = new Random(this.random.nextLong());
+//		this.chromosomeList.clear();
+//		while (chromosomeList.size() < this.populationSize) {
+//			this.chromosomeList.add(rouletteList.get(random.nextInt(rouletteList.size() - 1)));
+//		}
+		double numberSurvive = (this.chromosomeList.size()
+				- Math.ceil((double) 50 / 100 * this.chromosomeList.size()));
+		while (this.chromosomeList.size() >= numberSurvive & this.chromosomeList.size() > this.numberElite) {
+			this.chromosomeList.remove(this.chromosomeList.size() - 1);
 		}
 	}
 
@@ -93,4 +104,29 @@ public class BaldwinPopulation extends Population {
 			this.chromosomeList.get(index).crossover(this.chromosomeList.get(index + 1), randomCrossover.nextLong());
 		}
 	}
+	
+	protected void repopulate() {
+		ArrayList<Chromosome> repopulatedChromosomeList = new ArrayList<Chromosome>();
+		int index = 0;
+		while (repopulatedChromosomeList.size() < this.numberElite) {
+			if (index > this.chromosomeList.size() - 1) {
+				index = 0;
+			}
+			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
+			repopulatedChromosomeList.add(newChromosome);
+			index++;
+		}
+		index = 0;
+		while (repopulatedChromosomeList.size() < this.populationSize) {
+			if (index > this.chromosomeList.size() - 1) {
+				index = 0;
+			}
+			Chromosome newChromosome = this.chromosomeList.get(index).deepCopy();
+			repopulatedChromosomeList.add(newChromosome);
+
+			index++;
+		}
+		this.chromosomeList = repopulatedChromosomeList;
+	}
+	
 }

@@ -27,7 +27,7 @@ public class Population {
 
 	protected int chromosomeLength;
 	protected int populationSize;
-	private int truncationPercent;
+	protected int truncationPercent;
 	protected int numberElite;
 	protected String fitnessFunction = "";
 	private String selectionMethod = "";
