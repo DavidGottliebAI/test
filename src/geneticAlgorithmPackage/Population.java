@@ -260,7 +260,6 @@ public class Population {
 		for (int index = this.numberElite; index < this.populationSize; index++) {
 			this.chromosomeList.get(index).mutate(this.averageNumMutations, randomMutate.nextLong());
 		}
-
 	}
 
 	/**
@@ -286,8 +285,8 @@ public class Population {
 		this.truncationPercent = truncationPercent;
 	}
 
-	public void setNumberElite(int elitismPercent) {
-		this.numberElite = (int) Math.ceil(elitismPercent / 100 * this.populationSize);
+	public void setNumberElite(double elitismPercent) {
+		this.numberElite = (int) Math.ceil(elitismPercent / 100.0 * this.populationSize);
 	}
 
 	public ArrayList<Chromosome> getChromosomeList() {

@@ -69,6 +69,10 @@ public class LineGraph extends JComponent {
 		g2.translate(50, this.getHeight() - 50);
 		g2.drawRect(0, -PLOT_HEIGHT, PLOT_WIDTH, PLOT_HEIGHT);
 		int plotRatio = PLOT_HEIGHT / 100;
+		if (this.baldwin) {
+			plotRatio = PLOT_HEIGHT / 100 * 5;
+		}
+		
 
 		// outline of graph and every 10 fitness ticks
 
@@ -137,6 +141,7 @@ public class LineGraph extends JComponent {
 		// graphs each line and live updates for each
 
 		for (int x = 0; x < this.bestFitnessLog.size(); x++) {
+			
 			g2.setStroke(new BasicStroke(3));
 
 			g2.setColor(Color.GREEN);
@@ -169,18 +174,18 @@ public class LineGraph extends JComponent {
 				g2.setColor(Color.BLACK);
 				g2.setStroke(
 						new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1 }, 20));
-				g2.drawLine(x * 3, previousZero, x * 3 + 3, (int) (-this.zerosLog.get(x) * plotRatio));
-				previousZero = (int) -this.zerosLog.get(x) * plotRatio;
+				g2.drawLine(x * 3, previousZero, x * 3 + 3, (int) (-this.zerosLog.get(x) * plotRatio / 5));
+				previousZero = (int) -this.zerosLog.get(x) * plotRatio / 5;
 
 				g2.setColor(Color.GRAY);
 				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0));
-				g2.drawLine(x * 3, previousOne, x * 3 + 3, (int) (-this.onesLog.get(x) * plotRatio));
-				previousOne = (int) -this.onesLog.get(x) * plotRatio;
+				g2.drawLine(x * 3, previousOne, x * 3 + 3, (int) (-this.onesLog.get(x) * plotRatio / 5));
+				previousOne = (int) -this.onesLog.get(x) * plotRatio / 5;
 
 				g2.setColor(Color.DARK_GRAY);
 				g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
-				g2.drawLine(x * 3, previousTwo, x * 3 + 3, (int) (-this.twosLog.get(x) * plotRatio));
-				previousTwo = (int) -this.twosLog.get(x) * plotRatio;
+				g2.drawLine(x * 3, previousTwo, x * 3 + 3, (int) (-this.twosLog.get(x) * plotRatio / 5));
+				previousTwo = (int) -this.twosLog.get(x) * plotRatio / 5;
 			}
 		}
 	}
